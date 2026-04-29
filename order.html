@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Checkout — The Cookbook by Ashbovaxo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-0: #07060f;
+    --bg-1: #0c0a1f;
+    --bg-2: #14112e;
+    --ink: #ffffff;
+    --ink-dim: #b9b3d6;
+    --ink-mute: #8a83ad;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.16);
+    --purple: #7a5cff;
+    --purple-deep: #4a2bd9;
+    --blue: #3a7bff;
+    --pink: #ff5db1;
+    --orange: #ff7a3d;
+    --grad-bg: radial-gradient(1100px 700px at 80% 10%, rgba(122,92,255,0.35), transparent 60%),
+               radial-gradient(900px 700px at 10% 90%, rgba(58,123,255,0.30), transparent 65%),
+               linear-gradient(180deg, #07060f 0%, #0a0820 60%, #07060f 100%);
+    --grad-cta: linear-gradient(90deg, #ff7a3d 0%, #ff5db1 50%, #7a5cff 100%);
+    --grad-card: linear-gradient(160deg, rgba(122,92,255,0.18), rgba(58,123,255,0.06) 60%, rgba(255,255,255,0.02));
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg-0);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  body {
+    background: var(--grad-bg);
+    background-attachment: fixed;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- NAV ---------- */
+  nav.top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    background: linear-gradient(90deg, #b6a4ff, #7a5cff 60%, #3a7bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.01em;
+  }
+  .secure-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--ink-dim);
+    background: rgba(255,255,255,0.03);
+  }
+  .secure-pill svg { color: #7a5cff; }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--ink-dim);
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .back-link:hover { color: #fff; }
+
+  /* ---------- PAGE HEADER ---------- */
+  .page-head {
+    padding: 56px 0 32px;
+    text-align: center;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 9px 20px;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--ink-dim);
+    background: rgba(255,255,255,0.03);
+    margin-bottom: 22px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: linear-gradient(135deg, #ff5db1, #ff7a3d);
+    box-shadow: 0 0 10px rgba(255,93,177,0.6);
+  }
+  h1.page-title {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(40px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+  h1.page-title .accent {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 500;
+    background: linear-gradient(90deg, #ff5db1, #ff7a3d 60%, #ffd166);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .page-sub {
+    color: var(--ink-dim);
+    font-size: 15px;
+    margin-top: 14px;
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .checkout-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 32px;
+    padding: 32px 0 96px;
+    align-items: start;
+  }
+
+  .card {
+    background: var(--grad-card);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 32px;
+    backdrop-filter: blur(10px);
+  }
+  .card + .card { margin-top: 24px; }
+
+  .step-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7a5cff, #3a7bff);
+    color: #fff;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    margin-right: 12px;
+    box-shadow: 0 6px 20px -8px rgba(122,92,255,0.6);
+  }
+  .card h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+
+  /* ---------- FIELDS ---------- */
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .field-grid.single { grid-template-columns: 1fr; }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .field.full { grid-column: 1 / -1; }
+  label {
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+  }
+  .input {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: #fff;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+  }
+  .input::placeholder { color: var(--ink-mute); }
+  .input:focus {
+    border-color: var(--purple);
+    background: rgba(122,92,255,0.06);
+    box-shadow: 0 0 0 4px rgba(122,92,255,0.12);
+  }
+  select.input {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'><path d='M1 1l5 5 5-5' stroke='%238a83ad' stroke-width='2' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 44px;
+  }
+
+  /* ---------- PAYMENT METHOD TABS ---------- */
+  .pay-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .pay-tab {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    padding: 14px 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+  }
+  .pay-tab:hover { background: rgba(255,255,255,0.07); color: #fff; }
+  .pay-tab.active {
+    background: linear-gradient(135deg, rgba(122,92,255,0.2), rgba(58,123,255,0.1));
+    border-color: var(--purple);
+    color: #fff;
+    box-shadow: 0 0 0 1px rgba(122,92,255,0.3);
+  }
+  .pay-tab .check {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 1.5px solid var(--line-strong);
+    display: grid; place-items: center;
+  }
+  .pay-tab.active .check {
+    border-color: transparent;
+    background: linear-gradient(135deg, #7a5cff, #3a7bff);
+  }
+  .pay-tab.active .check::after {
+    content: "✓";
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .card-row {
+    display: grid;
+    grid-template-columns: 1fr 110px 110px;
+    gap: 16px;
+  }
+  .card-icon-row {
+    display: flex; gap: 8px;
+    margin-top: 8px;
+  }
+  .card-icon-row span {
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--line);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--ink-mute);
+  }
+
+  /* ---------- ORDER SUMMARY ---------- */
+  .summary {
+    position: sticky;
+    top: 24px;
+  }
+  .product-row {
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    gap: 16px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 22px;
+  }
+  .product-cover {
+    aspect-ratio: 3/4;
+    border-radius: 8px;
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.18), transparent 40%),
+      url("https://thecookbook.shop/cdn/shop/files/ASHBOVA_PRODUCT_IMAGE_SQUARE.png?v=1770505718&width=400") center/cover no-repeat,
+      #000;
+    box-shadow: 0 12px 30px -10px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08);
+  }
+  .product-name {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    margin-bottom: 4px;
+  }
+  .product-meta {
+    color: var(--ink-mute);
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  .qty-control {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .qty-control button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    width: 32px; height: 32px;
+    font-size: 16px;
+  }
+  .qty-control .qty-num {
+    width: 36px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .totals-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    color: var(--ink-dim);
+    font-size: 14.5px;
+  }
+  .totals-row.grand {
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 18px;
+    color: #fff;
+    font-weight: 600;
+  }
+  .totals-row.grand .num {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    background: linear-gradient(90deg, #ff5db1, #ff7a3d 60%, #ffd166);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .promo-row {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0 8px;
+  }
+  .promo-row .input { flex: 1; }
+  .promo-row button {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--line-strong);
+    border-radius: 12px;
+    color: #fff;
+    padding: 0 20px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .promo-row button:hover { background: rgba(255,255,255,0.1); }
+
+  .btn-place {
+    width: 100%;
+    margin-top: 24px;
+    padding: 18px 28px;
+    border-radius: 999px;
+    background: var(--grad-cta);
+    color: #fff;
+    font-weight: 700;
+    font-size: 15.5px;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 14px 40px -12px rgba(255,93,177,0.55), 0 0 0 1px rgba(255,255,255,0.1) inset;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-place:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 50px -12px rgba(255,93,177,0.7), 0 0 0 1px rgba(255,255,255,0.15) inset;
+  }
+  .trust-row {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    margin-top: 18px;
+    color: var(--ink-mute);
+    font-size: 12px;
+  }
+  .trust-row span { display: inline-flex; gap: 6px; align-items: center; }
+
+  /* ---------- WHAT YOU GET ---------- */
+  .perks {
+    margin-top: 24px;
+    list-style: none;
+  }
+  .perks li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px 0;
+    color: var(--ink-dim);
+    font-size: 14px;
+  }
+  .perks li::before {
+    content: "";
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(122,92,255,0.3), rgba(58,123,255,0.2));
+    border: 1px solid var(--line-strong);
+    background-image:
+      linear-gradient(135deg, rgba(122,92,255,0.3), rgba(58,123,255,0.2)),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'><path d='M2 6l3 3 5-7' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  /* ---------- SUCCESS STATE ---------- */
+  .success-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(7, 6, 15, 0.92);
+    backdrop-filter: blur(20px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .success-overlay.show {
+    display: flex;
+    opacity: 1;
+  }
+  .success-card {
+    max-width: 520px;
+    width: calc(100% - 40px);
+    text-align: center;
+    padding: 56px 40px;
+    background:
+      radial-gradient(600px 300px at 50% 0%, rgba(122,92,255,0.35), transparent 70%),
+      var(--grad-card);
+    border: 1px solid var(--line-strong);
+    border-radius: 28px;
+    box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(122,92,255,0.2);
+    transform: translateY(20px);
+    transition: transform 0.5s 0.1s;
+  }
+  .success-overlay.show .success-card { transform: translateY(0); }
+  .success-icon {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--grad-cta);
+    display: grid; place-items: center;
+    margin: 0 auto 28px;
+    box-shadow: 0 20px 50px -10px rgba(255,93,177,0.5);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 20px 50px -10px rgba(255,93,177,0.5); }
+    50% { box-shadow: 0 20px 60px -10px rgba(255,93,177,0.75); }
+  }
+  .success-card h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+  .success-card h2 .accent {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 500;
+    background: linear-gradient(90deg, #ff5db1, #ff7a3d 60%, #ffd166);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .success-card p {
+    color: var(--ink-dim);
+    font-size: 15.5px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .success-meta {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 20px;
+    margin: 20px 0 28px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--ink-dim);
+    text-align: left;
+  }
+  .success-meta strong { color: #fff; font-weight: 600; }
+  .success-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-secondary {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--line-strong);
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+  .btn-primary {
+    background: var(--grad-cta);
+    border: none;
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 8px 24px -8px rgba(255,93,177,0.5);
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 980px) {
+    .checkout-grid { grid-template-columns: 1fr; }
+    .summary { position: static; }
+    nav.top { padding: 22px 24px; }
+    .secure-pill { display: none; }
+  }
+  @media (max-width: 600px) {
+    .field-grid { grid-template-columns: 1fr; }
+    .card-row { grid-template-columns: 1fr 1fr; }
+    .card-row .field:first-child { grid-column: 1 / -1; }
+    .pay-tabs { grid-template-columns: 1fr; }
+    .card { padding: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============= NAV ============= -->
+<nav class="top">
+  <a href="index.html" class="brand">Ashbovaxo</a>
+  <a href="index.html" class="back-link">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to home
+  </a>
+  <div class="secure-pill">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <rect x="4" y="11" width="16" height="10" rx="2"/>
+      <path d="M8 11V7a4 4 0 018 0v4"/>
+    </svg>
+    Secure checkout · 256-bit SSL
+  </div>
+</nav>
+
+<!-- ============= PAGE HEAD ============= -->
+<div class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">One-Time Purchase · Instant Access</div>
+    <h1 class="page-title">Almost in the <span class="accent">kitchen</span>.</h1>
+    <p class="page-sub">Less than $10. Instant download. Yours for life.</p>
+  </div>
+</div>
+
+<!-- ============= CHECKOUT ============= -->
+<div class="wrap">
+  <form class="checkout-grid" id="orderForm">
+    <!-- LEFT COLUMN -->
+    <div>
+      <!-- Step 1: Contact -->
+      <div class="card">
+        <h2><span class="step-num">1</span>Contact</h2>
+        <div class="field-grid single">
+          <div class="field">
+            <label for="email">Email · receipt &amp; download link</label>
+            <input class="input" type="email" id="email" placeholder="you@example.com" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Billing -->
+      <div class="card">
+        <h2><span class="step-num">2</span>Billing details</h2>
+        <div class="field-grid">
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input class="input" type="text" id="firstName" placeholder="Ashley" required>
+          </div>
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input class="input" type="text" id="lastName" placeholder="Bova" required>
+          </div>
+          <div class="field full">
+            <label for="address">Address</label>
+            <input class="input" type="text" id="address" placeholder="123 Main Street" required>
+          </div>
+          <div class="field">
+            <label for="city">City</label>
+            <input class="input" type="text" id="city" placeholder="New York" required>
+          </div>
+          <div class="field">
+            <label for="zip">ZIP / Postal code</label>
+            <input class="input" type="text" id="zip" placeholder="10001" required>
+          </div>
+          <div class="field full">
+            <label for="country">Country</label>
+            <select class="input" id="country" required>
+              <option value="US">United States</option>
+              <option>Canada</option>
+              <option>United Kingdom</option>
+              <option>Australia</option>
+              <option>Italy</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Payment -->
+      <div class="card">
+        <h2><span class="step-num">3</span>Payment</h2>
+
+        <div class="pay-tabs" id="payTabs">
+          <button type="button" class="pay-tab active" data-method="card">
+            <span class="check"></span> Card
+          </button>
+          <button type="button" class="pay-tab" data-method="paypal">
+            <span class="check"></span> PayPal
+          </button>
+          <button type="button" class="pay-tab" data-method="apple">
+            <span class="check"></span> Apple Pay
+          </button>
+        </div>
+
+        <div class="field-grid">
+          <div class="field full">
+            <label for="cardName">Cardholder name</label>
+            <input class="input" type="text" id="cardName" placeholder="Name on card" autocomplete="off">
+          </div>
+          <div class="field full">
+            <label for="cardNumber">Card number</label>
+            <input class="input" type="text" id="cardNumber" placeholder="•••• •••• •••• ••••" maxlength="19" inputmode="numeric" autocomplete="off">
+            <div class="card-icon-row">
+              <span>VISA</span><span>MASTERCARD</span><span>AMEX</span><span>DISCOVER</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-row" style="margin-top: 16px;">
+          <div class="field">
+            <label for="cardExp">Expiry · MM / YY</label>
+            <input class="input" type="text" id="cardExp" placeholder="12 / 28" maxlength="7" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="cardCvc">CVC</label>
+            <input class="input" type="text" id="cardCvc" placeholder="•••" maxlength="4" inputmode="numeric" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="cardZip">Zip</label>
+            <input class="input" type="text" id="cardZip" placeholder="10001" maxlength="10" autocomplete="off">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: ORDER SUMMARY -->
+    <aside class="summary">
+      <div class="card">
+        <h2 style="font-size: 18px; margin-bottom: 22px;">Order summary</h2>
+
+        <div class="product-row">
+          <div class="product-cover"></div>
+          <div>
+            <div class="product-name">The Cookbook</div>
+            <div class="product-meta">Digital · Instant Download · By Ashbovaxo</div>
+            <div class="qty-control">
+              <button type="button" id="qtyDown" aria-label="Decrease">−</button>
+              <span class="qty-num" id="qtyNum">1</span>
+              <button type="button" id="qtyUp" aria-label="Increase">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="totals-row">
+          <span>Subtotal</span>
+          <span id="subtotal">$9.99</span>
+        </div>
+        <div class="totals-row">
+          <span>Tax (estimated)</span>
+          <span id="tax">$0.80</span>
+        </div>
+        <div class="totals-row">
+          <span>Delivery</span>
+          <span style="color: #6ed79b;">Free · Instant</span>
+        </div>
+
+        <div class="promo-row">
+          <input class="input" type="text" id="promo" placeholder="Promo code (try SPICY)">
+          <button type="button" id="applyPromo">Apply</button>
+        </div>
+
+        <div class="totals-row grand">
+          <span>Total</span>
+          <span class="num" id="grandTotal">$10.79</span>
+        </div>
+
+        <button class="btn-place" type="submit">
+          Place order — Get Spicy
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+
+        <div class="trust-row">
+          <span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+            Encrypted
+          </span>
+          <span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            30-day refund
+          </span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="font-size: 17px; margin-bottom: 12px;">What you get</h2>
+        <ul class="perks">
+          <li>150+ recipes across 10+ cuisines &mdash; Italian, American, Asian, Vegan, Keto and more</li>
+          <li>Instant PDF download to any device, plus updates for life</li>
+          <li>Sugar-free, gluten-free, dairy-free, and carnivore-friendly options</li>
+          <li>30-day &ldquo;cook it once or your money back&rdquo; guarantee</li>
+        </ul>
+      </div>
+    </aside>
+  </form>
+</div>
+
+<!-- ============= SUCCESS OVERLAY ============= -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+    </div>
+    <h2>You're <span class="accent">in&nbsp;the&nbsp;kitchen</span>.</h2>
+    <p>Your copy of <strong style="color:#fff;">The Cookbook</strong> is on its way to your inbox right now. Time to get spicy.</p>
+    <div class="success-meta">
+      <div>
+        <div style="color: var(--ink-mute); margin-bottom: 4px;">Order #</div>
+        <strong id="orderNum">SPICY-•••</strong>
+      </div>
+      <div>
+        <div style="color: var(--ink-mute); margin-bottom: 4px;">Sent to</div>
+        <strong id="orderEmail">you@example.com</strong>
+      </div>
+      <div style="text-align: right;">
+        <div style="color: var(--ink-mute); margin-bottom: 4px;">Total</div>
+        <strong id="orderTotal">$10.79</strong>
+      </div>
+    </div>
+    <div class="success-actions">
+      <a href="login.html" class="btn-primary">Open Members Area</a>
+      <a href="index.html" class="btn-secondary">Back to home</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PRICE = 9.99;
+  const TAX_RATE = 0.08;
+
+  const qtyNumEl = document.getElementById('qtyNum');
+  const subtotalEl = document.getElementById('subtotal');
+  const taxEl = document.getElementById('tax');
+  const grandEl = document.getElementById('grandTotal');
+  let qty = 1;
+  let discount = 0;
+
+  function fmt(n) { return '$' + n.toFixed(2); }
+  function recalc() {
+    const sub = PRICE * qty;
+    const taxable = Math.max(0, sub - discount);
+    const tax = taxable * TAX_RATE;
+    const total = taxable + tax;
+    subtotalEl.textContent = fmt(sub);
+    taxEl.textContent = fmt(tax);
+    grandEl.textContent = fmt(total);
+  }
+  document.getElementById('qtyUp').addEventListener('click', () => {
+    qty = Math.min(99, qty + 1); qtyNumEl.textContent = qty; recalc();
+  });
+  document.getElementById('qtyDown').addEventListener('click', () => {
+    qty = Math.max(1, qty - 1); qtyNumEl.textContent = qty; recalc();
+  });
+  document.getElementById('applyPromo').addEventListener('click', () => {
+    const code = (document.getElementById('promo').value || '').trim().toUpperCase();
+    const btn = document.getElementById('applyPromo');
+    if (code === 'SPICY') {
+      discount = PRICE * 0.2;
+      btn.textContent = 'Applied ✓';
+      btn.style.background = 'linear-gradient(135deg, rgba(122,92,255,0.3), rgba(58,123,255,0.2))';
+      recalc();
+    } else if (code) {
+      btn.textContent = 'Invalid';
+      setTimeout(() => btn.textContent = 'Apply', 1400);
+    }
+  });
+
+  // Payment method tabs
+  document.querySelectorAll('.pay-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+
+  // Card number formatting
+  const cardInput = document.getElementById('cardNumber');
+  cardInput.addEventListener('input', (e) => {
+    const v = e.target.value.replace(/\D/g, '').slice(0, 16);
+    e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
+  });
+  // Exp formatting
+  const expInput = document.getElementById('cardExp');
+  expInput.addEventListener('input', (e) => {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+    if (v.length > 2) v = v.slice(0,2) + ' / ' + v.slice(2);
+    e.target.value = v;
+  });
+
+  // Submit -> success
+  document.getElementById('orderForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value || 'you@example.com';
+    document.getElementById('orderEmail').textContent = email;
+    document.getElementById('orderNum').textContent = 'SPICY-' + Math.random().toString(36).slice(2,7).toUpperCase();
+    document.getElementById('orderTotal').textContent = grandEl.textContent;
+    const overlay = document.getElementById('successOverlay');
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  });
+
+  recalc();
+</script>
+
+</body>
+</html>

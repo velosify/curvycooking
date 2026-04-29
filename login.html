@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cooking Community — Members Area</title>
+<style>
+  :root {
+    --bg: #0e0904;
+    --bg-2: #1a1108;
+    --surface: rgba(28, 20, 14, 0.78);
+    --surface-solid: #1e1510;
+    --surface-strong: rgba(34, 25, 18, 0.92);
+    --text: #f5ecdf;
+    --muted: #a99c8a;
+    --border: rgba(255, 240, 210, 0.10);
+    --border-strong: rgba(255, 240, 210, 0.22);
+    --accent: #e8933a;
+    --accent-hover: #f4a84f;
+    --accent-text: #1a1108;
+    --danger-bg: rgba(153, 27, 27, 0.25);
+    --danger-border: rgba(239, 68, 68, 0.35);
+    --danger-text: #fca5a5;
+    --chip: rgba(255, 240, 210, 0.08);
+    --chip-hover: rgba(255, 240, 210, 0.14);
+    --chip-active: #e8933a;
+    --chip-active-text: #1a1108;
+    --shadow: 0 1px 2px rgba(0,0,0,0.45), 0 6px 16px rgba(0,0,0,0.35);
+    --shadow-lg: 0 14px 48px rgba(0,0,0,0.55);
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    position: relative;
+    background-color: var(--bg);
+  }
+
+  /* The user-supplied photo is the main backdrop. A vignette is layered ON
+     TOP to keep content readable. Mobile (default) uses the portrait photo;
+     desktop gets a 90°-rotated landscape version so the veg border frames
+     top & bottom instead of stretching awkwardly.
+     Fallback gradients only show if the images are missing. */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: -2;
+    background-image:
+      /* Top layer: center-clear vignette darkens edges slightly */
+      radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.55) 100%),
+      /* Subtle warm highlight, top-right */
+      radial-gradient(700px 500px at 92% 8%, rgba(232, 148, 58, 0.10), transparent 60%),
+      /* Portrait photo for mobile */
+      url("background.jpg"),
+      /* Fallback layers (only visible if the image fails to load) */
+      radial-gradient(900px 700px at 92% 8%, rgba(232, 148, 58, 0.30), transparent 55%),
+      radial-gradient(700px 700px at 8% 92%, rgba(120, 52, 22, 0.22), transparent 55%),
+      linear-gradient(160deg, #1c1208 0%, #0a0602 55%, #130c06 100%);
+    background-size: cover, cover, cover, cover, cover, cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: var(--bg);
+  }
+
+  /* Desktop: use the landscape (rotated) version of the photo */
+  @media (min-width: 768px) {
+    body::before {
+      background-image:
+        radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.55) 100%),
+        radial-gradient(700px 500px at 92% 8%, rgba(232, 148, 58, 0.10), transparent 60%),
+        url("background-wide.jpg"),
+        radial-gradient(900px 700px at 92% 8%, rgba(232, 148, 58, 0.30), transparent 55%),
+        radial-gradient(700px 700px at 8% 92%, rgba(120, 52, 22, 0.22), transparent 55%),
+        linear-gradient(160deg, #1c1208 0%, #0a0602 55%, #130c06 100%);
+    }
+  }
+
+  /* Film grain for texture */
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    opacity: 0.28;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  [hidden] { display: none !important; }
+  button { font-family: inherit; cursor: pointer; }
+  ::selection { background: rgba(232, 148, 58, 0.35); color: var(--text); }
+
+  /* ---------- Login ---------- */
+  .login-wrap {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+  .login-card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    background: rgba(20, 14, 10, 0.42);
+    border: 1px solid rgba(255, 245, 220, 0.20);
+    border-radius: 22px;
+    padding: 36px 32px;
+    backdrop-filter: blur(32px) saturate(180%);
+    -webkit-backdrop-filter: blur(32px) saturate(180%);
+    box-shadow:
+      0 24px 70px rgba(0, 0, 0, 0.55),
+      0 4px 12px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.30);
+  }
+  .login-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    border-radius: 22px 22px 0 0;
+    pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 100%);
+  }
+  .login-card > * { position: relative; }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 28px;
+  }
+  .brand-mark {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), #c06a22);
+    color: var(--accent-text);
+    display: grid; place-items: center;
+    font-weight: 800; font-size: 18px;
+    box-shadow: 0 4px 12px rgba(232, 148, 58, 0.35);
+  }
+  .brand-name {
+    font-weight: 700; font-size: 18px; letter-spacing: 0.01em;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  .login-card h1 {
+    font-size: 30px; margin: 0 0 6px; letter-spacing: -0.01em;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+  }
+  .login-card p.sub { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
+  .field { margin-bottom: 14px; }
+  label {
+    display: block; font-size: 12px; font-weight: 600; margin-bottom: 6px;
+    color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  input[type="email"], input[type="password"], input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    background: rgba(0,0,0,0.35);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  }
+  input::placeholder { color: rgba(255,240,210,0.35); }
+  input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(232, 148, 58, 0.18);
+    background: rgba(0,0,0,0.45);
+  }
+  .btn {
+    width: 100%;
+    background: linear-gradient(180deg, var(--accent-hover), var(--accent));
+    color: var(--accent-text);
+    padding: 12px 16px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition: transform 0.05s, box-shadow 0.15s, filter 0.15s;
+    box-shadow: 0 6px 18px rgba(232, 148, 58, 0.25);
+  }
+  .btn:hover { filter: brightness(1.05); box-shadow: 0 8px 24px rgba(232, 148, 58, 0.35); }
+  .btn:active { transform: scale(0.99); }
+  .hint {
+    margin-top: 18px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.5;
+  }
+  .hint code {
+    background: rgba(255,240,210,0.08); padding: 2px 6px; border-radius: 4px;
+    color: var(--text); font-size: 12px;
+    border: 1px solid var(--border);
+  }
+  .tab-toggle {
+    display: flex; gap: 4px; margin-bottom: 22px;
+    background: rgba(0,0,0,0.35); padding: 4px; border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .tab-toggle button {
+    flex: 1; background: transparent; border: 0; padding: 8px 10px;
+    border-radius: 8px; font-weight: 600; font-size: 14px; color: var(--muted);
+    transition: background 0.15s, color 0.15s;
+  }
+  .tab-toggle button.active {
+    background: var(--surface-strong); color: var(--text);
+    box-shadow: 0 1px 0 var(--border-strong);
+  }
+  .err {
+    background: var(--danger-bg);
+    border: 1px solid var(--danger-border);
+    color: var(--danger-text);
+    padding: 10px 12px; border-radius: 10px; font-size: 13px; margin-bottom: 14px;
+  }
+
+  /* ---------- App ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(10, 6, 2, 0.45);
+    backdrop-filter: blur(28px) saturate(180%);
+    -webkit-backdrop-filter: blur(28px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 245, 220, 0.10);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 8px 24px rgba(0, 0, 0, 0.20);
+  }
+  .topbar-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px;
+  }
+  .topbar .brand { margin-bottom: 0; }
+  .user {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--muted);
+  }
+  .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #8a4a1a);
+    color: var(--accent-text); font-weight: 700; font-size: 13px;
+    display: grid; place-items: center;
+    border: 1px solid var(--border-strong);
+  }
+  .logout {
+    background: transparent; border: 1px solid var(--border-strong);
+    padding: 7px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    color: var(--text);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .logout:hover { background: var(--chip); border-color: var(--accent); }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 48px 24px 80px; }
+  .hero h1 {
+    font-size: 44px; margin: 0 0 8px; letter-spacing: -0.01em;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+  }
+  .hero p { margin: 0 0 28px; color: var(--muted); font-size: 16px; }
+
+  .chips {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 36px;
+    padding-bottom: 8px;
+  }
+  .chip {
+    background: var(--chip); color: var(--text);
+    border: 1px solid var(--border);
+    padding: 9px 16px; border-radius: 999px;
+    font-size: 14px; font-weight: 500;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .chip:hover { background: var(--chip-hover); border-color: var(--border-strong); }
+  .chip.active {
+    background: var(--chip-active); color: var(--chip-active-text);
+    border-color: var(--chip-active);
+    box-shadow: 0 4px 14px rgba(232, 148, 58, 0.35);
+  }
+
+  .meals { display: grid; gap: 48px; }
+  .meal-section h2 {
+    font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em;
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 4px;
+  }
+  .meal-section h2::after {
+    content: ''; display: block; width: 36px; height: 2px;
+    background: var(--accent); margin-top: 8px; border-radius: 2px;
+  }
+  .meal-section .meal-sub { color: var(--muted); font-size: 14px; margin: 8px 0 18px; }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 18px;
+  }
+  /* ---------- Liquid Glass Cards ---------- */
+  .card {
+    position: relative;
+    background: rgba(20, 14, 10, 0.38);
+    border: 1px solid rgba(255, 245, 220, 0.16);
+    border-radius: 18px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex; flex-direction: column;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    box-shadow:
+      0 14px 40px rgba(0, 0, 0, 0.45),
+      0 2px 6px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.30);
+    transition: transform 0.30s cubic-bezier(0.2, 0.8, 0.2, 1),
+                box-shadow 0.30s ease,
+                border-color 0.30s ease;
+  }
+  /* Surface light gradient — gives the glass its sheen */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 65%;
+    pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(255, 255, 255, 0.10) 0%,
+      rgba(255, 255, 255, 0.03) 40%,
+      transparent 100%);
+    z-index: 0;
+  }
+  /* Keep content above the highlight gradient */
+  .card > * { position: relative; z-index: 1; }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255, 245, 220, 0.30);
+    box-shadow:
+      0 22px 60px rgba(0, 0, 0, 0.55),
+      0 4px 10px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.26),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.30);
+  }
+  .card-img {
+    aspect-ratio: 16/10;
+    display: grid; place-items: center;
+    font-size: 56px;
+    background:
+      linear-gradient(180deg,
+        rgba(255, 255, 255, 0.04) 0%,
+        rgba(0, 0, 0, 0.18) 100%);
+    border-bottom: 1px solid rgba(255, 245, 220, 0.08);
+  }
+  .card-body { padding: 14px 16px 16px; }
+  .card-tag {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    color: var(--accent); text-transform: uppercase; letter-spacing: 0.09em;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-size: 16px; font-weight: 600; letter-spacing: -0.005em;
+    margin: 0 0 6px; line-height: 1.3; color: var(--text);
+  }
+  .card-meta { display: flex; gap: 12px; color: var(--muted); font-size: 12px; }
+
+  /* ---------- Modal ---------- */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(6, 3, 1, 0.70);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 50;
+    display: grid; place-items: center;
+    padding: 24px;
+    animation: fade 0.15s ease;
+  }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    position: relative;
+    background: rgba(20, 14, 10, 0.55);
+    border: 1px solid rgba(255, 245, 220, 0.20);
+    border-radius: 22px;
+    max-width: 640px; width: 100%;
+    max-height: 90vh; overflow: auto;
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    box-shadow:
+      0 30px 80px rgba(0, 0, 0, 0.60),
+      0 4px 12px rgba(0, 0, 0, 0.30),
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.30);
+    animation: pop 0.2s ease;
+  }
+  .modal::before {
+    content: '';
+    position: sticky;
+    top: 0; left: 0; right: 0;
+    display: block;
+    height: 0;
+    pointer-events: none;
+  }
+  @keyframes pop { from { transform: translateY(8px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-hero {
+    aspect-ratio: 16/7;
+    display: grid; place-items: center;
+    font-size: 96px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(232, 148, 58, 0.22), transparent 60%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.25));
+    border-radius: 22px 22px 0 0;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 245, 220, 0.10);
+  }
+  .modal-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--border-strong);
+    background: rgba(0,0,0,0.5);
+    color: var(--text);
+    font-size: 18px; font-weight: 600;
+    display: grid; place-items: center;
+    box-shadow: var(--shadow);
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .modal-close:hover { background: rgba(0,0,0,0.75); border-color: var(--accent); }
+  .modal-body { padding: 28px 32px 32px; }
+  .modal-body h2 {
+    font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em;
+    font-family: Georgia, "Times New Roman", serif;
+  }
+  .modal-body .meta { display: flex; gap: 18px; color: var(--muted); font-size: 14px; margin-bottom: 22px; }
+  .modal-body h3 {
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.10em;
+    color: var(--accent); margin: 24px 0 10px; font-weight: 700;
+  }
+  .modal-body ul, .modal-body ol { padding-left: 20px; line-height: 1.7; margin: 0; color: var(--text); }
+  .modal-body li { margin-bottom: 4px; }
+  .modal-body li::marker { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 32px; }
+    .container { padding: 28px 16px 60px; }
+    .topbar-inner { padding: 12px 16px; }
+    .modal-body { padding: 22px 20px 26px; }
+    .cards { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== LOGIN VIEW ========== -->
+<div id="login-view" class="login-wrap">
+  <div class="login-card">
+    <div class="brand">
+      <div class="brand-mark">C</div>
+      <div class="brand-name">Cooking Community</div>
+    </div>
+
+    <div class="tab-toggle" role="tablist">
+      <button id="tab-login" class="active" type="button">Sign in</button>
+      <button id="tab-signup" type="button">Sign up</button>
+    </div>
+
+    <h1 id="auth-title">Welcome back</h1>
+    <p class="sub" id="auth-sub">Sign in to explore recipes tailored to your diet.</p>
+
+    <div id="auth-error" class="err" hidden></div>
+
+    <form id="auth-form" autocomplete="on">
+      <div class="field" id="name-field" hidden>
+        <label for="name">Name</label>
+        <input id="name" type="text" placeholder="Jane Cook" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" required placeholder="you@example.com" />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" required minlength="4" placeholder="••••••••" />
+      </div>
+      <button class="btn" type="submit" id="submit-btn">Sign in</button>
+    </form>
+
+    <p class="hint">
+      Try the demo account: <br />
+      <code>demo@cook.com</code> / <code>demo123</code>
+    </p>
+  </div>
+</div>
+
+<!-- ========== APP VIEW ========== -->
+<div id="app-view" hidden>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">C</div>
+        <div class="brand-name">Cooking Community</div>
+      </div>
+      <div class="user">
+        <div class="avatar" id="user-avatar">?</div>
+        <span id="user-name">Guest</span>
+        <button class="logout" id="logout-btn" type="button">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="hero">
+      <h1 id="greeting">Hey there 👋</h1>
+      <p>Pick a diet, then browse 5 recipe options for breakfast, lunch, and dinner.</p>
+    </div>
+
+    <div class="chips" id="diet-chips"></div>
+
+    <div class="meals" id="meals"></div>
+  </main>
+</div>
+
+<!-- ========== MODAL ========== -->
+<div id="modal" class="modal-backdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-hero">
+      <span id="modal-emoji">🍳</span>
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <h2 id="modal-title"></h2>
+      <div class="meta">
+        <span id="modal-time"></span>
+        <span id="modal-serves"></span>
+      </div>
+      <p id="modal-desc" style="color: var(--muted); line-height: 1.6; margin: 0;"></p>
+      <h3>Ingredients</h3>
+      <ul id="modal-ingredients"></ul>
+      <h3>Steps</h3>
+      <ol id="modal-steps"></ol>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ----------------------------------------------------------
+   Data: 6 diets × breakfast/lunch/dinner × 5 recipes
+---------------------------------------------------------- */
+const DIETS = [
+  { id: 'none',       label: 'No restrictions' },
+  { id: 'vegan',      label: 'Vegan' },
+  { id: 'sugarfree',  label: 'Sugar free' },
+  { id: 'glutenfree', label: 'Gluten free' },
+  { id: 'dairyfree',  label: 'Dairy free' },
+  { id: 'carnivore',  label: 'Carnivore' },
+];
+
+const MEALS = [
+  { id: 'breakfast', label: 'Breakfast', sub: 'Five ways to start the day.' },
+  { id: 'lunch',     label: 'Lunch',     sub: 'Midday meals that deliver.' },
+  { id: 'dinner',    label: 'Dinner',    sub: 'End the day with something great.' },
+];
+
+const RECIPES = {
+  /* =================== NO RESTRICTIONS =================== */
+  none: {
+    breakfast: [
+      {
+        title: 'Classic Buttermilk Pancakes', emoji: '🥞', time: '20 min', serves: '2',
+        desc: 'Fluffy, golden pancakes the whole table will fight over.',
+        ingredients: ['1½ cups flour','2 tbsp sugar','1 tsp baking powder','½ tsp baking soda','½ tsp salt','1¼ cups buttermilk','1 large egg','3 tbsp melted butter'],
+        steps: ['Whisk dry ingredients.','Whisk buttermilk, egg, and butter separately.','Combine wet and dry — leave lumps.','Cook ¼-cup portions on a buttered skillet, 2 min per side.','Serve with maple syrup and butter.']
+      },
+      {
+        title: 'Eggs Benedict', emoji: '🍳', time: '25 min', serves: '2',
+        desc: 'Poached eggs and Canadian bacon on English muffins with hollandaise.',
+        ingredients: ['2 English muffins, split','4 slices Canadian bacon','4 eggs','3 egg yolks','½ cup melted butter','1 tbsp lemon juice','Pinch cayenne','Chives'],
+        steps: ['Blend yolks, lemon, and cayenne; drizzle in warm butter to make hollandaise.','Poach eggs in simmering vinegar water 3 min.','Toast muffins and warm Canadian bacon.','Stack muffin, bacon, egg; spoon over hollandaise.','Garnish with chives.']
+      },
+      {
+        title: 'Blueberry French Toast', emoji: '🍞', time: '20 min', serves: '2',
+        desc: 'Thick brioche soaked in custard and fried until caramelized.',
+        ingredients: ['4 thick slices brioche','2 eggs','½ cup milk','1 tsp vanilla','½ tsp cinnamon','2 tbsp butter','1 cup blueberries','Maple syrup'],
+        steps: ['Whisk eggs, milk, vanilla, and cinnamon.','Soak brioche 20 seconds per side.','Fry in butter over medium heat until golden, 2–3 min per side.','Top with blueberries and syrup.']
+      },
+      {
+        title: 'Bacon Breakfast Burrito', emoji: '🌯', time: '20 min', serves: '2',
+        desc: 'Scrambled eggs, crispy bacon, cheese, and salsa in a warm tortilla.',
+        ingredients: ['4 strips bacon','4 eggs','¼ cup shredded cheddar','2 large flour tortillas','¼ cup salsa','Handful baby spinach','Hot sauce'],
+        steps: ['Crisp bacon; drain and chop.','Scramble eggs in bacon fat until just set.','Warm tortillas 10 sec.','Pile eggs, bacon, cheese, spinach, and salsa down the center.','Fold sides in and roll tightly.']
+      },
+      {
+        title: 'Steel-Cut Oats with Brown Sugar', emoji: '🥣', time: '30 min', serves: '2',
+        desc: 'Creamy, chewy oats with a glossy brown-sugar finish.',
+        ingredients: ['1 cup steel-cut oats','3 cups water','½ cup milk','Pinch salt','2 tbsp brown sugar','2 tbsp butter','Cinnamon'],
+        steps: ['Toast oats in dry pan 2 min.','Add water and salt; simmer 20 min, stirring occasionally.','Stir in milk; cook 5 more min.','Top with brown sugar, butter, and a dusting of cinnamon.']
+      }
+    ],
+    lunch: [
+      {
+        title: 'Grilled Chicken Caesar Wrap', emoji: '🌯', time: '15 min', serves: '1',
+        desc: 'The classic Caesar, wrapped up and ready to travel.',
+        ingredients: ['1 grilled chicken breast, sliced','1 large flour tortilla','2 cups romaine, chopped','3 tbsp Caesar dressing','¼ cup shaved Parmesan','¼ cup croutons'],
+        steps: ['Toss romaine with dressing, Parmesan, and pepper.','Warm tortilla briefly.','Lay chicken and salad down the center; add croutons.','Fold sides, roll tight, slice on the diagonal.']
+      },
+      {
+        title: 'BLT with Avocado', emoji: '🥪', time: '15 min', serves: '1',
+        desc: 'Crispy bacon, ripe tomato, creamy avocado on toasted sourdough.',
+        ingredients: ['6 strips bacon','2 slices sourdough','2 lettuce leaves','2 tomato slices','½ avocado, sliced','2 tbsp mayonnaise','Salt and pepper'],
+        steps: ['Cook bacon until crisp.','Toast sourdough; spread with mayo.','Layer lettuce, tomato, avocado, bacon.','Season, close, slice in half.']
+      },
+      {
+        title: 'Beef & Cheddar Sliders', emoji: '🍔', time: '25 min', serves: '3',
+        desc: 'Juicy mini burgers topped with melted cheddar and caramelized onion.',
+        ingredients: ['1 lb ground beef','6 slider buns','6 slices sharp cheddar','1 onion, sliced thin','2 tbsp butter','1 tbsp Worcestershire','Salt and pepper'],
+        steps: ['Caramelize onions in butter with a pinch of salt, 15 min.','Season beef; form 6 small patties.','Sear patties 2 min per side, top with cheese to melt.','Toast buns, assemble with onion jam on top.']
+      },
+      {
+        title: 'Tomato Basil Soup & Grilled Cheese', emoji: '🍲', time: '25 min', serves: '2',
+        desc: 'Velvety tomato soup with a buttery grilled cheese for dipping.',
+        ingredients: ['1 can (28 oz) whole tomatoes','1 small onion, chopped','2 cloves garlic','2 tbsp butter','½ cup cream','Fresh basil','4 slices bread','2 slices sharp cheddar','2 slices Monterey Jack'],
+        steps: ['Sauté onion and garlic in butter 5 min.','Add tomatoes; simmer 15 min. Blend smooth.','Stir in cream and torn basil.','Butter bread, fill with cheese, grill until golden.','Serve alongside soup.']
+      },
+      {
+        title: 'Turkey Club Sandwich', emoji: '🥪', time: '15 min', serves: '1',
+        desc: 'Triple-decker with turkey, bacon, lettuce, tomato, and mayo.',
+        ingredients: ['3 slices toasted bread','4 slices roast turkey','3 strips bacon','2 lettuce leaves','2 tomato slices','2 tbsp mayo','Salt and pepper','Toothpicks'],
+        steps: ['Spread mayo on all toast sides.','Layer: bread, turkey, lettuce, tomato, bread, bacon, lettuce, bread.','Secure with toothpicks, cut into quarters.']
+      }
+    ],
+    dinner: [
+      {
+        title: 'Herb-Crusted Salmon & Vegetables', emoji: '🐟', time: '30 min', serves: '2',
+        desc: 'A sheet-pan dinner that looks fancier than it is.',
+        ingredients: ['2 salmon fillets','2 tbsp olive oil','2 tbsp parsley, chopped','1 tbsp dill','2 garlic cloves, minced','1 zucchini, sliced','1 cup cherry tomatoes','1 bell pepper, sliced'],
+        steps: ['Heat oven to 425°F.','Toss veg with oil, salt, pepper; roast 10 min.','Mix herbs, garlic, oil; top salmon.','Add salmon to pan; roast 12–14 min.','Finish with lemon.']
+      },
+      {
+        title: 'Spaghetti Bolognese', emoji: '🍝', time: '50 min', serves: '4',
+        desc: 'A slow-simmered meat sauce over al dente spaghetti.',
+        ingredients: ['1 lb ground beef','1 onion, diced','2 carrots, diced','2 celery stalks, diced','3 garlic cloves','1 can (28 oz) crushed tomatoes','½ cup red wine','1 lb spaghetti','Parmesan'],
+        steps: ['Brown beef; remove.','Sauté onion, carrot, celery 8 min; add garlic.','Deglaze with wine; reduce 2 min.','Add tomatoes and beef; simmer 30 min.','Toss with cooked pasta and serve with Parm.']
+      },
+      {
+        title: 'Butter Chicken with Naan', emoji: '🍛', time: '40 min', serves: '4',
+        desc: 'Creamy tomato curry with tender spiced chicken.',
+        ingredients: ['1½ lb chicken thighs, cubed','½ cup yogurt','1 tbsp garam masala','1 onion, grated','3 garlic cloves','1 tbsp ginger','1 can (14 oz) tomato sauce','½ cup heavy cream','3 tbsp butter','4 naan'],
+        steps: ['Marinate chicken in yogurt and masala 15 min.','Sauté onion, garlic, ginger in butter 5 min.','Add tomato sauce; simmer 10 min.','Stir in chicken; cook 15 min.','Finish with cream; serve with warm naan.']
+      },
+      {
+        title: 'Beef Stir-Fry with Broccoli', emoji: '🥢', time: '20 min', serves: '3',
+        desc: 'Weeknight-fast, restaurant-quality stir-fry.',
+        ingredients: ['1 lb flank steak, sliced thin','3 cups broccoli florets','3 tbsp soy sauce','1 tbsp oyster sauce','1 tbsp cornstarch','2 tbsp vegetable oil','3 garlic cloves, minced','1 tsp ginger, grated','Rice, to serve'],
+        steps: ['Toss beef with soy, oyster sauce, and cornstarch.','Sear beef in hot oil 2 min; remove.','Stir-fry broccoli 3 min; add garlic and ginger.','Return beef, toss to glaze.','Serve over rice.']
+      },
+      {
+        title: 'Margherita Pizza', emoji: '🍕', time: '30 min', serves: '2',
+        desc: 'Homemade pizza with tomato, mozzarella, and basil.',
+        ingredients: ['1 ball pizza dough','½ cup tomato sauce','8 oz fresh mozzarella, torn','Fresh basil','2 tbsp olive oil','Salt'],
+        steps: ['Preheat oven with stone/pan at 500°F.','Stretch dough onto a floured peel.','Spread sauce; dot with mozzarella.','Bake 8–10 min until bubbly.','Top with basil, oil, and flaky salt.']
+      }
+    ]
+  },
+
+  /* =================== VEGAN =================== */
+  vegan: {
+    breakfast: [
+      {
+        title: 'Chia Seed Pudding with Berries', emoji: '🫐', time: '5 min + chill', serves: '2',
+        desc: 'Creamy overnight pudding with fresh berries and toasted nuts.',
+        ingredients: ['¼ cup chia seeds','1 cup oat milk','1 tbsp maple syrup','½ tsp vanilla','1 cup mixed berries','2 tbsp sliced almonds'],
+        steps: ['Whisk chia, milk, maple, vanilla.','Chill at least 4 hours.','Stir to loosen; top with berries and almonds.']
+      },
+      {
+        title: 'Tofu Scramble with Veggies', emoji: '🍳', time: '15 min', serves: '2',
+        desc: 'Fluffy turmeric-yellow tofu with peppers and spinach.',
+        ingredients: ['1 block extra-firm tofu, crumbled','½ tsp turmeric','1 tsp nutritional yeast','½ bell pepper, diced','2 cups baby spinach','2 tbsp olive oil','Salt, black salt (kala namak) if available'],
+        steps: ['Sauté pepper in oil 3 min.','Add tofu, turmeric, yeast; cook 5 min, stirring.','Wilt spinach.','Season and serve on toast.']
+      },
+      {
+        title: 'Banana Oat Pancakes', emoji: '🥞', time: '20 min', serves: '2',
+        desc: 'Naturally sweetened vegan pancakes with oats and banana.',
+        ingredients: ['1 cup rolled oats, blended','1 ripe banana','1 tbsp flax + 3 tbsp water','1 tsp baking powder','¾ cup plant milk','1 tsp vanilla','Maple syrup'],
+        steps: ['Mix flax and water; rest 5 min.','Blend oats, banana, flax, baking powder, milk, vanilla.','Cook ¼-cup pancakes in an oiled pan, 2 min per side.','Top with syrup.']
+      },
+      {
+        title: 'Avocado Toast with Tomato', emoji: '🥑', time: '10 min', serves: '1',
+        desc: 'Smashed avocado, cherry tomatoes, red pepper flakes on sourdough.',
+        ingredients: ['2 slices sourdough','1 ripe avocado','½ cup cherry tomatoes, halved','1 tsp lemon juice','Red pepper flakes','Flaky salt, olive oil'],
+        steps: ['Toast bread.','Mash avocado with lemon and salt.','Spread on toast; top with tomatoes.','Finish with flakes, salt, and oil.']
+      },
+      {
+        title: 'Açaí Smoothie Bowl', emoji: '🍓', time: '10 min', serves: '1',
+        desc: 'Thick açaí blend topped with granola, coconut, and banana.',
+        ingredients: ['1 packet frozen açaí','1 frozen banana','½ cup plant milk','¼ cup granola','2 tbsp shredded coconut','Sliced banana','Berries'],
+        steps: ['Blend açaí, banana, and milk until thick.','Pour into a bowl.','Top with granola, coconut, sliced banana, and berries.']
+      }
+    ],
+    lunch: [
+      {
+        title: 'Chickpea "Tuna" Sandwich', emoji: '🥪', time: '15 min', serves: '2',
+        desc: 'Mashed chickpeas with crunchy veg and a punchy dressing.',
+        ingredients: ['1 can chickpeas','3 tbsp vegan mayo','1 tsp Dijon','1 celery stalk, diced','2 tbsp red onion','1 tbsp capers','Lemon juice','4 slices whole-grain bread'],
+        steps: ['Mash chickpeas, leaving some texture.','Stir in mayo, Dijon, celery, onion, capers, lemon.','Pile onto bread with lettuce and tomato.']
+      },
+      {
+        title: 'Buddha Bowl with Tahini', emoji: '🥗', time: '25 min', serves: '2',
+        desc: 'Roasted veg, quinoa, and creamy tahini-lemon sauce.',
+        ingredients: ['1 cup quinoa','1 sweet potato, cubed','1 can chickpeas','2 cups kale','3 tbsp tahini','1 lemon','1 tbsp maple','Olive oil','Cumin'],
+        steps: ['Roast sweet potato and chickpeas tossed in oil and cumin, 25 min at 425°F.','Cook quinoa.','Massage kale with oil and salt.','Whisk tahini, lemon, maple, water.','Build bowls; drizzle sauce.']
+      },
+      {
+        title: 'Lentil Soup', emoji: '🍲', time: '40 min', serves: '4',
+        desc: 'Hearty, spiced red lentil soup with lemon.',
+        ingredients: ['1½ cups red lentils','1 onion','2 carrots','3 garlic cloves','1 tsp cumin','1 tsp coriander','6 cups veg broth','1 can (14 oz) tomatoes','Lemon, parsley'],
+        steps: ['Sauté onion, carrots, garlic 6 min.','Add spices 30 sec.','Add lentils, tomatoes, broth; simmer 25 min.','Finish with lemon and parsley.']
+      },
+      {
+        title: 'Black Bean Burger', emoji: '🍔', time: '25 min', serves: '3',
+        desc: 'Smoky bean patties with avocado on toasted buns.',
+        ingredients: ['2 cans black beans, drained','½ cup rolled oats','½ onion, diced','2 garlic cloves','1 tsp smoked paprika','1 tsp cumin','1 tbsp soy sauce','3 burger buns','Avocado, lettuce, salsa'],
+        steps: ['Pulse beans, oats, onion, garlic, spices, soy in a food processor.','Form 3 patties; chill 10 min.','Pan-fry 4 min per side in oil.','Serve on buns with avocado, lettuce, salsa.']
+      },
+      {
+        title: 'Vegan Pad Thai', emoji: '🍜', time: '25 min', serves: '2',
+        desc: 'Rice noodles in a sweet-tangy tamarind sauce.',
+        ingredients: ['8 oz rice noodles','1 block firm tofu, cubed','2 tbsp tamarind paste','2 tbsp soy sauce','2 tbsp maple syrup','1 lime','2 garlic cloves','1 cup bean sprouts','Scallions, peanuts'],
+        steps: ['Soak noodles in hot water until pliable.','Pan-fry tofu until golden.','Whisk tamarind, soy, maple, lime.','Stir-fry garlic, add tofu, noodles, and sauce; toss.','Fold in sprouts; top with scallions and peanuts.']
+      }
+    ],
+    dinner: [
+      {
+        title: 'Thai Coconut Curry with Tofu', emoji: '🍲', time: '30 min', serves: '3',
+        desc: 'Aromatic, creamy, weeknight-friendly.',
+        ingredients: ['1 block extra-firm tofu','3 tbsp red curry paste','1 can (14 oz) coconut milk','1 red bell pepper','1 cup snap peas','1 tbsp soy sauce','1 tbsp maple','Lime, basil, rice'],
+        steps: ['Pan-fry tofu until golden.','Fry curry paste 1 min; add coconut milk.','Add peppers and snap peas; cook 4 min.','Stir in tofu, soy, maple, lime.','Serve over rice with basil.']
+      },
+      {
+        title: 'Mushroom Risotto', emoji: '🍚', time: '40 min', serves: '3',
+        desc: 'Creamy, umami-rich risotto — vegan style.',
+        ingredients: ['1½ cups arborio rice','1 lb mushrooms, sliced','1 onion, diced','3 garlic cloves','½ cup white wine','6 cups warm veg broth','2 tbsp olive oil','Nutritional yeast, parsley'],
+        steps: ['Sauté mushrooms until browned; set aside.','Soften onion and garlic in oil.','Toast rice 1 min; deglaze with wine.','Add broth a ladle at a time, stirring, 20 min.','Fold in mushrooms, yeast, and parsley.']
+      },
+      {
+        title: 'Spaghetti Marinara', emoji: '🍝', time: '30 min', serves: '3',
+        desc: 'Simple, garlicky tomato sauce tossed with spaghetti.',
+        ingredients: ['1 lb spaghetti','1 can (28 oz) San Marzano tomatoes','4 garlic cloves','¼ cup olive oil','Chili flakes','Fresh basil'],
+        steps: ['Sizzle garlic and chili flakes in oil 1 min.','Crush tomatoes in; simmer 20 min.','Cook pasta; reserve ½ cup water.','Toss pasta and sauce with pasta water.','Finish with basil.']
+      },
+      {
+        title: 'Stuffed Portobello Mushrooms', emoji: '🍄', time: '35 min', serves: '2',
+        desc: 'Meaty portobellos filled with herbed quinoa and spinach.',
+        ingredients: ['4 large portobellos, stems removed','1 cup cooked quinoa','2 cups spinach, chopped','2 garlic cloves','2 tbsp sun-dried tomatoes','Olive oil','Fresh thyme'],
+        steps: ['Brush mushrooms with oil; roast 10 min at 400°F, gill-side up.','Sauté garlic, spinach, tomatoes; toss with quinoa and thyme.','Stuff mushrooms; bake 12 more min.']
+      },
+      {
+        title: 'Cauliflower Tacos', emoji: '🌮', time: '30 min', serves: '3',
+        desc: 'Crispy roasted cauliflower with slaw and chipotle crema.',
+        ingredients: ['1 head cauliflower, florets','1 tbsp smoked paprika','1 tsp cumin','Olive oil','6 corn tortillas','2 cups shredded cabbage','Lime, cilantro','3 tbsp vegan mayo + 1 chipotle in adobo, blended'],
+        steps: ['Toss cauliflower with oil and spices; roast 25 min at 425°F.','Warm tortillas.','Fill with cauliflower and cabbage.','Drizzle with chipotle crema; top with cilantro and lime.']
+      }
+    ]
+  },
+
+  /* =================== SUGAR FREE =================== */
+  sugarfree: {
+    breakfast: [
+      {
+        title: 'Veggie-Loaded Spinach Omelet', emoji: '🍳', time: '10 min', serves: '1',
+        desc: 'Savory, protein-packed, zero added sugar.',
+        ingredients: ['3 eggs','1 cup baby spinach','¼ cup bell pepper, diced','2 tbsp onion, diced','1 tbsp olive oil','Salt, pepper'],
+        steps: ['Sauté onion and pepper 2 min.','Add spinach, wilt.','Pour in beaten eggs; cook low until set.','Fold and serve.']
+      },
+      {
+        title: 'Avocado & Smoked Salmon Plate', emoji: '🥑', time: '5 min', serves: '1',
+        desc: 'Creamy avocado with smoked salmon, capers, and lemon.',
+        ingredients: ['1 avocado, sliced','3 oz smoked salmon','1 tbsp capers','1 tsp lemon juice','Red onion, sliced','Olive oil, black pepper'],
+        steps: ['Arrange avocado and salmon on a plate.','Top with capers and onion.','Drizzle with lemon and oil; crack pepper.']
+      },
+      {
+        title: 'Greek Yogurt, Walnuts & Cinnamon', emoji: '🥣', time: '3 min', serves: '1',
+        desc: 'Thick unsweetened yogurt with crunch and warm cinnamon.',
+        ingredients: ['1 cup plain full-fat Greek yogurt','¼ cup walnuts, chopped','½ tsp cinnamon','1 tsp chia seeds','Zest of ½ lemon (optional)'],
+        steps: ['Spoon yogurt into a bowl.','Top with walnuts, chia, cinnamon, and zest.']
+      },
+      {
+        title: 'Scrambled Eggs with Avocado', emoji: '🍳', time: '10 min', serves: '1',
+        desc: 'Soft-scrambled eggs with chives and creamy avocado.',
+        ingredients: ['3 eggs','1 tbsp butter','1 tbsp chives','½ avocado, sliced','Salt, pepper'],
+        steps: ['Beat eggs; melt butter in cold pan.','Cook over low heat, stirring gently, until just set.','Plate with avocado; top with chives.']
+      },
+      {
+        title: 'Cottage Cheese & Cucumber Bowl', emoji: '🥒', time: '5 min', serves: '1',
+        desc: 'High-protein bowl with fresh herbs and cracked pepper.',
+        ingredients: ['1 cup cottage cheese','½ cucumber, diced','2 tbsp dill','1 tsp olive oil','Pepper'],
+        steps: ['Spoon cottage cheese into a bowl.','Top with cucumber, dill, oil, and pepper.']
+      }
+    ],
+    lunch: [
+      {
+        title: 'Zucchini Noodle Pesto Bowl', emoji: '🥗', time: '15 min', serves: '2',
+        desc: 'Fresh basil pesto over zoodles with grilled chicken.',
+        ingredients: ['3 zucchini, spiralized','1 grilled chicken breast','½ cup unsweetened basil pesto','¼ cup cherry tomatoes','2 tbsp pine nuts'],
+        steps: ['Warm zoodles in dry pan 1–2 min.','Toss with pesto.','Top with chicken, tomatoes, and pine nuts.']
+      },
+      {
+        title: 'Chicken Cobb Salad', emoji: '🥗', time: '20 min', serves: '2',
+        desc: 'Chicken, bacon, egg, avocado, and blue cheese with olive oil & vinegar.',
+        ingredients: ['2 grilled chicken breasts','4 strips bacon, crumbled','2 hard-boiled eggs','1 avocado','2 tomatoes','¼ cup blue cheese','Romaine','Olive oil, red wine vinegar'],
+        steps: ['Chop everything.','Lay romaine on a plate; arrange toppings in rows.','Dress with oil and vinegar; salt and pepper.']
+      },
+      {
+        title: 'Beef Lettuce Wraps', emoji: '🥬', time: '20 min', serves: '2',
+        desc: 'Savory ground beef in crisp lettuce cups — no added sugar.',
+        ingredients: ['1 lb ground beef','1 tsp ginger, grated','2 garlic cloves','3 tbsp coconut aminos','1 tsp sesame oil','Butter lettuce leaves','Scallions, sesame seeds'],
+        steps: ['Brown beef; drain.','Stir in ginger, garlic, aminos, and sesame oil.','Spoon into lettuce cups.','Top with scallions and sesame.']
+      },
+      {
+        title: 'Tuna Salad Stuffed Avocado', emoji: '🥑', time: '10 min', serves: '2',
+        desc: 'Creamy tuna salad served in avocado halves.',
+        ingredients: ['2 cans tuna, drained','3 tbsp mayonnaise','1 tbsp Dijon','1 celery stalk, diced','2 tbsp red onion','2 avocados, halved','Lemon, parsley'],
+        steps: ['Mix tuna, mayo, Dijon, celery, onion, lemon.','Scoop into avocado halves.','Garnish with parsley and pepper.']
+      },
+      {
+        title: 'Turkey & Cheese Roll-Ups', emoji: '🧀', time: '10 min', serves: '1',
+        desc: 'Low-carb wraps using deli turkey as the "bread".',
+        ingredients: ['6 slices roast turkey','3 slices cheddar','1 avocado','Spinach','Mustard'],
+        steps: ['Lay turkey flat; spread with mustard.','Add cheese, spinach, and avocado slices.','Roll up tightly; slice in half.']
+      }
+    ],
+    dinner: [
+      {
+        title: 'Lemon-Garlic Roast Chicken & Asparagus', emoji: '🍗', time: '45 min', serves: '3',
+        desc: 'Bright, garlicky, no hidden sugars.',
+        ingredients: ['4 chicken thighs','1 bunch asparagus','4 garlic cloves','1 lemon, sliced','3 tbsp olive oil','1 tsp oregano','Salt, pepper'],
+        steps: ['Heat oven to 425°F.','Toss chicken with oil and oregano.','Roast with garlic and lemon 25 min.','Add asparagus; roast 10 more min.','Rest 5 min; serve.']
+      },
+      {
+        title: 'Baked Cod with Broccoli', emoji: '🐟', time: '25 min', serves: '2',
+        desc: 'Flaky cod with roasted broccoli and herb butter.',
+        ingredients: ['2 cod fillets','1 head broccoli, florets','3 tbsp butter','2 garlic cloves, minced','1 tbsp parsley','Lemon, salt, pepper'],
+        steps: ['Heat oven to 400°F.','Toss broccoli with oil and salt; roast 10 min.','Top cod with herb-garlic butter; add to pan.','Roast 12 min until cod flakes.','Finish with lemon.']
+      },
+      {
+        title: 'Pork Chops with Sautéed Spinach', emoji: '🥩', time: '25 min', serves: '2',
+        desc: 'Thick bone-in chops with garlicky spinach.',
+        ingredients: ['2 thick pork chops','4 cups spinach','3 garlic cloves','2 tbsp butter','2 tbsp olive oil','Thyme, salt, pepper'],
+        steps: ['Season chops; sear in oil 4 min per side.','Rest chops; add butter, garlic, thyme to pan.','Wilt spinach in the pan.','Serve chops over spinach.']
+      },
+      {
+        title: 'Cauliflower Fried "Rice"', emoji: '🍚', time: '20 min', serves: '2',
+        desc: 'Low-carb fried rice with shrimp or chicken.',
+        ingredients: ['1 head cauliflower, riced','2 eggs','½ cup frozen peas','2 scallions','3 tbsp coconut aminos','1 tsp sesame oil','1 tbsp ginger','½ lb cooked shrimp'],
+        steps: ['Scramble eggs; remove.','Stir-fry cauliflower rice with ginger 5 min.','Add peas, shrimp, aminos, sesame oil.','Fold in eggs and scallions.']
+      },
+      {
+        title: 'Zucchini Lasagna', emoji: '🍝', time: '60 min', serves: '4',
+        desc: 'Layers of zucchini, beef, and cheese — no noodles, no sugar.',
+        ingredients: ['3 large zucchini, sliced lengthwise','1 lb ground beef','2 cups unsweetened marinara','1½ cups ricotta','2 cups mozzarella','1 egg','Basil, oregano'],
+        steps: ['Salt zucchini slices; drain 10 min, pat dry.','Brown beef; mix with marinara.','Mix ricotta with egg and herbs.','Layer zucchini, meat sauce, ricotta, mozzarella; repeat.','Bake covered at 375°F for 35 min, uncovered 10 min.']
+      }
+    ]
+  },
+
+  /* =================== GLUTEN FREE =================== */
+  glutenfree: {
+    breakfast: [
+      {
+        title: 'Quinoa Breakfast Bowl', emoji: '🥣', time: '15 min', serves: '2',
+        desc: 'A warm, nutty alternative to oatmeal.',
+        ingredients: ['1 cup cooked quinoa','1 cup almond milk','1 tbsp honey','½ tsp cinnamon','1 banana','2 tbsp almonds','1 tbsp chia seeds'],
+        steps: ['Warm quinoa with milk and cinnamon.','Stir in honey.','Top with banana, almonds, and chia.']
+      },
+      {
+        title: 'Greek Yogurt Parfait with GF Granola', emoji: '🍓', time: '5 min', serves: '1',
+        desc: 'Layered yogurt, fruit, and certified gluten-free granola.',
+        ingredients: ['1 cup Greek yogurt','½ cup GF granola','½ cup strawberries','2 tbsp honey','1 tbsp slivered almonds'],
+        steps: ['Layer yogurt, granola, and berries in a glass.','Drizzle with honey; top with almonds.']
+      },
+      {
+        title: 'Veggie Frittata', emoji: '🍳', time: '25 min', serves: '3',
+        desc: 'Baked egg dish with peppers, spinach, and cheese.',
+        ingredients: ['8 eggs','½ cup milk','1 cup spinach','½ bell pepper, diced','¼ cup crumbled feta','2 tbsp olive oil','Salt, pepper'],
+        steps: ['Sauté pepper and spinach in oil.','Whisk eggs with milk, salt, pepper.','Pour over veg in oven-safe pan.','Top with feta; bake 15 min at 375°F.']
+      },
+      {
+        title: 'Corn Tortilla Breakfast Tacos', emoji: '🌮', time: '15 min', serves: '2',
+        desc: 'Scrambled eggs and chorizo in soft corn tortillas.',
+        ingredients: ['6 eggs','4 oz chorizo','6 corn tortillas','½ cup shredded cheese','Salsa, cilantro'],
+        steps: ['Brown chorizo; add beaten eggs and scramble.','Warm tortillas on an open flame or dry pan.','Fill tortillas with eggs, cheese, salsa, cilantro.']
+      },
+      {
+        title: 'Chia Banana Smoothie', emoji: '🍌', time: '5 min', serves: '1',
+        desc: 'Creamy dairy-free shake that keeps you full.',
+        ingredients: ['1 frozen banana','1 cup almond milk','1 tbsp chia seeds','1 tbsp almond butter','1 tsp honey','Pinch cinnamon'],
+        steps: ['Blend everything until smooth.','Let stand 2 min for chia to thicken.']
+      }
+    ],
+    lunch: [
+      {
+        title: 'Stuffed Bell Peppers with Rice', emoji: '🫑', time: '40 min', serves: '4',
+        desc: 'Beef, rice, and tomato tucked into sweet peppers.',
+        ingredients: ['4 bell peppers','1 lb ground beef','1 cup cooked white rice','1 cup GF tomato sauce','½ onion','2 garlic cloves','1 tsp paprika','Shredded cheese'],
+        steps: ['Heat oven to 375°F.','Brown beef with onion and garlic.','Stir in rice, sauce, paprika.','Stuff peppers; bake covered 30 min.','Top with cheese; bake 5 more min.']
+      },
+      {
+        title: 'Rice Paper Summer Rolls', emoji: '🥒', time: '20 min', serves: '2',
+        desc: 'Fresh rolls with shrimp, herbs, and peanut dipping sauce.',
+        ingredients: ['8 rice paper wrappers','½ lb cooked shrimp, halved','1 cup cooked vermicelli','Lettuce, mint, cilantro','Carrot, julienned','3 tbsp peanut butter','2 tbsp tamari','1 lime','1 tsp honey'],
+        steps: ['Dip rice paper in warm water 5 sec.','Layer lettuce, herbs, noodles, carrot, shrimp.','Roll tightly.','Whisk peanut butter, tamari, lime, honey; thin with water.','Dip and eat.']
+      },
+      {
+        title: 'Quinoa Tabbouleh', emoji: '🥗', time: '20 min', serves: '3',
+        desc: 'Bright herb salad, GF style with quinoa instead of bulgur.',
+        ingredients: ['1 cup cooked quinoa','1 cup parsley, chopped','½ cup mint','2 tomatoes, diced','½ cucumber, diced','¼ cup lemon juice','⅓ cup olive oil','Salt'],
+        steps: ['Cool quinoa.','Combine with herbs, tomato, cucumber.','Dress with lemon, oil, salt.','Chill 15 min to marry flavors.']
+      },
+      {
+        title: 'Shrimp Poke Bowl', emoji: '🍚', time: '20 min', serves: '2',
+        desc: 'Cooked shrimp over rice with avocado, edamame, and tamari.',
+        ingredients: ['½ lb cooked shrimp','1½ cups cooked sushi rice','1 avocado','½ cup shelled edamame','2 scallions','2 tbsp tamari','1 tsp sesame oil','Sesame seeds','Nori strips'],
+        steps: ['Divide rice between 2 bowls.','Top with shrimp, avocado, edamame.','Whisk tamari and sesame oil; drizzle.','Garnish with scallions, sesame, nori.']
+      },
+      {
+        title: 'GF Pasta Primavera', emoji: '🍝', time: '25 min', serves: '3',
+        desc: 'GF pasta tossed with spring vegetables in a lemon-butter sauce.',
+        ingredients: ['8 oz GF pasta','1 cup asparagus','1 zucchini','½ cup peas','2 tbsp butter','2 garlic cloves','Lemon zest','Parmesan'],
+        steps: ['Cook pasta; reserve ½ cup water.','Sauté veg in butter with garlic 5 min.','Toss pasta with veg, lemon zest, pasta water.','Top with Parmesan.']
+      }
+    ],
+    dinner: [
+      {
+        title: 'Grilled Steak with Sweet Potato Mash', emoji: '🥩', time: '30 min', serves: '2',
+        desc: 'Naturally gluten free and deeply satisfying.',
+        ingredients: ['2 ribeyes','2 sweet potatoes','3 tbsp butter','2 tbsp olive oil','Rosemary','Salt, pepper'],
+        steps: ['Boil sweet potatoes 15 min; mash with butter.','Pat steaks dry; season.','Sear 3–4 min per side with rosemary.','Rest 5 min; serve over mash.']
+      },
+      {
+        title: 'Coconut Shrimp Curry', emoji: '🍤', time: '25 min', serves: '3',
+        desc: 'Fragrant coconut curry with jumbo shrimp.',
+        ingredients: ['1 lb shrimp','1 can coconut milk','2 tbsp red curry paste','1 red pepper','1 tbsp ginger','1 lime','Cilantro','Jasmine rice'],
+        steps: ['Fry curry paste 1 min; add coconut milk.','Add pepper and ginger; simmer 5 min.','Add shrimp; cook 3 min.','Finish with lime; serve over rice with cilantro.']
+      },
+      {
+        title: 'Stuffed Spaghetti Squash', emoji: '🎃', time: '60 min', serves: '2',
+        desc: 'Roasted squash shells filled with sausage marinara.',
+        ingredients: ['1 spaghetti squash','1 lb Italian sausage (GF)','2 cups GF marinara','1 cup mozzarella','Basil'],
+        steps: ['Halve squash; roast cut-side down 40 min at 400°F.','Brown sausage; stir in marinara.','Scrape squash into strands in the shells.','Top with sauce and mozzarella; broil 5 min.','Finish with basil.']
+      },
+      {
+        title: 'Chicken Piccata (GF)', emoji: '🍗', time: '25 min', serves: '2',
+        desc: 'Lemon-caper sauce over pan-seared chicken dusted in GF flour.',
+        ingredients: ['2 chicken breasts, sliced thin','¼ cup GF flour','3 tbsp butter','2 tbsp olive oil','½ cup chicken broth','¼ cup lemon juice','2 tbsp capers','Parsley'],
+        steps: ['Dredge chicken in flour.','Sear in oil and 1 tbsp butter 3 min per side; remove.','Deglaze pan with broth and lemon.','Whisk in remaining butter and capers.','Return chicken; coat and serve with parsley.']
+      },
+      {
+        title: 'Pan-Seared Scallops with Risotto', emoji: '🍚', time: '35 min', serves: '2',
+        desc: 'Golden scallops atop creamy Parmesan risotto.',
+        ingredients: ['½ lb large scallops','1 cup arborio rice','4 cups warm chicken broth','1 shallot','½ cup white wine','3 tbsp butter','¼ cup Parmesan','Chives'],
+        steps: ['Soften shallot in butter; toast rice 1 min.','Deglaze with wine; add broth a ladle at a time, 20 min.','Stir in Parmesan.','Pat scallops dry; sear 90 sec per side.','Plate risotto; top with scallops and chives.']
+      }
+    ]
+  },
+
+  /* =================== DAIRY FREE =================== */
+  dairyfree: {
+    breakfast: [
+      {
+        title: 'Coconut Yogurt Parfait with Granola', emoji: '🥥', time: '5 min', serves: '1',
+        desc: 'Layered coconut yogurt, fruit, and crunchy granola.',
+        ingredients: ['1 cup coconut yogurt','¼ cup granola (dairy-free)','½ cup mixed berries','1 tbsp maple','1 tbsp hemp hearts'],
+        steps: ['Layer yogurt, berries, granola with maple in a glass.','Repeat layers; top with hemp hearts.']
+      },
+      {
+        title: 'Avocado Toast with Egg', emoji: '🥑', time: '10 min', serves: '1',
+        desc: 'Creamy avocado topped with a fried egg.',
+        ingredients: ['2 slices dairy-free bread','1 avocado','1 egg','1 tsp olive oil','Red pepper flakes, salt'],
+        steps: ['Toast bread.','Mash avocado with salt.','Fry egg in oil, sunny-side up.','Top toast with avocado and egg.']
+      },
+      {
+        title: 'Banana Almond Smoothie', emoji: '🍌', time: '5 min', serves: '1',
+        desc: 'Thick, creamy, no dairy required.',
+        ingredients: ['1 frozen banana','1 cup almond milk','2 tbsp almond butter','1 tsp vanilla','1 tsp chia seeds','Pinch cinnamon'],
+        steps: ['Blend until smooth and thick.']
+      },
+      {
+        title: 'Oatmeal with Almond Milk & Berries', emoji: '🥣', time: '10 min', serves: '1',
+        desc: 'Cozy oats with a handful of berries and nuts.',
+        ingredients: ['½ cup rolled oats','1 cup almond milk','½ cup blueberries','2 tbsp sliced almonds','1 tbsp maple','Pinch salt'],
+        steps: ['Simmer oats in almond milk with salt 5 min.','Stir in maple.','Top with berries and almonds.']
+      },
+      {
+        title: 'Veggie Breakfast Hash', emoji: '🥔', time: '25 min', serves: '2',
+        desc: 'Crispy potatoes with peppers, onions, and a fried egg on top.',
+        ingredients: ['2 russet potatoes, diced','½ onion','1 bell pepper','3 tbsp olive oil','2 eggs','Smoked paprika','Salt, pepper'],
+        steps: ['Par-cook potatoes 8 min.','Fry in oil with paprika until crisp.','Add peppers and onion; cook 5 min.','Top with fried eggs.']
+      }
+    ],
+    lunch: [
+      {
+        title: 'Asian Rice Noodle Salad', emoji: '🍜', time: '20 min', serves: '2',
+        desc: 'Cold noodles with herbs and a zippy lime dressing.',
+        ingredients: ['6 oz rice vermicelli','1 carrot','1 cucumber','Mint, cilantro','Lime, tamari, sesame oil','Honey, ginger','Crushed peanuts'],
+        steps: ['Cook and cool noodles.','Whisk lime, tamari, sesame oil, honey, ginger.','Toss noodles with veg, herbs, dressing.','Top with peanuts.']
+      },
+      {
+        title: 'Mediterranean Grain Bowl', emoji: '🥗', time: '20 min', serves: '2',
+        desc: 'Farro, chickpeas, olives, and lemony greens — no cheese needed.',
+        ingredients: ['1 cup cooked farro','1 can chickpeas','½ cup Kalamata olives','1 cup arugula','½ cucumber','2 tbsp tahini','1 lemon','Olive oil'],
+        steps: ['Whisk tahini, lemon, oil, salt, water.','Build bowls with farro, chickpeas, olives, arugula, cucumber.','Drizzle with sauce.']
+      },
+      {
+        title: 'Turkey Avocado Wrap', emoji: '🌯', time: '10 min', serves: '1',
+        desc: 'Lean turkey and ripe avocado in a dairy-free wrap.',
+        ingredients: ['1 large flour tortilla (dairy-free)','4 slices roast turkey','½ avocado','Lettuce, tomato','1 tbsp hummus','Mustard'],
+        steps: ['Spread hummus and mustard on tortilla.','Layer turkey, avocado, lettuce, tomato.','Roll tight, slice in half.']
+      },
+      {
+        title: 'Vietnamese Chicken Pho', emoji: '🍲', time: '40 min', serves: '2',
+        desc: 'Aromatic broth with rice noodles and poached chicken.',
+        ingredients: ['6 cups chicken broth','2 star anise','1 cinnamon stick','1 onion, charred','1 inch ginger, charred','2 chicken breasts','8 oz rice noodles','Basil, lime, bean sprouts'],
+        steps: ['Simmer broth with anise, cinnamon, onion, ginger 25 min.','Poach chicken 15 min; slice.','Cook noodles.','Ladle broth over noodles and chicken.','Top with basil, sprouts, lime.']
+      },
+      {
+        title: 'Roasted Veggie Couscous Salad', emoji: '🥗', time: '35 min', serves: '3',
+        desc: 'Warm roasted vegetables over lemony couscous.',
+        ingredients: ['1 cup couscous','1 zucchini','1 red pepper','1 red onion','Olive oil','2 tbsp lemon juice','Parsley','Salt, pepper'],
+        steps: ['Roast veg tossed in oil 25 min at 425°F.','Hydrate couscous with boiling water 5 min.','Toss with veg, lemon, parsley.']
+      }
+    ],
+    dinner: [
+      {
+        title: 'Moroccan Chicken Tagine', emoji: '🍗', time: '50 min', serves: '4',
+        desc: 'Warmly spiced, slow-simmered, totally dairy-free.',
+        ingredients: ['6 chicken thighs','Olive oil','1 onion','3 garlic cloves','1 tsp each cumin, coriander, paprika, cinnamon','Preserved lemon','½ cup olives','Chicken broth','Cilantro'],
+        steps: ['Brown chicken; set aside.','Soften onion and garlic; bloom spices.','Return chicken with lemon, olives, broth.','Simmer covered 35 min.','Finish with cilantro.']
+      },
+      {
+        title: 'Cajun Shrimp & Rice', emoji: '🍤', time: '25 min', serves: '3',
+        desc: 'Spicy shrimp with bell peppers over rice.',
+        ingredients: ['1 lb shrimp','2 tbsp Cajun seasoning','1 bell pepper','½ onion','2 garlic cloves','3 tbsp olive oil','Lemon','Rice'],
+        steps: ['Toss shrimp with seasoning.','Sauté pepper and onion in oil 5 min.','Add garlic and shrimp; cook 3 min.','Serve over rice with lemon.']
+      },
+      {
+        title: 'Grilled Pork Tenderloin with Apples', emoji: '🍖', time: '35 min', serves: '3',
+        desc: 'Juicy pork with caramelized apples — no dairy.',
+        ingredients: ['1 pork tenderloin','2 tbsp olive oil','1 tsp sage','2 apples, sliced','1 onion','2 tbsp apple cider vinegar','1 tbsp maple'],
+        steps: ['Season tenderloin; sear on all sides.','Roast at 400°F 18 min to 145°F.','Meanwhile, sauté apples and onion; deglaze with vinegar and maple.','Slice pork; top with apple mixture.']
+      },
+      {
+        title: 'Coconut Chicken Curry', emoji: '🍛', time: '35 min', serves: '3',
+        desc: 'Mild, creamy curry with a coconut-milk base.',
+        ingredients: ['1½ lb chicken thighs','1 can coconut milk','2 tbsp curry powder','1 onion','3 garlic cloves','1 inch ginger','1 tomato','Rice, cilantro'],
+        steps: ['Sauté onion, garlic, ginger in oil.','Bloom curry powder 30 sec.','Add chicken; brown.','Add tomato and coconut milk; simmer 20 min.','Serve over rice with cilantro.']
+      },
+      {
+        title: 'Sheet-Pan Fajitas', emoji: '🌯', time: '25 min', serves: '3',
+        desc: 'Steak, peppers, and onions roasted on one pan.',
+        ingredients: ['1 lb flank steak, sliced','3 bell peppers, sliced','1 onion','2 tbsp olive oil','2 tbsp fajita seasoning','Lime','Corn tortillas','Guacamole'],
+        steps: ['Toss everything with oil and seasoning.','Roast at 450°F for 12 min.','Squeeze lime.','Serve in tortillas with guac.']
+      }
+    ]
+  },
+
+  /* =================== CARNIVORE =================== */
+  carnivore: {
+    breakfast: [
+      {
+        title: 'Bacon & Eggs Skillet', emoji: '🥓', time: '15 min', serves: '2',
+        desc: 'Pure animal-based fuel.',
+        ingredients: ['6 strips bacon','4 eggs','Salt, pepper'],
+        steps: ['Crisp bacon; reserve fat.','Cook eggs in bacon fat.','Season and serve.']
+      },
+      {
+        title: 'Steak & Eggs', emoji: '🥩', time: '20 min', serves: '1',
+        desc: 'A sirloin steak with sunny-side-up eggs.',
+        ingredients: ['1 sirloin steak','2 eggs','2 tbsp butter','Salt, pepper'],
+        steps: ['Season steak; sear 3 min per side in butter.','Rest 5 min.','Fry eggs in the pan.','Slice steak; plate with eggs.']
+      },
+      {
+        title: 'Ham & Cheese Omelet', emoji: '🍳', time: '10 min', serves: '1',
+        desc: 'Classic fold-over omelet with salty ham and melty cheese.',
+        ingredients: ['3 eggs','2 oz diced ham','¼ cup shredded cheddar','1 tbsp butter','Salt, pepper'],
+        steps: ['Whisk eggs; melt butter in pan.','Pour eggs; scatter ham and cheese.','Fold and slide onto plate.']
+      },
+      {
+        title: 'Ground Beef Breakfast Patties', emoji: '🥓', time: '15 min', serves: '2',
+        desc: 'Simple seasoned beef patties — savory and filling.',
+        ingredients: ['1 lb ground beef','1 tsp salt','½ tsp pepper','½ tsp garlic powder','Butter or tallow'],
+        steps: ['Mix beef with seasonings.','Form 4 patties.','Sear in butter 3 min per side.']
+      },
+      {
+        title: 'Sausage & Egg Cups', emoji: '🍳', time: '25 min', serves: '3',
+        desc: 'Sausage-lined muffin cups with a baked egg center.',
+        ingredients: ['6 breakfast sausages, casings removed','6 eggs','Salt, pepper'],
+        steps: ['Press sausage into muffin tin to form cups.','Crack an egg into each.','Bake at 400°F for 15 min.']
+      }
+    ],
+    lunch: [
+      {
+        title: 'Grilled Ribeye with Bone Marrow', emoji: '🍖', time: '25 min', serves: '2',
+        desc: 'Steak, marrow, butter — a carnivore classic.',
+        ingredients: ['2 ribeyes','2 marrow bones, halved','2 tbsp butter','Flaky salt, pepper'],
+        steps: ['Roast marrow 15 min at 450°F.','Grill steaks 3–4 min per side.','Rest 5 min; top with butter.','Spoon marrow over steak.']
+      },
+      {
+        title: 'Burger Patties with Cheese', emoji: '🍔', time: '15 min', serves: '2',
+        desc: 'Bunless burgers with melted cheese and butter.',
+        ingredients: ['1 lb ground beef','4 slices cheddar','2 tbsp butter','Salt, pepper'],
+        steps: ['Form 4 thin patties; season.','Sear in butter 2 min per side.','Top with cheese to melt.','Plate 2 patties each.']
+      },
+      {
+        title: 'Pork Belly Bites', emoji: '🐷', time: '40 min', serves: '3',
+        desc: 'Crispy, melty pork belly cubes.',
+        ingredients: ['1 lb pork belly, cubed','1 tbsp salt','1 tsp pepper'],
+        steps: ['Season pork belly.','Roast at 425°F for 30 min, flipping halfway.','Broil 2 min for extra crisp.']
+      },
+      {
+        title: 'Lamb Chops', emoji: '🍖', time: '20 min', serves: '2',
+        desc: 'Butter-basted lamb chops with a simple salt crust.',
+        ingredients: ['6 lamb chops','3 tbsp butter','Rosemary, garlic','Salt, pepper'],
+        steps: ['Season chops.','Sear in hot pan 2 min per side.','Add butter, rosemary, garlic; baste 1 min.','Rest and serve.']
+      },
+      {
+        title: 'Grilled Salmon Fillet', emoji: '🐟', time: '15 min', serves: '2',
+        desc: 'Pure salmon with butter and salt.',
+        ingredients: ['2 salmon fillets','2 tbsp butter','Salt, pepper'],
+        steps: ['Pat salmon dry; season.','Sear skin-side down 4 min.','Flip and cook 2 min.','Top with butter.']
+      }
+    ],
+    dinner: [
+      {
+        title: 'Slow-Cooked Beef Short Ribs', emoji: '🍲', time: '3 hrs', serves: '4',
+        desc: 'Fall-off-the-bone tender, minimal seasoning.',
+        ingredients: ['4 lb short ribs','2 tbsp tallow','2 cups beef broth','Salt, pepper'],
+        steps: ['Heat oven to 300°F.','Season ribs; sear in tallow.','Add broth; braise covered 2½ hrs.','Rest 10 min.']
+      },
+      {
+        title: 'Prime Rib Roast', emoji: '🥩', time: '2 hrs 30 min', serves: '6',
+        desc: 'Showstopping roast with a salt-and-butter crust.',
+        ingredients: ['4 lb prime rib','3 tbsp butter','2 tbsp salt','1 tbsp pepper'],
+        steps: ['Rub roast with butter, salt, pepper.','Roast at 500°F for 15 min.','Drop to 325°F; cook to 125°F internal (about 1½ hrs).','Rest 20 min before slicing.']
+      },
+      {
+        title: 'Chicken Thighs in Butter', emoji: '🍗', time: '30 min', serves: '3',
+        desc: 'Crispy-skin thighs bathed in butter.',
+        ingredients: ['6 bone-in, skin-on chicken thighs','4 tbsp butter','Salt, pepper'],
+        steps: ['Season skin generously.','Sear skin-side down 8 min in cold pan until crisp.','Flip; add butter.','Finish in 400°F oven 12 min.','Spoon butter over before serving.']
+      },
+      {
+        title: 'Surf & Turf (Filet + Shrimp)', emoji: '🦐', time: '30 min', serves: '2',
+        desc: 'Buttery filet mignon with garlic shrimp.',
+        ingredients: ['2 filet mignon steaks','½ lb shrimp, peeled','4 tbsp butter','2 garlic cloves','Salt, pepper'],
+        steps: ['Season filets; sear 3 min per side.','Rest in foil.','Sauté shrimp in butter and garlic 3 min.','Plate filet with shrimp on top.','Spoon butter over.']
+      },
+      {
+        title: 'Roast Turkey Breast', emoji: '🦃', time: '1 hr 30 min', serves: '4',
+        desc: 'Bone-in turkey breast with a crispy, buttered skin.',
+        ingredients: ['1 bone-in turkey breast (3–4 lb)','4 tbsp butter, softened','Salt, pepper'],
+        steps: ['Rub butter, salt, pepper under and over skin.','Roast at 350°F until 160°F internal, ~75 min.','Rest 15 min; slice.']
+      }
+    ]
+  }
+};
+
+/* ----------------------------------------------------------
+   State + storage
+---------------------------------------------------------- */
+const USERS_KEY = 'cc_users_v1';
+const SESSION_KEY = 'cc_session_v1';
+
+function loadUsers() {
+  try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
+  catch { return {}; }
+}
+function saveUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
+function getSession() {
+  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
+  catch { return null; }
+}
+function setSession(s) {
+  if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
+  else localStorage.removeItem(SESSION_KEY);
+}
+
+// Seed demo account once
+(function seedDemo() {
+  const users = loadUsers();
+  if (!users['demo@cook.com']) {
+    users['demo@cook.com'] = { name: 'Demo Chef', password: 'demo123' };
+    saveUsers(users);
+  }
+})();
+
+/* ----------------------------------------------------------
+   Auth UI
+---------------------------------------------------------- */
+const loginView = document.getElementById('login-view');
+const appView = document.getElementById('app-view');
+const tabLogin = document.getElementById('tab-login');
+const tabSignup = document.getElementById('tab-signup');
+const authTitle = document.getElementById('auth-title');
+const authSub = document.getElementById('auth-sub');
+const nameField = document.getElementById('name-field');
+const submitBtn = document.getElementById('submit-btn');
+const authForm = document.getElementById('auth-form');
+const authError = document.getElementById('auth-error');
+
+let mode = 'login';
+function setMode(m) {
+  mode = m;
+  const isLogin = m === 'login';
+  tabLogin.classList.toggle('active', isLogin);
+  tabSignup.classList.toggle('active', !isLogin);
+  authTitle.textContent = isLogin ? 'Welcome back' : 'Create your account';
+  authSub.textContent = isLogin
+    ? 'Sign in to explore recipes tailored to your diet.'
+    : 'Sign up to start cooking with the community.';
+  nameField.hidden = isLogin;
+  submitBtn.textContent = isLogin ? 'Sign in' : 'Create account';
+  authError.hidden = true;
+}
+tabLogin.addEventListener('click', () => setMode('login'));
+tabSignup.addEventListener('click', () => setMode('signup'));
+
+function showError(msg) {
+  authError.textContent = msg;
+  authError.hidden = false;
+}
+
+authForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+  const name = document.getElementById('name').value.trim();
+  const users = loadUsers();
+
+  if (mode === 'signup') {
+    if (!name) return showError('Please enter your name.');
+    if (users[email]) return showError('An account with that email already exists.');
+    users[email] = { name, password };
+    saveUsers(users);
+    setSession({ email, name });
+    enterApp({ email, name });
+    return;
+  }
+  const u = users[email];
+  if (!u || u.password !== password) {
+    return showError('Email or password is incorrect.');
+  }
+  setSession({ email, name: u.name });
+  enterApp({ email, name: u.name });
+});
+
+/* ----------------------------------------------------------
+   App (members area)
+---------------------------------------------------------- */
+const chipsEl = document.getElementById('diet-chips');
+const mealsEl = document.getElementById('meals');
+const greetingEl = document.getElementById('greeting');
+const userNameEl = document.getElementById('user-name');
+const userAvatarEl = document.getElementById('user-avatar');
+
+let activeDiet = 'none';
+
+function enterApp(session) {
+  loginView.hidden = true;
+  appView.hidden = false;
+  const first = (session.name || session.email).split(/\s+/)[0];
+  greetingEl.textContent = `Hey ${first} 👋`;
+  userNameEl.textContent = session.name || session.email;
+  userAvatarEl.textContent = (session.name || session.email).charAt(0).toUpperCase();
+  renderChips();
+  renderMeals();
+}
+
+function renderChips() {
+  chipsEl.innerHTML = '';
+  DIETS.forEach(d => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (d.id === activeDiet ? ' active' : '');
+    b.textContent = d.label;
+    b.type = 'button';
+    b.addEventListener('click', () => {
+      activeDiet = d.id;
+      renderChips();
+      renderMeals();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    chipsEl.appendChild(b);
+  });
+}
+
+function renderMeals() {
+  mealsEl.innerHTML = '';
+  const recipes = RECIPES[activeDiet];
+  MEALS.forEach(m => {
+    const section = document.createElement('section');
+    section.className = 'meal-section';
+    const list = recipes[m.id] || [];
+    const cards = list.map((r, idx) => `
+      <article class="card" data-diet="${activeDiet}" data-meal="${m.id}" data-idx="${idx}">
+        <div class="card-img">${r.emoji}</div>
+        <div class="card-body">
+          <div class="card-tag">${m.label}</div>
+          <h3 class="card-title">${r.title}</h3>
+          <div class="card-meta">
+            <span>⏱ ${r.time}</span>
+            <span>🍽 Serves ${r.serves}</span>
+          </div>
+        </div>
+      </article>
+    `).join('');
+    section.innerHTML = `
+      <h2>${m.label}</h2>
+      <p class="meal-sub">${m.sub}</p>
+      <div class="cards">${cards}</div>
+    `;
+    mealsEl.appendChild(section);
+  });
+
+  mealsEl.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => openModal(card.dataset.diet, card.dataset.meal, parseInt(card.dataset.idx, 10)));
+  });
+}
+
+/* ----------------------------------------------------------
+   Modal
+---------------------------------------------------------- */
+const modal = document.getElementById('modal');
+const modalClose = document.getElementById('modal-close');
+
+function openModal(dietId, mealId, idx) {
+  const r = RECIPES[dietId][mealId][idx];
+  document.getElementById('modal-emoji').textContent = r.emoji;
+  document.getElementById('modal-title').textContent = r.title;
+  document.getElementById('modal-time').textContent = '⏱ ' + r.time;
+  document.getElementById('modal-serves').textContent = '🍽 Serves ' + r.serves;
+  document.getElementById('modal-desc').textContent = r.desc;
+  const ul = document.getElementById('modal-ingredients');
+  ul.innerHTML = '';
+  r.ingredients.forEach(i => {
+    const li = document.createElement('li');
+    li.textContent = i;
+    ul.appendChild(li);
+  });
+  const ol = document.getElementById('modal-steps');
+  ol.innerHTML = '';
+  r.steps.forEach(s => {
+    const li = document.createElement('li');
+    li.textContent = s;
+    ol.appendChild(li);
+  });
+  modal.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  modal.hidden = true;
+  document.body.style.overflow = '';
+}
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+
+/* ----------------------------------------------------------
+   Logout
+---------------------------------------------------------- */
+document.getElementById('logout-btn').addEventListener('click', () => {
+  setSession(null);
+  appView.hidden = true;
+  loginView.hidden = false;
+  authForm.reset();
+  setMode('login');
+  activeDiet = 'none';
+});
+
+/* ----------------------------------------------------------
+   Boot
+---------------------------------------------------------- */
+const existing = getSession();
+if (existing) enterApp(existing);
+</script>
+</body>
+</html>

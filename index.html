@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ashbovaxo — The Cookbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-0: #07060f;
+    --bg-1: #0c0a1f;
+    --bg-2: #14112e;
+    --ink: #ffffff;
+    --ink-dim: #b9b3d6;
+    --ink-mute: #8a83ad;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.16);
+    --purple: #7a5cff;
+    --purple-deep: #4a2bd9;
+    --blue: #3a7bff;
+    --pink: #ff5db1;
+    --orange: #ff7a3d;
+    --grad-hero: radial-gradient(1200px 700px at 78% 35%, rgba(122,92,255,0.45), transparent 60%),
+                 radial-gradient(900px 600px at 15% 85%, rgba(58,123,255,0.35), transparent 65%),
+                 linear-gradient(180deg, #07060f 0%, #0a0820 60%, #07060f 100%);
+    --grad-cta: linear-gradient(90deg, #ff7a3d 0%, #ff5db1 50%, #7a5cff 100%);
+    --grad-card: linear-gradient(160deg, rgba(122,92,255,0.18), rgba(58,123,255,0.06) 60%, rgba(255,255,255,0.02));
+    --grad-strip: linear-gradient(90deg, #5a3bff, #3a7bff);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg-0); color: var(--ink); font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- HERO ---------- */
+  .hero-shell {
+    position: relative;
+    margin: 24px;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--grad-hero);
+    border: 1px solid var(--line);
+  }
+  .hero-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(420px 280px at 70% 50%, rgba(255,255,255,0.06), transparent 70%),
+      radial-gradient(700px 500px at 90% 90%, rgba(122,92,255,0.25), transparent 60%);
+    pointer-events: none;
+  }
+  .nav {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px;
+  }
+  .brand {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    background: linear-gradient(90deg, #b6a4ff, #7a5cff 60%, #3a7bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.01em;
+  }
+  .nav-links { display: flex; gap: 36px; align-items: center; }
+  .nav-links a {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--ink); position: relative; }
+  .nav-links a.active::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -8px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #fff, transparent);
+  }
+  .nav-actions { display: flex; gap: 16px; align-items: center; }
+  .btn-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 26px;
+    border-radius: 999px;
+    font-weight: 600; font-size: 14px;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(8px);
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .btn-pill:hover { background: rgba(255,255,255,0.10); border-color: rgba(255,255,255,0.4); }
+  .cart-badge {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.22);
+    display: grid; place-items: center;
+    background: rgba(255,255,255,0.04);
+    position: relative;
+  }
+  .cart-badge::after {
+    content: "";
+    position: absolute;
+    top: 6px; right: 7px;
+    width: 8px; height: 8px;
+    background: linear-gradient(135deg, #ff5db1, #ff7a3d);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255,93,177,0.7);
+  }
+
+  .hero {
+    position: relative;
+    z-index: 4;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 40px 48px 96px;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 9px 20px;
+    border: 1px solid rgba(255,255,255,0.22);
+    border-radius: 999px;
+    font-size: 13px; letter-spacing: 0.02em;
+    color: var(--ink-dim);
+    background: rgba(255,255,255,0.03);
+    margin-bottom: 28px;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 6px; height: 6px; border-radius: 50%;
+    background: linear-gradient(135deg, #ff5db1, #ff7a3d);
+    box-shadow: 0 0 10px rgba(255,93,177,0.6);
+  }
+  h1.title {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(56px, 7.2vw, 104px);
+    line-height: 0.94;
+    letter-spacing: -0.025em;
+    margin-bottom: 36px;
+  }
+  h1.title .accent {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 500;
+    background: linear-gradient(90deg, #ff5db1, #ff7a3d 60%, #ffd166);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    align-items: center;
+    margin-top: 28px;
+  }
+  .stack-faces {
+    display: flex;
+  }
+  .stack-faces div {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    border: 2px solid #0a0820;
+    background-size: cover;
+    background-position: center;
+    margin-left: -10px;
+  }
+  .stack-faces div:first-child { margin-left: 0; }
+  .face-1 { background: linear-gradient(135deg, #ffb088, #ff5db1); }
+  .face-2 { background: linear-gradient(135deg, #88c5ff, #7a5cff); }
+  .face-3 { background: linear-gradient(135deg, #ffe0b3, #ff7a3d); }
+  .face-4 { background: linear-gradient(135deg, #c7b3ff, #5a3bff); }
+  .rating { display: flex; flex-direction: column; gap: 4px; }
+  .rating-stars {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 600; font-size: 18px;
+  }
+  .rating-stars .star { color: #ffd166; }
+  .rating-sub { font-size: 12.5px; color: var(--ink-mute); letter-spacing: 0.04em; text-transform: uppercase; }
+
+  .hero-right {
+    position: relative;
+    text-align: right;
+  }
+  .hero-blurb {
+    color: var(--ink-dim);
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 320px;
+    margin-left: auto;
+    margin-bottom: 28px;
+  }
+  .btn-cta {
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 16px 28px;
+    border-radius: 999px;
+    background: var(--grad-cta);
+    color: #fff;
+    font-weight: 600; font-size: 15px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 12px 40px -10px rgba(255,93,177,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 18px 50px -10px rgba(255,93,177,0.65), 0 0 0 1px rgba(255,255,255,0.15) inset; }
+  .btn-cta .arrow {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    display: grid; place-items: center;
+  }
+
+  .book-stage {
+    position: absolute;
+    right: -40px;
+    bottom: -180px;
+    width: 540px;
+    height: 640px;
+    pointer-events: none;
+  }
+  .book {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+  .book-shadow {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    height: 60px;
+    background: radial-gradient(ellipse at center, rgba(122,92,255,0.6), transparent 70%);
+    filter: blur(20px);
+  }
+  .book-cover {
+    position: relative;
+    width: 320px;
+    height: 460px;
+    border-radius: 6px;
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.18), transparent 40%),
+      url("https://thecookbook.shop/cdn/shop/files/ASHBOVA_PRODUCT_IMAGE_SQUARE.png?v=1770505718&width=900") center/cover no-repeat,
+      #000;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.08),
+      0 60px 80px -30px rgba(0,0,0,0.7),
+      0 30px 60px -20px rgba(122,92,255,0.45),
+      -8px 0 0 -2px rgba(255,255,255,0.04),
+      -10px 4px 24px -8px rgba(0,0,0,0.4);
+    transform: rotate(-2deg);
+  }
+  .book-cover::before {
+    content: "";
+    position: absolute;
+    left: -8px; top: 6px; bottom: 6px;
+    width: 14px;
+    background: linear-gradient(90deg, rgba(0,0,0,0.7), rgba(255,255,255,0.05));
+    border-radius: 3px 0 0 3px;
+  }
+  .book-stack {
+    position: absolute;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%);
+    width: 240px; height: 28px;
+    background: linear-gradient(180deg, #1a1638, #0c0a1f);
+    border-radius: 4px;
+    box-shadow: 0 -1px 0 rgba(255,255,255,0.05) inset, 0 8px 24px rgba(0,0,0,0.5);
+  }
+  .book-stack::before {
+    content: "";
+    position: absolute;
+    top: -10px; left: 14px; right: 14px;
+    height: 10px;
+    background: linear-gradient(180deg, #221c4a, #14112e);
+    border-radius: 3px;
+  }
+
+  .squiggle {
+    position: absolute;
+    left: 4%;
+    bottom: 80px;
+    width: 240px;
+    opacity: 0.7;
+    z-index: 3;
+  }
+
+  /* ---------- AWARD MARQUEE ---------- */
+  .marquee-strip {
+    background: var(--grad-strip);
+    padding: 14px 0;
+    overflow: hidden;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+    margin-top: -36px;
+    transform: rotate(-1deg);
+    position: relative;
+    z-index: 6;
+  }
+  .marquee-track {
+    display: flex;
+    gap: 48px;
+    white-space: nowrap;
+    animation: scroll-left 30s linear infinite;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    color: #fff;
+  }
+  .marquee-track span { display: inline-flex; align-items: center; gap: 24px; }
+  .marquee-track .dot {
+    width: 18px; height: 18px;
+    background: radial-gradient(circle at 30% 30%, #ffd166, #ff7a3d);
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 12px rgba(255,209,102,0.7);
+  }
+  @keyframes scroll-left {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- ABOUT ---------- */
+  section { padding: 120px 0; position: relative; }
+  .section-bg-text {
+    position: absolute;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(140px, 16vw, 240px);
+    color: rgba(255,255,255,0.025);
+    letter-spacing: -0.03em;
+    z-index: 0;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .about {
+    display: grid;
+    grid-template-columns: 0.95fr 1.1fr;
+    gap: 80px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+  .about-photo {
+    position: relative;
+    aspect-ratio: 4/5;
+    border-radius: 18px;
+    overflow: hidden;
+    background:
+      linear-gradient(140deg, rgba(122,92,255,0.4), rgba(58,123,255,0.2) 50%, rgba(255,93,177,0.3)),
+      radial-gradient(circle at 60% 35%, #ffd1a3 0%, #c98a5c 35%, #6a3a22 70%, #1a0a06 100%);
+    box-shadow: 0 30px 80px -20px rgba(122,92,255,0.4);
+  }
+  .about-photo::before {
+    content: "👩‍🍳";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 200px;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+    opacity: 0.85;
+  }
+  .about-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(7,6,15,0.7));
+  }
+  .about-card {
+    position: relative;
+    padding: 48px;
+    border-radius: 24px;
+    background: var(--grad-card);
+    border: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+  }
+  .about-card p {
+    color: var(--ink-dim);
+    font-size: 15.5px;
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+  .about-card p strong { color: #fff; font-weight: 600; }
+  .stats-row {
+    display: flex;
+    gap: 56px;
+    align-items: flex-end;
+    margin: 40px 0 0;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .stat-num {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1;
+    background: linear-gradient(180deg, #fff, #b9b3d6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .stat-label {
+    color: var(--ink-mute);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .socials {
+    display: flex;
+    gap: 14px;
+    margin-top: 28px;
+    align-items: center;
+  }
+  .socials .arrow-pill {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--line-strong);
+    display: grid; place-items: center;
+    color: var(--ink-dim);
+  }
+  .socials .icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line-strong);
+    display: grid; place-items: center;
+    font-size: 14px;
+    color: #fff;
+    transition: background 0.25s;
+    cursor: pointer;
+  }
+  .socials .icon:hover { background: var(--purple); border-color: var(--purple); }
+
+  /* ---------- RECIPES ---------- */
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 2;
+  }
+  .section-head h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(38px, 4.4vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .section-head p {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    max-width: 380px;
+    line-height: 1.6;
+  }
+  .pager {
+    display: flex; gap: 10px;
+  }
+  .pager .pager-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line-strong);
+    background: rgba(255,255,255,0.04);
+    color: #fff;
+    display: grid; place-items: center;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .pager .pager-btn:hover { background: var(--purple); border-color: var(--purple); }
+  .pager .pager-btn.active {
+    background: var(--grad-cta);
+    border-color: transparent;
+    box-shadow: 0 8px 24px -8px rgba(255,93,177,0.5);
+  }
+
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    position: relative;
+    z-index: 2;
+  }
+  .recipe-card {
+    border-radius: 20px;
+    background: var(--grad-card);
+    border: 1px solid var(--line);
+    padding: 18px;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .recipe-card:hover { transform: translateY(-6px); border-color: var(--line-strong); }
+  .recipe-thumb {
+    position: relative;
+    aspect-ratio: 3/4;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    display: grid;
+    place-items: center;
+    font-size: 90px;
+  }
+  .recipe-thumb.one { background: linear-gradient(155deg, #1a1638, #0c0a1f); }
+  .recipe-thumb.two { background: linear-gradient(155deg, #0d2d24, #061a13); }
+  .recipe-thumb.three {
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.18), transparent 40%),
+      url("https://thecookbook.shop/cdn/shop/files/ASHBOVA_PRODUCT_IMAGE_SQUARE.png?v=1770505718&width=600") center/cover no-repeat,
+      #000;
+  }
+  .recipe-thumb.four { background: linear-gradient(155deg, #2a1410, #0a0303); }
+  .recipe-thumb.one::after, .recipe-thumb.two::after, .recipe-thumb.four::after {
+    content: ""; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.12), transparent 60%);
+  }
+  .recipe-card h4 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .recipe-price {
+    color: var(--ink-mute);
+    font-size: 14px;
+  }
+
+  /* ---------- REVIEWS ---------- */
+  .reviews-wrap {
+    position: relative;
+  }
+  .reviews-bg-text {
+    text-align: center;
+    margin-bottom: -90px;
+  }
+  .reviews-head {
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    z-index: 2;
+  }
+  .reviews-head h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(38px, 4.4vw, 56px);
+  }
+  .review-row {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .reviewer {
+    aspect-ratio: 1;
+    border-radius: 18px;
+    background:
+      linear-gradient(180deg, transparent, rgba(7,6,15,0.5)),
+      linear-gradient(135deg, #ffd1a3 0%, #c98a5c 50%, #6a3a22 100%);
+    display: grid; place-items: center;
+    font-size: 130px;
+    box-shadow: 0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  .review-card {
+    padding: 36px 40px;
+    background: var(--grad-card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    position: relative;
+  }
+  .review-card .quote {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+  .reviewer-name {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+  }
+  .reviewer-role {
+    color: var(--ink-mute);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .review-pager {
+    position: absolute;
+    right: 28px; bottom: 28px;
+    display: flex; gap: 8px;
+  }
+  .review-pager .pager-btn { width: 36px; height: 36px; }
+
+  /* ---------- NEWSLETTER MARQUEE ---------- */
+  .news-strip {
+    background: var(--grad-strip);
+    padding: 14px 0;
+    overflow: hidden;
+    margin-top: 80px;
+  }
+  .news-strip .marquee-track { font-size: 16px; }
+
+  /* ---------- NEWSLETTER ---------- */
+  .newsletter {
+    padding: 90px 0 80px;
+  }
+  .newsletter-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .newsletter h3 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(34px, 3.8vw, 50px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .newsletter-right p {
+    color: var(--ink-dim);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    font-size: 15px;
+    max-width: 520px;
+  }
+  .news-form {
+    display: flex;
+    gap: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 6px 6px 6px 22px;
+    max-width: 520px;
+  }
+  .news-form input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 14.5px;
+    padding: 12px 0;
+  }
+  .news-form input::placeholder { color: var(--ink-mute); }
+  .news-form button {
+    background: var(--grad-cta);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    padding: 12px 26px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 8px 24px -8px rgba(255,93,177,0.5);
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 32px 0 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .foot-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0 28px;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  .foot-row a { color: var(--ink-dim); font-size: 14px; }
+  .foot-row a:hover { color: #fff; }
+  .foot-brand {
+    text-align: center;
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(72px, 11vw, 160px);
+    letter-spacing: -0.03em;
+    background: linear-gradient(180deg, rgba(122,92,255,0.6), rgba(122,92,255,0));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+    padding-bottom: 0;
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 1024px) {
+    .hero { grid-template-columns: 1fr; padding: 40px 32px 60px; }
+    .book-stage { position: relative; right: auto; bottom: auto; width: 100%; height: 500px; margin-top: 20px; }
+    .about { grid-template-columns: 1fr; gap: 40px; }
+    .recipe-grid { grid-template-columns: repeat(2, 1fr); }
+    .review-row { grid-template-columns: 1fr; }
+    .reviewer { max-width: 240px; margin: 0 auto; }
+    .newsletter-inner { grid-template-columns: 1fr; gap: 32px; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 600px) {
+    .hero-shell { margin: 12px; border-radius: 20px; }
+    .nav { padding: 22px 24px; }
+    .recipe-grid { grid-template-columns: 1fr; }
+    .stats-row { gap: 32px; }
+    .stat-num { font-size: 42px; }
+    .news-form { flex-direction: column; border-radius: 16px; padding: 12px; }
+    .news-form input { padding: 10px 12px; }
+    .news-form button { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============= HERO ============= -->
+<div class="hero-shell">
+  <nav class="nav">
+    <div class="brand">Ashbovaxo</div>
+    <div class="nav-links">
+      <a href="#" class="active">Home</a>
+      <a href="#about">About</a>
+      <a href="#recipes">Recipes</a>
+      <a href="#reviews">Reviews</a>
+      <a href="order.html">Get Spicy</a>
+    </div>
+    <div class="nav-actions">
+      <a href="order.html" class="btn-pill">Order Now</a>
+      <div class="cart-badge">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-left">
+      <div class="eyebrow">Ashbovaxo Presents</div>
+      <h1 class="title">Ready to <span class="accent">Get&nbsp;Spicy?</span><br/>The&nbsp;Cookbook.</h1>
+      <div class="hero-meta">
+        <div class="stack-faces">
+          <div class="face-1"></div>
+          <div class="face-2"></div>
+          <div class="face-3"></div>
+          <div class="face-4"></div>
+        </div>
+        <div class="rating">
+          <div class="rating-stars"><span class="star">★</span> 4.9 Ratings</div>
+          <div class="rating-sub">From 50,000+ Hungry Readers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <p class="hero-blurb">Italian. Born and raised in New York. Meet Ashley in the kitchen — where things tend to heat up (if you know what we mean).</p>
+      <a href="order.html" class="btn-cta">Get The Cookbook
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+    </div>
+
+    <svg class="squiggle" viewBox="0 0 240 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 100 C 60 100, 80 20, 130 40 S 220 90, 230 30" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="0"/>
+      <path d="M222 24 L 232 30 L 226 38" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+    </svg>
+
+    <div class="book-stage">
+      <div class="book-shadow"></div>
+      <div class="book">
+        <div class="book-cover"></div>
+      </div>
+      <div class="book-stack"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============= MARQUEE ============= -->
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span><span class="dot"></span>The Best Cookbook In The World</span>
+    <span><span class="dot"></span>Get Spicy In The Kitchen</span>
+    <span><span class="dot"></span>The Best Cookbook In The World</span>
+    <span><span class="dot"></span>Get Spicy In The Kitchen</span>
+    <span><span class="dot"></span>The Best Cookbook In The World</span>
+    <span><span class="dot"></span>Get Spicy In The Kitchen</span>
+  </div>
+</div>
+
+<!-- ============= ABOUT ============= -->
+<section id="about">
+  <div class="wrap">
+    <div class="section-bg-text" style="left: -40px; top: 60px;">About&nbsp;Me</div>
+    <div class="about">
+      <div class="about-photo"></div>
+      <div class="about-card">
+        <p><strong>Hi, I'm Ashley.</strong> An Italian girl, born and raised in New York — which is just a complicated way of saying I think pasta is a food group and I argue about red sauce on the internet.</p>
+        <p>I started cooking the way every Italian grandmother started cooking — by being told to. Decades later, the only thing that's changed is the audience. For less than the price of a sad takeout salad, you can meet me in the kitchen and learn every recipe I've ever loved.</p>
+        <p>This is the cookbook I wish I'd had at twenty: warm, a little chaotic, and unreasonably good at dinner.</p>
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-num">150+</div>
+            <div class="stat-label">Recipes Inside</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">10+</div>
+            <div class="stat-label">Cuisines Covered</div>
+          </div>
+        </div>
+        <div class="socials">
+          <span class="arrow-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </span>
+          <span class="icon">f</span>
+          <span class="icon">𝕏</span>
+          <span class="icon">◎</span>
+          <span class="icon">▶</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= RECIPES ============= -->
+<section id="recipes">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <h2>What's Inside The Cookbook</h2>
+      </div>
+      <div style="display: flex; align-items: center; gap: 24px;">
+        <p>Italian, American, Asian, Keto, Vegan, Gluten Free, Carnivore, Sugar Free, Dairy Free, Desserts… much, much more.</p>
+        <div class="pager">
+          <div class="pager-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </div>
+          <div class="pager-btn active">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-thumb one">🍝</div>
+        <h4>Eggplant Parmesan</h4>
+        <div class="recipe-price">Italian Classic · 45 min</div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-thumb two">🧀</div>
+        <h4>Mac &amp; Cheese</h4>
+        <div class="recipe-price">American Comfort · 30 min</div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-thumb three"></div>
+        <h4>Meatballs &amp; Ravazzate</h4>
+        <div class="recipe-price">Featured Recipe · Inside</div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-thumb four">🍔</div>
+        <h4>Burger Bowls &amp; Pastina</h4>
+        <div class="recipe-price">Carnivore + Keto · 25 min</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= REVIEWS ============= -->
+<section id="reviews">
+  <div class="wrap reviews-wrap">
+    <div class="section-bg-text reviews-bg-text" style="position: relative; opacity: 1; color: rgba(255,255,255,0.025);">Reviews</div>
+    <div class="reviews-head">
+      <h2>Reviews From My Readers</h2>
+    </div>
+    <div class="review-row">
+      <div class="reviewer">👩</div>
+      <div class="review-card">
+        <p class="quote">"I bought this on a whim and now my husband thinks I went to culinary school. The pastina alone paid for the cookbook three times over. Ashley writes the way your funniest friend texts — except every recipe actually works."</p>
+        <div class="reviewer-name">Adelia Z.</div>
+        <div class="reviewer-role">Home Cook · NY</div>
+        <div class="review-pager">
+          <div class="pager-btn">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </div>
+          <div class="pager-btn active">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= NEWSLETTER MARQUEE ============= -->
+<div class="news-strip">
+  <div class="marquee-track">
+    <span><span class="dot"></span>Subscribe To Newsletter</span>
+    <span><span class="dot"></span>Get Spicy Discounts</span>
+    <span><span class="dot"></span>Subscribe To Newsletter</span>
+    <span><span class="dot"></span>Get Spicy Discounts</span>
+    <span><span class="dot"></span>Subscribe To Newsletter</span>
+    <span><span class="dot"></span>Get Spicy Discounts</span>
+  </div>
+</div>
+
+<!-- ============= NEWSLETTER ============= -->
+<section id="newsletter" class="newsletter">
+  <div class="wrap">
+    <div class="newsletter-inner">
+      <div>
+        <h3>Exclusive Discounts &amp; Recipes Into Your Inbox</h3>
+      </div>
+      <div class="newsletter-right">
+        <p>One email. Spicy recipes, behind-the-scenes kitchen chaos, and first-look discounts on The Cookbook. No spam, ever.</p>
+        <form class="news-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
+          <input type="email" placeholder="Email Address" required>
+          <button type="submit">
+            Subscribe
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= FOOTER ============= -->
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <a href="#">Home</a>
+      <a href="#about">About</a>
+      <a href="#recipes">Recipes</a>
+      <a href="#reviews">Reviews</a>
+      <a href="order.html">Get The Cookbook · $9.99</a>
+    </div>
+    <div class="foot-brand">Ashbovaxo</div>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+# macOS
+.DS_Store
+
+# Raw source images (processed versions are committed as background.jpg / background-wide.jpg)
+0b8301e05875377ef712b261f79cb418.jpg
+a9e5fbc0b3f421cae1da3e069a491cb6.jpg
+thumb-1920-997869.jpg
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
