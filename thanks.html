@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Thank You — Curvy Cookbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-0: #07060f;
+    --ink: #ffffff;
+    --ink-dim: #b9b3d6;
+    --ink-mute: #8a83ad;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.16);
+    --grad-bg: radial-gradient(900px 600px at 50% 0%, rgba(122,92,255,0.45), transparent 65%),
+               radial-gradient(700px 500px at 50% 100%, rgba(255,93,177,0.25), transparent 70%),
+               linear-gradient(180deg, #07060f 0%, #0a0820 60%, #07060f 100%);
+    --grad-cta: linear-gradient(90deg, #ff7a3d 0%, #ff5db1 50%, #7a5cff 100%);
+    --grad-card: linear-gradient(160deg, rgba(122,92,255,0.18), rgba(58,123,255,0.06) 60%, rgba(255,255,255,0.02));
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg-0);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  body {
+    background: var(--grad-bg);
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+
+  nav.top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    background: linear-gradient(90deg, #b6a4ff, #7a5cff 60%, #3a7bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.01em;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+  }
+  .thanks-card {
+    max-width: 600px;
+    width: 100%;
+    padding: 64px 48px;
+    text-align: center;
+    background:
+      radial-gradient(700px 350px at 50% 0%, rgba(122,92,255,0.4), transparent 70%),
+      var(--grad-card);
+    border: 1px solid var(--line-strong);
+    border-radius: 28px;
+    box-shadow: 0 40px 100px -20px rgba(0,0,0,0.7);
+  }
+  .check-icon {
+    width: 92px; height: 92px;
+    border-radius: 50%;
+    background: var(--grad-cta);
+    display: grid; place-items: center;
+    margin: 0 auto 32px;
+    box-shadow: 0 24px 60px -10px rgba(255,93,177,0.5);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 24px 60px -10px rgba(255,93,177,0.5); }
+    50% { box-shadow: 0 28px 80px -10px rgba(255,93,177,0.75); }
+  }
+
+  h1 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(36px, 5vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 18px;
+  }
+  h1 .accent {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 500;
+    background: linear-gradient(90deg, #ff5db1, #ff7a3d 60%, #ffd166);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .lede {
+    color: var(--ink-dim);
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .lede strong { color: #fff; font-weight: 600; }
+
+  .next-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 32px 0;
+    text-align: left;
+  }
+  .next-steps li {
+    list-style: none;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .step-dot {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(122,92,255,0.4), rgba(58,123,255,0.25));
+    border: 1px solid var(--line-strong);
+    display: grid; place-items: center;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 12.5px;
+    color: #fff;
+  }
+  .next-steps strong { display: block; color: #fff; font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+  .next-steps span { color: var(--ink-dim); font-size: 14px; line-height: 1.55; }
+
+  .actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 26px;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 14.5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary {
+    background: var(--grad-cta);
+    color: #fff;
+    border: none;
+    box-shadow: 0 12px 30px -10px rgba(255,93,177,0.5);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -10px rgba(255,93,177,0.65); }
+  .btn-secondary {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--line-strong);
+    color: #fff;
+  }
+  .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+  .footnote {
+    margin-top: 36px;
+    color: var(--ink-mute);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .footnote a { color: #b6a4ff; text-decoration: underline; text-underline-offset: 3px; }
+
+  @media (max-width: 600px) {
+    .thanks-card { padding: 48px 28px; border-radius: 20px; }
+    .check-icon { width: 76px; height: 76px; margin-bottom: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <a href="index.html" class="brand">Ashbovaxo</a>
+</nav>
+
+<main>
+  <div class="thanks-card">
+    <div class="check-icon">
+      <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+    </div>
+
+    <h1>You're in the <span class="accent">kitchen</span>.</h1>
+    <p class="lede">Payment received. Your copy of <strong>Curvy Cookbook</strong> is being delivered to your inbox right now.</p>
+
+    <ul class="next-steps">
+      <li>
+        <span class="step-dot">1</span>
+        <div>
+          <strong>Check your email in the next 60 seconds.</strong>
+          <span>Look for a message from Stripe with your download link. If you don't see it, check your spam folder.</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-dot">2</span>
+        <div>
+          <strong>Save the PDF to your phone or laptop.</strong>
+          <span>It's yours forever. Open it any time you're standing in the kitchen wondering what to make.</span>
+        </div>
+      </li>
+      <li>
+        <span class="step-dot">3</span>
+        <div>
+          <strong>Tag me when you cook.</strong>
+          <span>Hit me on Instagram <a href="#" style="color:#fff;">@ashbovaxo</a> with what you're making — I love seeing your plates.</span>
+        </div>
+      </li>
+    </ul>
+
+    <div class="actions">
+      <a href="index.html" class="btn btn-secondary">Back to home</a>
+      <a href="login.html" class="btn btn-primary">
+        Open Members Area
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+
+    <p class="footnote">
+      Didn't get the email? Email me at <a href="mailto:hello@curvycooking.com">hello@curvycooking.com</a> and I'll resend it manually.
+    </p>
+  </div>
+</main>
+
+</body>
+</html>

@@ -728,7 +728,7 @@
         </div>
 
         <div class="promo-row">
-          <input class="input" type="text" id="promo" placeholder="Promo code (try SPICY)">
+          <input class="input" type="text" id="promo" placeholder="Promo code">
           <button type="button" id="applyPromo">Apply</button>
         </div>
 
@@ -805,17 +805,14 @@
   const taxEl = document.getElementById('tax');
   const grandEl = document.getElementById('grandTotal');
   let qty = 1;
-  let discount = 0;
 
   function fmt(n) { return '$' + n.toFixed(2); }
   function recalc() {
     const sub = PRICE * qty;
-    const taxable = Math.max(0, sub - discount);
-    const tax = taxable * TAX_RATE;
-    const total = taxable + tax;
+    const tax = sub * TAX_RATE;
     subtotalEl.textContent = fmt(sub);
     taxEl.textContent = fmt(tax);
-    grandEl.textContent = fmt(total);
+    grandEl.textContent = fmt(sub + tax);
   }
   document.getElementById('qtyUp').addEventListener('click', () => {
     qty = Math.min(99, qty + 1); qtyNumEl.textContent = qty; recalc();
@@ -823,17 +820,13 @@
   document.getElementById('qtyDown').addEventListener('click', () => {
     qty = Math.max(1, qty - 1); qtyNumEl.textContent = qty; recalc();
   });
+  // Promo codes are validated by Stripe at checkout; we just forward the code
   document.getElementById('applyPromo').addEventListener('click', () => {
-    const code = (document.getElementById('promo').value || '').trim().toUpperCase();
+    const code = (document.getElementById('promo').value || '').trim();
     const btn = document.getElementById('applyPromo');
-    if (code === 'SPICY') {
-      discount = PRICE * 0.2;
-      btn.textContent = 'Applied ✓';
-      btn.style.background = 'linear-gradient(135deg, rgba(122,92,255,0.3), rgba(58,123,255,0.2))';
-      recalc();
-    } else if (code) {
-      btn.textContent = 'Invalid';
-      setTimeout(() => btn.textContent = 'Apply', 1400);
+    if (code) {
+      btn.textContent = 'Will apply at checkout';
+      setTimeout(() => btn.textContent = 'Apply', 2000);
     }
   });
 
@@ -864,7 +857,7 @@
   // Get it at: https://dashboard.stripe.com → Products → The Cookbook
   // → Create payment link → copy URL
   // ============================================================
-  const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/REPLACE_WITH_YOUR_PAYMENT_LINK";
+  const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/28EdRbe8u9cJ9GW4GG2Nq00";
 
   // Submit -> redirect to Stripe Checkout
   document.getElementById('orderForm').addEventListener('submit', (e) => {
