@@ -190,9 +190,26 @@
   }
   .footnote a { color: #b6a4ff; text-decoration: underline; text-underline-offset: 3px; }
 
+  .receipt {
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    margin: -8px auto 28px;
+    max-width: 420px;
+    padding: 16px 22px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    text-align: left;
+  }
+  .receipt > div { display: flex; flex-direction: column; gap: 3px; }
+  .receipt span { color: var(--ink-mute); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .receipt strong { color: #fff; font-weight: 600; font-size: 14.5px; }
+
   @media (max-width: 600px) {
     .thanks-card { padding: 48px 28px; border-radius: 20px; }
     .check-icon { width: 76px; height: 76px; margin-bottom: 24px; }
+    .receipt { flex-direction: column; gap: 10px; }
   }
 </style>
 </head>
@@ -209,7 +226,11 @@
     </div>
 
     <h1>You're in the <span class="accent">kitchen</span>.</h1>
-    <p class="lede">Payment received. We just sent an email with a link to create your <strong>Curvy Cookbook</strong> members account.</p>
+    <p class="lede" id="lede">Payment received. We just sent an email with a link to create your <strong>Curvy Cookbook</strong> members account.</p>
+    <div class="receipt" id="receipt" style="display:none;">
+      <div><span>Sent to</span><strong id="customerEmail">—</strong></div>
+      <div><span>Total</span><strong id="customerTotal">—</strong></div>
+    </div>
 
     <ul class="next-steps">
       <li>
@@ -248,6 +269,34 @@
     </p>
   </div>
 </main>
+
+<script>
+  // Verify the payment really cleared by fetching the session details from
+  // our backend (which calls Stripe with the secret key). The browser-only
+  // ?session_id=... param can't be trusted on its own.
+  (async () => {
+    const sessionId = new URLSearchParams(location.search).get('session_id');
+    if (!sessionId) return;
+
+    try {
+      const res = await fetch('/api/session-status?session_id=' + encodeURIComponent(sessionId));
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.payment_status !== 'paid') return;
+
+      const email = data.customer_email || '';
+      const total = (data.amount_total != null)
+        ? new Intl.NumberFormat('en-US', { style: 'currency', currency: (data.currency || 'usd').toUpperCase() }).format(data.amount_total / 100)
+        : '';
+
+      if (email) document.getElementById('customerEmail').textContent = email;
+      if (total) document.getElementById('customerTotal').textContent = total;
+      if (email || total) document.getElementById('receipt').style.display = 'flex';
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+</script>
 
 </body>
 </html>

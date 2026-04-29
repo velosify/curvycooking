@@ -431,6 +431,40 @@
     background-position: center;
   }
 
+  /* ---------- EMBEDDED CHECKOUT ---------- */
+  .stripe-card { min-height: 600px; }
+  #checkout { min-height: 540px; }
+  .checkout-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 80px 20px;
+    color: var(--ink-dim);
+    font-size: 14px;
+  }
+  .spinner {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(255,255,255,0.1);
+    border-top-color: var(--purple);
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .checkout-error {
+    display: none;
+    padding: 20px 22px;
+    background: rgba(255,93,177,0.08);
+    border: 1px solid rgba(255,93,177,0.3);
+    border-radius: 12px;
+    color: #ffb3d4;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
   /* ---------- HOW IT WORKS LIST ---------- */
   .how-list {
     list-style: none;
@@ -643,60 +677,29 @@
   <div class="page-head">
     <div class="eyebrow">One-Time Purchase · Instant Access</div>
     <h1 class="page-title">Almost in the <span class="accent">kitchen</span>.</h1>
-    <p class="page-sub">Less than $10. Instant download. Yours for life.</p>
+    <p class="page-sub">Pay $19 once. Lifetime access to the members area.</p>
   </div>
 </div>
 
 <!-- ============= CHECKOUT ============= -->
 <div class="wrap">
-  <form class="checkout-grid" id="orderForm">
-    <!-- LEFT COLUMN -->
-    <div>
-      <!-- Step 1: Contact -->
-      <div class="card">
-        <h2><span class="step-num">1</span>Contact</h2>
-        <div class="field-grid single">
-          <div class="field">
-            <label for="email">Email · receipt &amp; account link</label>
-            <input class="input" type="email" id="email" placeholder="you@example.com" required>
-          </div>
-        </div>
+  <div class="checkout-grid">
+    <!-- LEFT: STRIPE EMBEDDED CHECKOUT -->
+    <div class="card stripe-card">
+      <h2 style="font-size: 18px; margin-bottom: 18px;">Secure checkout</h2>
+      <div id="checkout-loading" class="checkout-loading">
+        <div class="spinner"></div>
+        <span>Loading secure payment form…</span>
       </div>
-
-      <!-- Step 2: What happens next -->
-      <div class="card">
-        <h2><span class="step-num">2</span>What happens next</h2>
-        <ol class="how-list">
-          <li>
-            <span class="how-num">1</span>
-            <div>
-              <strong>Click checkout below.</strong>
-              <span>You'll be sent to Stripe's secure payment page — the same checkout used by Lyft, Slack, and Shopify.</span>
-            </div>
-          </li>
-          <li>
-            <span class="how-num">2</span>
-            <div>
-              <strong>Pay $19 with card, Apple Pay, or Link.</strong>
-              <span>Stripe handles all card details. We never see or store your payment info.</span>
-            </div>
-          </li>
-          <li>
-            <span class="how-num">3</span>
-            <div>
-              <strong>Create your account &amp; start cooking.</strong>
-              <span>You'll get an email with a link to set up your members account. Sign in once and the whole cookbook is yours, forever, on any device.</span>
-            </div>
-          </li>
-        </ol>
-        <div class="stripe-trust">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
-          Powered by <strong>Stripe</strong> · 256-bit SSL · PCI-DSS Level 1
-        </div>
+      <div id="checkout"></div>
+      <div id="checkout-error" class="checkout-error"></div>
+      <div class="stripe-trust" style="margin-top: 22px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+        Powered by <strong>Stripe</strong> · 256-bit SSL · PCI-DSS Level 1
       </div>
     </div>
 
-    <!-- RIGHT COLUMN: ORDER SUMMARY -->
+    <!-- RIGHT: ORDER SUMMARY -->
     <aside class="summary">
       <div class="card">
         <h2 style="font-size: 18px; margin-bottom: 22px;">Order summary</h2>
@@ -704,48 +707,33 @@
         <div class="product-row">
           <div class="product-cover"></div>
           <div>
-            <div class="product-name">The Cookbook</div>
-            <div class="product-meta">Digital · Instant Download · By Ashbovaxo</div>
-            <div class="qty-control">
-              <button type="button" id="qtyDown" aria-label="Decrease">−</button>
-              <span class="qty-num" id="qtyNum">1</span>
-              <button type="button" id="qtyUp" aria-label="Increase">+</button>
-            </div>
+            <div class="product-name">Curvy Cookbook</div>
+            <div class="product-meta">Digital · By Ashbovaxo</div>
           </div>
         </div>
 
         <div class="totals-row">
           <span>Subtotal</span>
-          <span id="subtotal">$19.00</span>
+          <span>$19.00</span>
         </div>
         <div class="totals-row">
-          <span>Tax (estimated)</span>
-          <span id="tax">$1.52</span>
+          <span>Tax</span>
+          <span style="color: var(--ink-mute);">Calculated at checkout</span>
         </div>
         <div class="totals-row">
           <span>Delivery</span>
-          <span style="color: #6ed79b;">Free · Instant</span>
-        </div>
-
-        <div class="promo-row">
-          <input class="input" type="text" id="promo" placeholder="Promo code">
-          <button type="button" id="applyPromo">Apply</button>
+          <span style="color: #6ed79b;">Instant</span>
         </div>
 
         <div class="totals-row grand">
           <span>Total</span>
-          <span class="num" id="grandTotal">$20.52</span>
+          <span class="num">$19.00<span style="font-size:13px; color: var(--ink-mute); font-weight: 500; margin-left: 6px;">+ tax</span></span>
         </div>
 
-        <button class="btn-place" type="submit">
-          Continue to Stripe — $19
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </button>
-
-        <div class="trust-row">
+        <div class="trust-row" style="margin-top: 24px;">
           <span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
-            Encrypted
+            Encrypted by Stripe
           </span>
           <span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -764,120 +752,61 @@
         </ul>
       </div>
     </aside>
-  </form>
-</div>
-
-<!-- ============= SUCCESS OVERLAY ============= -->
-<div class="success-overlay" id="successOverlay">
-  <div class="success-card">
-    <div class="success-icon">
-      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-    </div>
-    <h2>You're <span class="accent">in&nbsp;the&nbsp;kitchen</span>.</h2>
-    <p>Your copy of <strong style="color:#fff;">The Cookbook</strong> is on its way to your inbox right now. Time to get spicy.</p>
-    <div class="success-meta">
-      <div>
-        <div style="color: var(--ink-mute); margin-bottom: 4px;">Order #</div>
-        <strong id="orderNum">SPICY-•••</strong>
-      </div>
-      <div>
-        <div style="color: var(--ink-mute); margin-bottom: 4px;">Sent to</div>
-        <strong id="orderEmail">you@example.com</strong>
-      </div>
-      <div style="text-align: right;">
-        <div style="color: var(--ink-mute); margin-bottom: 4px;">Total</div>
-        <strong id="orderTotal">$20.52</strong>
-      </div>
-    </div>
-    <div class="success-actions">
-      <a href="login.html" class="btn-primary">Open Members Area</a>
-      <a href="index.html" class="btn-secondary">Back to home</a>
-    </div>
   </div>
 </div>
 
+<script src="https://js.stripe.com/v3/"></script>
 <script>
-  const PRICE = 19.00;
-  const TAX_RATE = 0.08;
+  // ============================================================
+  // STRIPE PUBLISHABLE KEY — safe to ship in browser.
+  // NEVER use a secret key (sk_…) here — those go in Cloudflare env vars.
+  // Get yours at: https://dashboard.stripe.com → Developers → API keys
+  // ============================================================
+  const STRIPE_PUBLISHABLE_KEY = "pk_live_REPLACE_WITH_YOUR_PUBLISHABLE_KEY";
 
-  const qtyNumEl = document.getElementById('qtyNum');
-  const subtotalEl = document.getElementById('subtotal');
-  const taxEl = document.getElementById('tax');
-  const grandEl = document.getElementById('grandTotal');
-  let qty = 1;
+  const loadingEl = document.getElementById('checkout-loading');
+  const mountEl   = document.getElementById('checkout');
+  const errorEl   = document.getElementById('checkout-error');
 
-  function fmt(n) { return '$' + n.toFixed(2); }
-  function recalc() {
-    const sub = PRICE * qty;
-    const tax = sub * TAX_RATE;
-    subtotalEl.textContent = fmt(sub);
-    taxEl.textContent = fmt(tax);
-    grandEl.textContent = fmt(sub + tax);
+  function showError(msg) {
+    if (loadingEl) loadingEl.style.display = 'none';
+    errorEl.textContent = msg;
+    errorEl.style.display = 'block';
   }
-  document.getElementById('qtyUp').addEventListener('click', () => {
-    qty = Math.min(99, qty + 1); qtyNumEl.textContent = qty; recalc();
-  });
-  document.getElementById('qtyDown').addEventListener('click', () => {
-    qty = Math.max(1, qty - 1); qtyNumEl.textContent = qty; recalc();
-  });
-  // Promo codes are validated by Stripe at checkout; we just forward the code
-  document.getElementById('applyPromo').addEventListener('click', () => {
-    const code = (document.getElementById('promo').value || '').trim();
-    const btn = document.getElementById('applyPromo');
-    if (code) {
-      btn.textContent = 'Will apply at checkout';
-      setTimeout(() => btn.textContent = 'Apply', 2000);
+
+  if (!STRIPE_PUBLISHABLE_KEY || STRIPE_PUBLISHABLE_KEY.includes('REPLACE_WITH')) {
+    showError("Stripe publishable key not configured yet. Open order.html and replace STRIPE_PUBLISHABLE_KEY.");
+  } else if (!window.Stripe) {
+    showError("Couldn't load Stripe.js. Check your network connection and reload.");
+  } else {
+    initialize();
+  }
+
+  async function initialize() {
+    try {
+      const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+      const checkout = await stripe.initEmbeddedCheckout({
+        fetchClientSecret: async () => {
+          const res = await fetch('/api/create-checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.error || `Checkout request failed (${res.status})`);
+          }
+          const { client_secret } = await res.json();
+          return client_secret;
+        },
+      });
+      if (loadingEl) loadingEl.style.display = 'none';
+      checkout.mount('#checkout');
+    } catch (e) {
+      console.error(e);
+      showError("Couldn't start checkout: " + e.message);
     }
-  });
-
-  // Payment method tabs
-  document.querySelectorAll('.pay-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.pay-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-    });
-  });
-
-  // Card number formatting
-  const cardInput = document.getElementById('cardNumber');
-  cardInput.addEventListener('input', (e) => {
-    const v = e.target.value.replace(/\D/g, '').slice(0, 16);
-    e.target.value = v.replace(/(.{4})/g, '$1 ').trim();
-  });
-  // Exp formatting
-  const expInput = document.getElementById('cardExp');
-  expInput.addEventListener('input', (e) => {
-    let v = e.target.value.replace(/\D/g, '').slice(0, 4);
-    if (v.length > 2) v = v.slice(0,2) + ' / ' + v.slice(2);
-    e.target.value = v;
-  });
-
-  // ============================================================
-  // STRIPE PAYMENT LINK — paste your URL from Stripe Dashboard here.
-  // Get it at: https://dashboard.stripe.com → Products → The Cookbook
-  // → Create payment link → copy URL
-  // ============================================================
-  const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/28EdRbe8u9cJ9GW4GG2Nq00";
-
-  // Submit -> redirect to Stripe Checkout
-  document.getElementById('orderForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = (document.getElementById('email').value || '').trim();
-
-    if (STRIPE_PAYMENT_LINK.includes('REPLACE_WITH_YOUR_PAYMENT_LINK')) {
-      alert("Stripe Payment Link not configured yet.\n\nPaste your URL from Stripe Dashboard into STRIPE_PAYMENT_LINK at the bottom of order.html.");
-      return;
-    }
-
-    // Stripe accepts ?prefilled_email=... and ?prefilled_promo_code=... on Payment Links
-    const url = new URL(STRIPE_PAYMENT_LINK);
-    if (email) url.searchParams.set('prefilled_email', email);
-    const promo = (document.getElementById('promo').value || '').trim();
-    if (promo) url.searchParams.set('prefilled_promo_code', promo);
-    window.location.href = url.toString();
-  });
-
-  recalc();
+  }
 </script>
 
 </body>
