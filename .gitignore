@@ -14,3 +14,10 @@ thumb-1920-997869.jpg
 
 # Logs
 *.log
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
