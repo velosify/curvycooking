@@ -129,7 +129,9 @@
     gap: 40px;
     align-items: center;
     padding: 40px 48px 96px;
+    min-height: 640px;
   }
+  .hero-left { position: relative; z-index: 5; }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
     padding: 9px 20px;
@@ -225,80 +227,43 @@
     display: grid; place-items: center;
   }
 
-  .book-stage {
-    position: absolute;
-    right: -40px;
-    bottom: -180px;
-    width: 540px;
-    height: 640px;
-    pointer-events: none;
-  }
-  .book {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-  }
-  .book-shadow {
-    position: absolute;
-    bottom: 60px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 360px;
-    height: 60px;
-    background: radial-gradient(ellipse at center, rgba(122,92,255,0.6), transparent 70%);
-    filter: blur(20px);
-  }
-  .book-cover {
-    position: relative;
-    width: 320px;
-    height: 460px;
-    border-radius: 6px;
-    background:
-      linear-gradient(150deg, rgba(255,255,255,0.18), transparent 40%),
-      url("https://thecookbook.shop/cdn/shop/files/ASHBOVA_PRODUCT_IMAGE_SQUARE.png?v=1770505718&width=900") center/cover no-repeat,
-      #000;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.08),
-      0 60px 80px -30px rgba(0,0,0,0.7),
-      0 30px 60px -20px rgba(122,92,255,0.45),
-      -8px 0 0 -2px rgba(255,255,255,0.04),
-      -10px 4px 24px -8px rgba(0,0,0,0.4);
-    transform: rotate(-2deg);
-  }
-  .book-cover::before {
-    content: "";
-    position: absolute;
-    left: -8px; top: 6px; bottom: 6px;
-    width: 14px;
-    background: linear-gradient(90deg, rgba(0,0,0,0.7), rgba(255,255,255,0.05));
-    border-radius: 3px 0 0 3px;
-  }
-  .book-stack {
-    position: absolute;
-    bottom: 28px; left: 50%;
-    transform: translateX(-50%);
-    width: 240px; height: 28px;
-    background: linear-gradient(180deg, #1a1638, #0c0a1f);
-    border-radius: 4px;
-    box-shadow: 0 -1px 0 rgba(255,255,255,0.05) inset, 0 8px 24px rgba(0,0,0,0.5);
-  }
-  .book-stack::before {
-    content: "";
-    position: absolute;
-    top: -10px; left: 14px; right: 14px;
-    height: 10px;
-    background: linear-gradient(180deg, #221c4a, #14112e);
-    border-radius: 3px;
-  }
+  .hero-cta { margin-top: 40px; }
 
-  .squiggle {
+  .chef-stage {
     position: absolute;
-    left: 4%;
-    bottom: 80px;
-    width: 240px;
-    opacity: 0.7;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    width: 56%;
+    pointer-events: none;
+    overflow: hidden;
     z-index: 3;
+  }
+  .chef-glow {
+    position: absolute;
+    right: -10%;
+    top: 10%;
+    width: 90%;
+    height: 80%;
+    background:
+      radial-gradient(closest-side, rgba(255,93,177,0.35), transparent 70%),
+      radial-gradient(closest-side at 30% 70%, rgba(122,92,255,0.45), transparent 75%);
+    filter: blur(30px);
+    opacity: 0.9;
+    z-index: 1;
+  }
+  .chef-img {
+    position: absolute;
+    right: -2%;
+    bottom: -64px;
+    height: calc(100% + 64px);
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+    object-position: bottom right;
+    mix-blend-mode: screen;
+    filter: contrast(1.05) saturate(1.05);
+    z-index: 2;
   }
 
   /* ---------- AWARD MARQUEE ---------- */
@@ -713,8 +678,10 @@
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 1024px) {
-    .hero { grid-template-columns: 1fr; padding: 40px 32px 60px; }
-    .book-stage { position: relative; right: auto; bottom: auto; width: 100%; height: 500px; margin-top: 20px; }
+    .hero { grid-template-columns: 1fr; padding: 40px 32px 0; min-height: auto; }
+    .chef-stage { position: relative; right: auto; bottom: auto; top: auto; width: 100%; height: 480px; margin-top: 20px; }
+    .chef-img { right: 50%; transform: translateX(50%); bottom: 0; height: 100%; }
+    .chef-glow { right: 5%; left: 5%; width: auto; }
     .about { grid-template-columns: 1fr; gap: 40px; }
     .recipe-grid { grid-template-columns: repeat(2, 1fr); }
     .review-row { grid-template-columns: 1fr; }
@@ -771,28 +738,16 @@
           <div class="rating-sub">From 50,000+ Hungry Readers</div>
         </div>
       </div>
-    </div>
-
-    <div class="hero-right">
-      <p class="hero-blurb">Italian. Born and raised in New York. Meet Ashley in the kitchen — where things tend to heat up (if you know what we mean).</p>
-      <a href="order.html" class="btn-cta">Get The Cookbook
+      <a href="order.html" class="btn-cta hero-cta">Get The Cookbook
         <span class="arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </span>
       </a>
     </div>
 
-    <svg class="squiggle" viewBox="0 0 240 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 100 C 60 100, 80 20, 130 40 S 220 90, 230 30" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="0"/>
-      <path d="M222 24 L 232 30 L 226 38" stroke="rgba(255,255,255,0.5)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
-    </svg>
-
-    <div class="book-stage">
-      <div class="book-shadow"></div>
-      <div class="book">
-        <div class="book-cover"></div>
-      </div>
-      <div class="book-stack"></div>
+    <div class="chef-stage">
+      <div class="chef-glow"></div>
+      <img class="chef-img" src="chef-hero.jpg" alt="Curvy Cooking" />
     </div>
   </div>
 </div>
