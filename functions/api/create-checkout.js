@@ -25,10 +25,14 @@ export async function onRequestPost(context) {
   params.set("line_items[0][price]", env.STRIPE_PRICE_ID);
   params.set("line_items[0][quantity]", "1");
   params.set("return_url", `${env.PUBLIC_BASE_URL}/thanks?session_id={CHECKOUT_SESSION_ID}`);
-  params.set("automatic_tax[enabled]", "true");
-  params.set("billing_address_collection", "required");
-  params.set("phone_number_collection[enabled]", "false");
+  params.set("billing_address_collection", "auto");
   params.set("allow_promotion_codes", "true");
+
+  // Stripe Tax requires onboarding (tax registrations) before it can be used
+  // via API. Opt in only when ENABLE_STRIPE_TAX=true is set in env vars.
+  if (env.ENABLE_STRIPE_TAX === "true") {
+    params.set("automatic_tax[enabled]", "true");
+  }
 
   // Useful metadata for fulfillment / debugging
   params.set("metadata[product]", "curvy-cookbook");
@@ -46,8 +50,12 @@ export async function onRequestPost(context) {
   const data = await stripeRes.json();
 
   if (!stripeRes.ok) {
-    console.error("Stripe error", data);
-    return json({ error: data?.error?.message || "Stripe request failed" }, 502);
+    // Surface the real Stripe error to the browser so we can see it on screen
+    console.error("Stripe error", JSON.stringify(data));
+    const msg = data?.error?.message
+      || data?.error?.code
+      || `Stripe API ${stripeRes.status}`;
+    return json({ error: msg, code: data?.error?.code, type: data?.error?.type }, 502);
   }
 
   return json({ client_secret: data.client_secret });
