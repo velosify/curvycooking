@@ -20,7 +20,8 @@ export async function onRequestPost(context) {
   try { body = await request.json(); } catch (e) { /* allow empty body */ }
 
   const params = new URLSearchParams();
-  params.set("ui_mode", "embedded");
+  // Stripe renamed `embedded` → `embedded_page` in mid-2025
+  params.set("ui_mode", "embedded_page");
   params.set("mode", "payment");
   params.set("line_items[0][price]", env.STRIPE_PRICE_ID);
   params.set("line_items[0][quantity]", "1");
