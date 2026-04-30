@@ -606,6 +606,10 @@
     position: relative;
     z-index: 2;
   }
+  .section-head--center {
+    justify-content: center;
+    text-align: center;
+  }
   .section-head h2 {
     font-family: 'Sora', sans-serif;
     font-weight: 800;
@@ -957,21 +961,8 @@
 <!-- ============= RECIPES ============= -->
 <section id="recipes">
   <div class="wrap">
-    <div class="section-head">
-      <div class="scroll-fade">
-        <h2>What's Inside The Cookbook</h2>
-      </div>
-      <div style="display: flex; align-items: center; gap: 24px;">
-        <p>Italian, American, Asian, Keto, Vegan, Gluten Free, Carnivore, Sugar Free, Dairy Free, Desserts… much, much more.</p>
-        <div class="pager">
-          <div class="pager-btn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </div>
-          <div class="pager-btn active">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </div>
-        </div>
-      </div>
+    <div class="section-head section-head--center scroll-fade">
+      <h2>What's Inside The Cookbook</h2>
     </div>
 
     <div class="recipe-grid">
