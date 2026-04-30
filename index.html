@@ -899,17 +899,31 @@
 
   /* ---------- RESPONSIVE ---------- */
   @media (max-width: 1024px) {
+    section { padding: 70px 0; }
     .hero { padding: 60px 24px 0; min-height: 640px; }
     .chef-img { max-width: 95%; max-height: 580px; }
-    .about { grid-template-columns: 1fr; gap: 40px; }
+    .about { grid-template-columns: 1fr; gap: 28px; }
     .review-row { grid-template-columns: 1fr; }
     .reviewer { max-width: 240px; margin: 0 auto; }
-    .newsletter-inner { grid-template-columns: 1fr; gap: 32px; }
+    .newsletter { padding: 60px 0 50px; }
+    .newsletter-inner { grid-template-columns: 1fr; gap: 24px; }
     .nav-links { display: none; }
+    .section-head { margin-bottom: 36px; }
+    .reviews-bg-text { margin-bottom: -50px; }
   }
   @media (max-width: 600px) {
+    section { padding: 50px 0; }
     .hero-shell { margin: 0; border-radius: 0; }
     .nav { padding: 12px 20px; }
+    .about-card { padding: 28px 24px; border-radius: 18px; }
+    .about-card p { font-size: 14.5px; line-height: 1.65; margin-bottom: 12px; }
+    .stats-row { gap: 28px; margin: 24px 0 0; }
+    .socials { margin-top: 18px; }
+    .stat-num { font-size: 42px; }
+    .section-head { margin-bottom: 28px; }
+    .section-head h2 { font-size: clamp(30px, 8vw, 40px); }
+    .section-bg-text { font-size: clamp(80px, 24vw, 120px); }
+    .review-card { padding: 26px 24px; }
     .recipe-card { width: 260px; }
     .recipe-thumb { font-size: 100px; }
     .recipe-track { animation-name: recipe-scroll-mobile; }
@@ -917,8 +931,6 @@
       from { transform: translateX(0); }
       to   { transform: translateX(calc((-260px - 24px) * 4)); }
     }
-    .stats-row { gap: 32px; }
-    .stat-num { font-size: 42px; }
     .news-form { flex-direction: column; border-radius: 16px; padding: 12px; }
     .news-form input { padding: 10px 12px; }
     .news-form button { width: 100%; justify-content: center; }
