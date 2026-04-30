@@ -433,7 +433,18 @@
 
   /* ---------- EMBEDDED CHECKOUT ---------- */
   .stripe-card { min-height: 600px; }
-  #checkout { min-height: 540px; }
+  #checkout {
+    min-height: 540px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.08),
+      0 30px 80px -20px rgba(0,0,0,0.5),
+      0 12px 32px -10px rgba(122,92,255,0.25);
+  }
+  /* Stripe injects its iframe directly into #checkout — give the iframe room to breathe */
+  #checkout iframe { display: block; width: 100%; }
   .checkout-loading {
     display: flex;
     flex-direction: column;
@@ -441,6 +452,10 @@
     justify-content: center;
     gap: 14px;
     padding: 80px 20px;
+    min-height: 540px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.02);
+    border: 1px dashed var(--line-strong);
     color: var(--ink-dim);
     font-size: 14px;
   }
