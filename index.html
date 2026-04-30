@@ -664,8 +664,16 @@
      duplicate set lands precisely where the original started — seamless loop */
   @keyframes recipe-scroll {
     from { transform: translateX(0); }
-    to   { transform: translateX(calc((-320px - 24px) * 5)); }
+    to   { transform: translateX(calc((-320px - 24px) * 4)); }
   }
+  /* Second row scrolls in the opposite direction at a slightly different speed
+     so the two rows don't lockstep */
+  .recipe-track--reverse {
+    animation-direction: reverse;
+    animation-duration: 50s;
+  }
+  /* Stack the two marquee rows */
+  .recipe-marquee + .recipe-marquee { margin-top: 24px; }
 
   .recipe-card {
     flex-shrink: 0;
@@ -721,6 +729,24 @@
       linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
       url("recipe-pastina.jpg") center/cover no-repeat,
       #2a1f0a;
+  }
+  .recipe-thumb.six {
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
+      url("recipe-pizza.jpg") center/cover no-repeat,
+      #1f1408;
+  }
+  .recipe-thumb.seven {
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
+      url("recipe-steak.jpg") center/cover no-repeat,
+      #1a0a05;
+  }
+  .recipe-thumb.eight {
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
+      url("recipe-cinnamon.jpg") center/cover no-repeat,
+      #2a1505;
   }
   .recipe-card-meta {
     position: absolute;
@@ -946,7 +972,7 @@
     .recipe-track { animation-name: recipe-scroll-mobile; }
     @keyframes recipe-scroll-mobile {
       from { transform: translateX(0); }
-      to   { transform: translateX(calc((-260px - 24px) * 5)); }
+      to   { transform: translateX(calc((-260px - 24px) * 4)); }
     }
     .news-form { flex-direction: column; border-radius: 16px; padding: 12px; }
     .news-form input { padding: 10px 12px; }
@@ -1038,9 +1064,9 @@
       <h2>What's Inside The Cookbook</h2>
     </div>
 
+    <!-- ROW 1: scrolls right → left -->
     <div class="recipe-marquee scroll-fade">
       <div class="recipe-track">
-        <!-- First set -->
         <div class="recipe-card">
           <div class="recipe-thumb one"></div>
           <div class="recipe-card-meta">
@@ -1069,15 +1095,7 @@
             <div class="recipe-price">Carnivore · 25 min</div>
           </div>
         </div>
-        <div class="recipe-card">
-          <div class="recipe-thumb five"></div>
-          <div class="recipe-card-meta">
-            <h4>Pastina</h4>
-            <div class="recipe-price">Italian Comfort · 15 min</div>
-          </div>
-        </div>
-        <!-- Duplicate set for seamless loop (a11y-hidden so screen readers
-             don't read the same cards twice) -->
+        <!-- Duplicates for seamless loop -->
         <div class="recipe-card" aria-hidden="true">
           <div class="recipe-thumb one"></div>
           <div class="recipe-card-meta">
@@ -1106,11 +1124,67 @@
             <div class="recipe-price">Carnivore · 25 min</div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: scrolls left → right (reverse direction) -->
+    <div class="recipe-marquee scroll-fade">
+      <div class="recipe-track recipe-track--reverse">
+        <div class="recipe-card">
+          <div class="recipe-thumb five"></div>
+          <div class="recipe-card-meta">
+            <h4>Pastina</h4>
+            <div class="recipe-price">Italian Comfort · 15 min</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-thumb six"></div>
+          <div class="recipe-card-meta">
+            <h4>Homemade Pizza</h4>
+            <div class="recipe-price">Italian Classic · 60 min</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-thumb seven"></div>
+          <div class="recipe-card-meta">
+            <h4>Steak &amp; Eggs</h4>
+            <div class="recipe-price">Carnivore · 20 min</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-thumb eight"></div>
+          <div class="recipe-card-meta">
+            <h4>Cinnamon Rolls</h4>
+            <div class="recipe-price">Sweet Treat · 90 min</div>
+          </div>
+        </div>
+        <!-- Duplicates for seamless loop -->
         <div class="recipe-card" aria-hidden="true">
           <div class="recipe-thumb five"></div>
           <div class="recipe-card-meta">
             <h4>Pastina</h4>
             <div class="recipe-price">Italian Comfort · 15 min</div>
+          </div>
+        </div>
+        <div class="recipe-card" aria-hidden="true">
+          <div class="recipe-thumb six"></div>
+          <div class="recipe-card-meta">
+            <h4>Homemade Pizza</h4>
+            <div class="recipe-price">Italian Classic · 60 min</div>
+          </div>
+        </div>
+        <div class="recipe-card" aria-hidden="true">
+          <div class="recipe-thumb seven"></div>
+          <div class="recipe-card-meta">
+            <h4>Steak &amp; Eggs</h4>
+            <div class="recipe-price">Carnivore · 20 min</div>
+          </div>
+        </div>
+        <div class="recipe-card" aria-hidden="true">
+          <div class="recipe-thumb eight"></div>
+          <div class="recipe-card-meta">
+            <h4>Cinnamon Rolls</h4>
+            <div class="recipe-price">Sweet Treat · 90 min</div>
           </div>
         </div>
       </div>
