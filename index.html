@@ -710,10 +710,11 @@
       url("recipe-meatballs.jpg") center/cover no-repeat,
       #1a0a0a;
   }
-  .recipe-thumb.four { background: linear-gradient(155deg, #2a1410, #0a0303); }
-  .recipe-thumb.four::after {
-    content: ""; position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.12), transparent 60%);
+  .recipe-thumb.four {
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
+      url("recipe-burger.jpg") center/cover no-repeat,
+      #2a1410;
   }
   .recipe-card-meta {
     position: absolute;
@@ -1056,10 +1057,10 @@
           </div>
         </div>
         <div class="recipe-card">
-          <div class="recipe-thumb four">🍔</div>
+          <div class="recipe-thumb four"></div>
           <div class="recipe-card-meta">
-            <h4>Burger Bowls &amp; Pastina</h4>
-            <div class="recipe-price">Carnivore + Keto · 25 min</div>
+            <h4>Burger Bowls</h4>
+            <div class="recipe-price">Carnivore · 25 min</div>
           </div>
         </div>
         <!-- Duplicate set for seamless loop (a11y-hidden so screen readers
@@ -1086,10 +1087,10 @@
           </div>
         </div>
         <div class="recipe-card" aria-hidden="true">
-          <div class="recipe-thumb four">🍔</div>
+          <div class="recipe-thumb four"></div>
           <div class="recipe-card-meta">
-            <h4>Burger Bowls &amp; Pastina</h4>
-            <div class="recipe-price">Carnivore + Keto · 25 min</div>
+            <h4>Burger Bowls</h4>
+            <div class="recipe-price">Carnivore · 25 min</div>
           </div>
         </div>
       </div>
