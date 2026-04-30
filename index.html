@@ -165,10 +165,10 @@
     font-family: 'Sora', sans-serif;
     font-weight: 800;
     font-size: clamp(72px, 9.5vw, 152px);
-    line-height: 1.0;
+    line-height: 1.12;
     letter-spacing: -0.03em;
     margin-bottom: 36px;
-    padding-bottom: 0.12em; /* Room for the italic "?" descender */
+    padding-bottom: 0.18em; /* Room for italic "y"/"?" descenders */
   }
   h1.title .accent {
     font-family: 'Playfair Display', serif;
@@ -178,9 +178,14 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    /* Italic glyphs lean right; nudge the box so the leading edge isn't clipped */
+    /* The italic glyph box needs vertical room for descenders AND
+       horizontal room for the right-leaning slant. Padding extends the
+       background paint area so background-clip:text doesn't crop the
+       gradient before the curl of the "y" or "?" finishes. */
     display: inline-block;
-    padding-right: 0.08em;
+    padding: 0 0.08em 0.18em 0;
+    line-height: 1.05;
+    overflow: visible;
   }
   .hero-meta {
     display: flex;
