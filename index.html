@@ -45,17 +45,27 @@
     margin: 24px;
     border-radius: 28px;
     overflow: hidden;
-    background: var(--grad-hero);
     border: 1px solid var(--line);
+    background-color: #07060f;
+    background-image: url("hero-bg.jpg");
+    background-size: cover;
+    background-position: center 22%;
+    background-repeat: no-repeat;
   }
+  /* Dark gradient overlay so the title pops over the bright kitchen image */
   .hero-shell::before {
     content: "";
     position: absolute;
     inset: 0;
     background:
-      radial-gradient(420px 280px at 70% 50%, rgba(255,255,255,0.06), transparent 70%),
-      radial-gradient(700px 500px at 90% 90%, rgba(122,92,255,0.25), transparent 60%);
+      /* Subtle vignette around edges */
+      radial-gradient(120% 90% at 50% 50%, transparent 50%, rgba(7,6,15,0.55) 100%),
+      /* Strong dark wash at the bottom where the text lives */
+      linear-gradient(180deg, rgba(7,6,15,0.0) 0%, rgba(7,6,15,0.15) 45%, rgba(7,6,15,0.85) 95%, rgba(7,6,15,1) 100%),
+      /* Very soft top fade so nav has contrast */
+      linear-gradient(180deg, rgba(7,6,15,0.55) 0%, rgba(7,6,15,0) 25%);
     pointer-events: none;
+    z-index: 2;
   }
   .nav {
     position: relative;
@@ -154,6 +164,24 @@
     flex-direction: column;
     align-items: center;
     gap: 24px;
+  }
+
+  /* Scroll-triggered reveal: text/CTA are hidden on load, fade up when visible */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
   }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
@@ -861,14 +889,9 @@
 <!-- ============= HERO ============= -->
 <div class="hero-shell">
   <div class="hero">
-    <div class="chef-stage">
-      <div class="chef-glow"></div>
-      <img class="chef-img" src="chef-hero.jpg" alt="Curvy Cooking" />
-    </div>
-
     <div class="hero-text-bottom">
-      <h1 class="title">Ready to<br>Get <span class="accent">Spicy</span>?</h1>
-      <div class="hero-meta">
+      <h1 class="title reveal" data-reveal-delay="0">Ready to<br>Get <span class="accent">Spicy</span>?</h1>
+      <div class="hero-meta reveal" data-reveal-delay="180">
         <div class="stack-faces">
           <div class="face-1"></div>
           <div class="face-2"></div>
@@ -880,7 +903,7 @@
           <div class="rating-sub">From 500+ Hungry Readers</div>
         </div>
       </div>
-      <a href="order.html" class="btn-glass">Get The Cookbook
+      <a href="order.html" class="btn-glass reveal" data-reveal-delay="340">Get The Cookbook
         <span class="arrow">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </span>
@@ -1052,6 +1075,62 @@
     <div class="foot-brand">Ashbovaxo</div>
   </div>
 </footer>
+
+<script>
+  // Scroll-triggered reveal: hero text/CTA fade up on first scroll OR when
+  // they enter the viewport (whichever happens first). Each element waits
+  // its data-reveal-delay (ms) before animating in for a staggered cascade.
+  (function () {
+    const els = document.querySelectorAll('.reveal');
+    if (!els.length) return;
+
+    // Apply per-element delay from data attribute as a CSS variable
+    els.forEach(el => {
+      const d = el.dataset.revealDelay;
+      if (d) el.style.setProperty('--reveal-delay', d + 'ms');
+    });
+
+    function show(el) {
+      if (!el.classList.contains('is-visible')) {
+        el.classList.add('is-visible');
+      }
+    }
+
+    // 1) On any scroll past ~30px, reveal everything in the hero
+    let revealedOnScroll = false;
+    function onScroll() {
+      if (revealedOnScroll) return;
+      if (window.scrollY > 30) {
+        revealedOnScroll = true;
+        els.forEach(show);
+        window.removeEventListener('scroll', onScroll);
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // 2) IntersectionObserver — anything that scrolls into view also reveals.
+    //    Useful if other sections add .reveal later, and as a fallback.
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Only auto-reveal hero elements after the user has scrolled.
+            // Other .reveal elements down the page reveal on intersection.
+            const inHero = entry.target.closest('.hero');
+            if (!inHero || revealedOnScroll) {
+              show(entry.target);
+              io.unobserve(entry.target);
+            }
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
+      els.forEach(el => io.observe(el));
+    } else {
+      // Fallback: just show everything if IntersectionObserver isn't available
+      els.forEach(show);
+    }
+  })();
+</script>
 
 </body>
 </html>
