@@ -477,26 +477,13 @@
     aspect-ratio: 4/5;
     border-radius: 18px;
     overflow: hidden;
-    background:
-      linear-gradient(140deg, rgba(122,92,255,0.4), rgba(58,123,255,0.2) 50%, rgba(255,93,177,0.3)),
-      radial-gradient(circle at 60% 35%, #ffd1a3 0%, #c98a5c 35%, #6a3a22 70%, #1a0a06 100%);
-    box-shadow: 0 30px 80px -20px rgba(122,92,255,0.4);
-  }
-  .about-photo::before {
-    content: "👩‍🍳";
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    font-size: 200px;
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
-    opacity: 0.85;
-  }
-  .about-photo::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 50%, rgba(7,6,15,0.7));
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    background: #0c0a1f;
+    box-shadow: 0 30px 80px -20px rgba(122, 92, 255, 0.4);
+    /* Slight grade keeps the video on-brand with the dark/purple page */
+    filter: contrast(1.02) saturate(1.05);
   }
   .about-card {
     position: relative;
@@ -896,7 +883,7 @@
   <div class="wrap">
     <div class="section-bg-text" style="left: -40px; top: 60px;">About&nbsp;Me</div>
     <div class="about">
-      <div class="about-photo"></div>
+      <video class="about-photo" src="about-video.mp4" autoplay loop muted playsinline preload="auto" aria-label="Ashley cooking"></video>
       <div class="about-card">
         <p><strong>Hi, I'm Ashley.</strong> An Italian girl, born and raised in New York — which is just a complicated way of saying I think pasta is a food group and I argue about red sauce on the internet.</p>
         <p>I started cooking the way every Italian grandmother started cooking — by being told to. Decades later, the only thing that's changed is the audience. For less than the price of a sad takeout salad, you can meet me in the kitchen and learn every recipe I've ever loved.</p>
