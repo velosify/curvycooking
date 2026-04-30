@@ -164,10 +164,11 @@
   h1.title {
     font-family: 'Sora', sans-serif;
     font-weight: 800;
-    font-size: clamp(56px, 7.2vw, 104px);
-    line-height: 0.94;
-    letter-spacing: -0.025em;
+    font-size: clamp(72px, 9.5vw, 152px);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
     margin-bottom: 36px;
+    padding-bottom: 0.12em; /* Room for the italic "?" descender */
   }
   h1.title .accent {
     font-family: 'Playfair Display', serif;
@@ -177,6 +178,9 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    /* Italic glyphs lean right; nudge the box so the leading edge isn't clipped */
+    display: inline-block;
+    padding-right: 0.08em;
   }
   .hero-meta {
     display: flex;
