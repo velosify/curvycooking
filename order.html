@@ -711,12 +711,16 @@
 
       <div class="field-grid">
         <div class="field full">
+          <label for="cardName">Full name</label>
+          <input class="input" type="text" id="cardName" placeholder="Ashley Bova" required autocomplete="name">
+        </div>
+        <div class="field full">
           <label for="email">Email · receipt &amp; account link</label>
           <input class="input" type="email" id="email" placeholder="you@example.com" required autocomplete="email">
         </div>
         <div class="field full">
-          <label for="cardName">Cardholder name</label>
-          <input class="input" type="text" id="cardName" placeholder="Your name" required autocomplete="cc-name">
+          <label for="phone">Phone</label>
+          <input class="input" type="tel" id="phone" placeholder="(555) 555-5555" required autocomplete="tel">
         </div>
       </div>
 
@@ -917,6 +921,7 @@
   const loadingEl = document.getElementById('payment-loading');
   const emailEl = document.getElementById('email');
   const nameEl = document.getElementById('cardName');
+  const phoneEl = document.getElementById('phone');
 
   let stripe, elements;
 
@@ -981,10 +986,12 @@
     e.preventDefault();
     hideMessage();
 
+    const name  = nameEl.value.trim();
     const email = emailEl.value.trim();
-    const name = nameEl.value.trim();
+    const phone = phoneEl.value.trim();
+    if (!name)  { showMessage('Please enter your full name.'); nameEl.focus(); return; }
     if (!email) { showMessage('Please enter your email.'); emailEl.focus(); return; }
-    if (!name)  { showMessage('Please enter the cardholder name.'); nameEl.focus(); return; }
+    if (!phone) { showMessage('Please enter your phone number.'); phoneEl.focus(); return; }
     if (!stripe || !elements) { showMessage('Payment form is still loading.'); return; }
 
     setLoading(true);
@@ -996,8 +1003,9 @@
         receipt_email: email,
         payment_method_data: {
           billing_details: {
-            email,
             name,
+            email,
+            phone,
           },
         },
       },

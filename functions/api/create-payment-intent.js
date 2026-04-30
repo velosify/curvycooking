@@ -28,7 +28,11 @@ export async function onRequestPost(context) {
   params.set("amount", String(AMOUNT_CENTS));
   params.set("currency", CURRENCY);
   params.set("description", DESCRIPTION);
-  params.set("automatic_payment_methods[enabled]", "true");
+  // Explicit payment methods: Card (which includes Apple Pay + Google Pay
+  // wallets when the device supports them) and Cash App Pay. No Link,
+  // no Klarna, no Affirm — keeps the form clean.
+  params.set("payment_method_types[0]", "card");
+  params.set("payment_method_types[1]", "cashapp");
   params.set("metadata[product]", "curvy-cookbook");
   params.set("metadata[source]", "elements");
   if (email) params.set("receipt_email", email);
