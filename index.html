@@ -165,6 +165,48 @@
     gap: 24px;
   }
 
+  /* ---------- SCROLL-IN ANIMATIONS ---------- */
+  .scroll-fade {
+    opacity: 0;
+    transform: translateY(36px);
+    transition:
+      opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--scroll-fade-delay, 0ms);
+    will-change: opacity, transform;
+  }
+  .scroll-fade.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Recipe cards get a slightly different motion — gentle scale + lift */
+  .recipe-card.scroll-fade {
+    transform: translateY(36px) scale(0.96);
+    transition:
+      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    transition-delay: var(--scroll-fade-delay, 0ms);
+  }
+  .recipe-card.scroll-fade.is-visible {
+    transform: translateY(0) scale(1);
+  }
+  /* Stat numbers: subtle scale-in from below as they count up */
+  .stat-num.is-counting {
+    animation: statPulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes statPulse {
+    0%   { transform: translateY(12px) scale(0.85); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-fade, .recipe-card.scroll-fade {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+    .stat-num.is-counting { animation: none; }
+  }
+
   .eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
     padding: 9px 20px;
@@ -883,18 +925,18 @@
   <div class="wrap">
     <div class="section-bg-text" style="left: -40px; top: 60px;">About&nbsp;Me</div>
     <div class="about">
-      <video class="about-photo" src="about-video.mp4" autoplay loop muted playsinline preload="auto" aria-label="Ashley cooking"></video>
-      <div class="about-card">
+      <video class="about-photo scroll-fade" data-fade-delay="0" src="about-video.mp4" autoplay loop muted playsinline preload="auto" aria-label="Ashley cooking"></video>
+      <div class="about-card scroll-fade" data-fade-delay="120">
         <p><strong>Hi, I'm Ashley.</strong> An Italian girl, born and raised in New York — which is just a complicated way of saying I think pasta is a food group and I argue about red sauce on the internet.</p>
         <p>I started cooking the way every Italian grandmother started cooking — by being told to. Decades later, the only thing that's changed is the audience. For less than the price of a sad takeout salad, you can meet me in the kitchen and learn every recipe I've ever loved.</p>
         <p>This is the cookbook I wish I'd had at twenty: warm, a little chaotic, and unreasonably good at dinner.</p>
         <div class="stats-row">
           <div class="stat">
-            <div class="stat-num">150+</div>
+            <div class="stat-num" data-count="150" data-suffix="+">0+</div>
             <div class="stat-label">Recipes Inside</div>
           </div>
           <div class="stat">
-            <div class="stat-num">10+</div>
+            <div class="stat-num" data-count="10" data-suffix="+">0+</div>
             <div class="stat-label">Cuisines Covered</div>
           </div>
         </div>
@@ -916,7 +958,7 @@
 <section id="recipes">
   <div class="wrap">
     <div class="section-head">
-      <div>
+      <div class="scroll-fade">
         <h2>What's Inside The Cookbook</h2>
       </div>
       <div style="display: flex; align-items: center; gap: 24px;">
@@ -933,22 +975,22 @@
     </div>
 
     <div class="recipe-grid">
-      <div class="recipe-card">
+      <div class="recipe-card scroll-fade" data-fade-delay="0">
         <div class="recipe-thumb one">🍝</div>
         <h4>Eggplant Parmesan</h4>
         <div class="recipe-price">Italian Classic · 45 min</div>
       </div>
-      <div class="recipe-card">
+      <div class="recipe-card scroll-fade" data-fade-delay="100">
         <div class="recipe-thumb two">🧀</div>
         <h4>Mac &amp; Cheese</h4>
         <div class="recipe-price">American Comfort · 30 min</div>
       </div>
-      <div class="recipe-card">
+      <div class="recipe-card scroll-fade" data-fade-delay="200">
         <div class="recipe-thumb three"></div>
         <h4>Meatballs &amp; Ravazzate</h4>
         <div class="recipe-price">Featured Recipe · Inside</div>
       </div>
-      <div class="recipe-card">
+      <div class="recipe-card scroll-fade" data-fade-delay="300">
         <div class="recipe-thumb four">🍔</div>
         <h4>Burger Bowls &amp; Pastina</h4>
         <div class="recipe-price">Carnivore + Keto · 25 min</div>
@@ -961,12 +1003,12 @@
 <section id="reviews">
   <div class="wrap reviews-wrap">
     <div class="section-bg-text reviews-bg-text" style="position: relative; opacity: 1; color: rgba(255,255,255,0.025);">Reviews</div>
-    <div class="reviews-head">
+    <div class="reviews-head scroll-fade">
       <h2>Reviews From My Readers</h2>
     </div>
     <div class="review-row">
-      <div class="reviewer">👩</div>
-      <div class="review-card">
+      <div class="reviewer scroll-fade" data-fade-delay="0">👩</div>
+      <div class="review-card scroll-fade" data-fade-delay="150">
         <p class="quote">"I bought this on a whim and now my husband thinks I went to culinary school. The pastina alone paid for the cookbook three times over. Ashley writes the way your funniest friend texts — except every recipe actually works."</p>
         <div class="reviewer-name">Adelia Z.</div>
         <div class="reviewer-role">Home Cook · NY</div>
@@ -999,10 +1041,10 @@
 <section id="newsletter" class="newsletter">
   <div class="wrap">
     <div class="newsletter-inner">
-      <div>
+      <div class="scroll-fade" data-fade-delay="0">
         <h3>Exclusive Discounts &amp; Recipes Into Your Inbox</h3>
       </div>
-      <div class="newsletter-right">
+      <div class="newsletter-right scroll-fade" data-fade-delay="150">
         <p>One email. Spicy recipes, behind-the-scenes kitchen chaos, and first-look discounts on The Cookbook. No spam, ever.</p>
         <form class="news-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
           <input type="email" placeholder="Email Address" required>
@@ -1029,6 +1071,52 @@
     <div class="foot-brand">Ashbovaxo</div>
   </div>
 </footer>
+
+<script>
+  // Scroll-triggered reveals + stat number count-up.
+  // Elements with .scroll-fade get an .is-visible class when 15% of them
+  // is in view; .stat-num[data-count] elements count from 0 to their target.
+  (function () {
+    if (!('IntersectionObserver' in window)) return; // Old browsers: nothing animates, content is visible by fallback.
+
+    // Apply per-element delay from data attribute → CSS variable
+    document.querySelectorAll('[data-fade-delay]').forEach(el => {
+      el.style.setProperty('--scroll-fade-delay', el.dataset.fadeDelay + 'ms');
+    });
+
+    function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+    function animateCount(el) {
+      const target = parseInt(el.dataset.count, 10);
+      if (isNaN(target)) return;
+      const suffix = el.dataset.suffix || '';
+      const duration = 1400;
+      const startTime = performance.now();
+      el.classList.add('is-counting');
+      function tick(now) {
+        const t = Math.min((now - startTime) / duration, 1);
+        const value = Math.round(target * easeOutCubic(t));
+        el.textContent = value + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add('is-visible');
+        if (el.classList.contains('stat-num') && el.dataset.count) {
+          animateCount(el);
+        }
+        io.unobserve(el);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' });
+
+    document.querySelectorAll('.scroll-fade, .stat-num[data-count]').forEach(el => io.observe(el));
+  })();
+</script>
 
 </body>
 </html>
