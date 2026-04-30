@@ -692,7 +692,12 @@
     place-items: center;
     font-size: 130px;
   }
-  .recipe-thumb.one { background: linear-gradient(155deg, #1a1638, #0c0a1f); }
+  .recipe-thumb.one {
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
+      url("recipe-eggplant.jpg") center/cover no-repeat,
+      #1a1638;
+  }
   .recipe-thumb.two {
     background:
       linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
@@ -706,7 +711,7 @@
       #000;
   }
   .recipe-thumb.four { background: linear-gradient(155deg, #2a1410, #0a0303); }
-  .recipe-thumb.one::after, .recipe-thumb.four::after {
+  .recipe-thumb.four::after {
     content: ""; position: absolute; inset: 0;
     background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.12), transparent 60%);
   }
@@ -1030,7 +1035,7 @@
       <div class="recipe-track">
         <!-- First set -->
         <div class="recipe-card">
-          <div class="recipe-thumb one">🍝</div>
+          <div class="recipe-thumb one"></div>
           <div class="recipe-card-meta">
             <h4>Eggplant Parmesan</h4>
             <div class="recipe-price">Italian Classic · 45 min</div>
@@ -1060,7 +1065,7 @@
         <!-- Duplicate set for seamless loop (a11y-hidden so screen readers
              don't read the same cards twice) -->
         <div class="recipe-card" aria-hidden="true">
-          <div class="recipe-thumb one">🍝</div>
+          <div class="recipe-thumb one"></div>
           <div class="recipe-card-meta">
             <h4>Eggplant Parmesan</h4>
             <div class="recipe-price">Italian Classic · 45 min</div>
