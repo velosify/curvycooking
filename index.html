@@ -643,30 +643,54 @@
     box-shadow: 0 8px 24px -8px rgba(255,93,177,0.5);
   }
 
-  .recipe-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+  /* ---------- RECIPE MARQUEE ---------- */
+  .recipe-marquee {
     position: relative;
+    overflow: hidden;
+    /* Soft fade on the left/right edges so cards drift in/out gracefully */
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
     z-index: 2;
   }
-  .recipe-card {
-    border-radius: 20px;
-    background: var(--grad-card);
-    border: 1px solid var(--line);
-    padding: 18px;
-    transition: transform 0.3s, border-color 0.3s;
+  .recipe-track {
+    display: flex;
+    gap: 24px;
+    width: max-content;
+    animation: recipe-scroll 40s linear infinite;
   }
-  .recipe-card:hover { transform: translateY(-6px); border-color: var(--line-strong); }
-  .recipe-thumb {
+  /* Pause on hover so users can read a card */
+  .recipe-marquee:hover .recipe-track { animation-play-state: paused; }
+  /* Move exactly the width of one set (4 cards × (320px + 24px gap)) so the
+     duplicate set lands precisely where the original started — seamless loop */
+  @keyframes recipe-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc((-320px - 24px) * 4)); }
+  }
+
+  .recipe-card {
+    flex-shrink: 0;
+    width: 320px;
+    aspect-ratio: 1 / 1;
     position: relative;
-    aspect-ratio: 3/4;
-    border-radius: 12px;
+    border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 16px;
+    border: 1px solid var(--line);
+    background: var(--grad-card);
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+  }
+  .recipe-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: var(--line-strong);
+    box-shadow: 0 24px 48px -16px rgba(0, 0, 0, 0.6);
+  }
+  .recipe-thumb {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    border-radius: 0;
     display: grid;
     place-items: center;
-    font-size: 90px;
+    font-size: 130px;
   }
   .recipe-thumb.one { background: linear-gradient(155deg, #1a1638, #0c0a1f); }
   .recipe-thumb.two { background: linear-gradient(155deg, #0d2d24, #061a13); }
@@ -681,16 +705,31 @@
     content: ""; position: absolute; inset: 0;
     background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.12), transparent 60%);
   }
-  .recipe-card h4 {
+  .recipe-card-meta {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    z-index: 2;
+    padding: 56px 22px 20px;
+    background: linear-gradient(180deg,
+      rgba(7,6,15,0) 0%,
+      rgba(7,6,15,0.65) 50%,
+      rgba(7,6,15,0.95) 100%);
+    pointer-events: none;
+  }
+  .recipe-card-meta h4 {
     font-family: 'Sora', sans-serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1.25;
-    margin-bottom: 6px;
+    color: #fff;
+    margin-bottom: 4px;
   }
-  .recipe-price {
-    color: var(--ink-mute);
-    font-size: 14px;
+  .recipe-card-meta .recipe-price {
+    color: var(--ink-dim);
+    font-size: 13.5px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .recipe-track { animation: none; }
   }
 
   /* ---------- REVIEWS ---------- */
@@ -863,7 +902,6 @@
     .hero { padding: 60px 24px 0; min-height: 640px; }
     .chef-img { max-width: 95%; max-height: 580px; }
     .about { grid-template-columns: 1fr; gap: 40px; }
-    .recipe-grid { grid-template-columns: repeat(2, 1fr); }
     .review-row { grid-template-columns: 1fr; }
     .reviewer { max-width: 240px; margin: 0 auto; }
     .newsletter-inner { grid-template-columns: 1fr; gap: 32px; }
@@ -872,7 +910,13 @@
   @media (max-width: 600px) {
     .hero-shell { margin: 0; border-radius: 0; }
     .nav { padding: 12px 20px; }
-    .recipe-grid { grid-template-columns: 1fr; }
+    .recipe-card { width: 260px; }
+    .recipe-thumb { font-size: 100px; }
+    .recipe-track { animation-name: recipe-scroll-mobile; }
+    @keyframes recipe-scroll-mobile {
+      from { transform: translateX(0); }
+      to   { transform: translateX(calc((-260px - 24px) * 4)); }
+    }
     .stats-row { gap: 32px; }
     .stat-num { font-size: 42px; }
     .news-form { flex-direction: column; border-radius: 16px; padding: 12px; }
@@ -965,26 +1009,67 @@
       <h2>What's Inside The Cookbook</h2>
     </div>
 
-    <div class="recipe-grid">
-      <div class="recipe-card scroll-fade" data-fade-delay="0">
-        <div class="recipe-thumb one">🍝</div>
-        <h4>Eggplant Parmesan</h4>
-        <div class="recipe-price">Italian Classic · 45 min</div>
-      </div>
-      <div class="recipe-card scroll-fade" data-fade-delay="100">
-        <div class="recipe-thumb two">🧀</div>
-        <h4>Mac &amp; Cheese</h4>
-        <div class="recipe-price">American Comfort · 30 min</div>
-      </div>
-      <div class="recipe-card scroll-fade" data-fade-delay="200">
-        <div class="recipe-thumb three"></div>
-        <h4>Meatballs &amp; Ravazzate</h4>
-        <div class="recipe-price">Featured Recipe · Inside</div>
-      </div>
-      <div class="recipe-card scroll-fade" data-fade-delay="300">
-        <div class="recipe-thumb four">🍔</div>
-        <h4>Burger Bowls &amp; Pastina</h4>
-        <div class="recipe-price">Carnivore + Keto · 25 min</div>
+    <div class="recipe-marquee scroll-fade">
+      <div class="recipe-track">
+        <!-- First set -->
+        <div class="recipe-card">
+          <div class="recipe-thumb one">🍝</div>
+          <div class="recipe-card-meta">
+            <h4>Eggplant Parmesan</h4>
+            <div class="recipe-price">Italian Classic · 45 min</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-thumb two">🧀</div>
+          <div class="recipe-card-meta">
+            <h4>Mac &amp; Cheese</h4>
+            <div class="recipe-price">American Comfort · 30 min</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-thumb three"></div>
+          <div class="recipe-card-meta">
+            <h4>Meatballs &amp; Ravazzate</h4>
+            <div class="recipe-price">Featured Recipe · Inside</div>
+          </div>
+        </div>
+        <div class="recipe-card">
+          <div class="recipe-thumb four">🍔</div>
+          <div class="recipe-card-meta">
+            <h4>Burger Bowls &amp; Pastina</h4>
+            <div class="recipe-price">Carnivore + Keto · 25 min</div>
+          </div>
+        </div>
+        <!-- Duplicate set for seamless loop (a11y-hidden so screen readers
+             don't read the same cards twice) -->
+        <div class="recipe-card" aria-hidden="true">
+          <div class="recipe-thumb one">🍝</div>
+          <div class="recipe-card-meta">
+            <h4>Eggplant Parmesan</h4>
+            <div class="recipe-price">Italian Classic · 45 min</div>
+          </div>
+        </div>
+        <div class="recipe-card" aria-hidden="true">
+          <div class="recipe-thumb two">🧀</div>
+          <div class="recipe-card-meta">
+            <h4>Mac &amp; Cheese</h4>
+            <div class="recipe-price">American Comfort · 30 min</div>
+          </div>
+        </div>
+        <div class="recipe-card" aria-hidden="true">
+          <div class="recipe-thumb three"></div>
+          <div class="recipe-card-meta">
+            <h4>Meatballs &amp; Ravazzate</h4>
+            <div class="recipe-price">Featured Recipe · Inside</div>
+          </div>
+        </div>
+        <div class="recipe-card" aria-hidden="true">
+          <div class="recipe-thumb four">🍔</div>
+          <div class="recipe-card-meta">
+            <h4>Burger Bowls &amp; Pastina</h4>
+            <div class="recipe-price">Carnivore + Keto · 25 min</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
