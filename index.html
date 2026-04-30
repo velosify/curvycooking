@@ -6,28 +6,31 @@
 <title>Curvy Cooking — Get Spicy In The Kitchen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-0: #07060f;
-    --bg-1: #0c0a1f;
-    --bg-2: #14112e;
-    --ink: #ffffff;
-    --ink-dim: #b9b3d6;
-    --ink-mute: #8a83ad;
-    --line: rgba(255,255,255,0.08);
-    --line-strong: rgba(255,255,255,0.16);
-    --purple: #7a5cff;
-    --purple-deep: #4a2bd9;
-    --blue: #3a7bff;
-    --pink: #ff5db1;
-    --orange: #ff7a3d;
-    --grad-hero: radial-gradient(1200px 700px at 78% 35%, rgba(122,92,255,0.45), transparent 60%),
-                 radial-gradient(900px 600px at 15% 85%, rgba(58,123,255,0.35), transparent 65%),
-                 linear-gradient(180deg, #07060f 0%, #0a0820 60%, #07060f 100%);
-    --grad-cta: linear-gradient(90deg, #ff7a3d 0%, #ff5db1 50%, #7a5cff 100%);
-    --grad-card: linear-gradient(160deg, rgba(122,92,255,0.18), rgba(58,123,255,0.06) 60%, rgba(255,255,255,0.02));
-    --grad-strip: linear-gradient(90deg, #5a3bff, #3a7bff);
+    --bg-0: #08070a;       /* deep velvet near-black */
+    --bg-1: #14100b;       /* warm charcoal */
+    --bg-2: #1c1610;       /* card surface */
+    --ink: #f5ecdb;        /* warm ivory */
+    --ink-dim: #d4c5a6;    /* champagne cream */
+    --ink-mute: #8c7d63;   /* aged brass */
+    --line: rgba(212, 175, 55, 0.12);
+    --line-strong: rgba(212, 175, 55, 0.26);
+    --gold: #d4af37;          /* primary gold */
+    --gold-bright: #f5d990;   /* highlight gold */
+    --gold-deep: #a8841a;     /* deep amber */
+    --gold-soft: #c9a55c;     /* aged gold */
+    --wine: #8b1e2e;          /* deep wine red */
+    --wine-bright: #c9203a;   /* hot red */
+    --grad-hero:
+      radial-gradient(1200px 700px at 78% 25%, rgba(212, 175, 55, 0.20), transparent 60%),
+      radial-gradient(900px 600px at 15% 85%, rgba(139, 30, 46, 0.22), transparent 65%),
+      linear-gradient(180deg, #08070a 0%, #14100b 60%, #08070a 100%);
+    --grad-cta: linear-gradient(135deg, #f5d990 0%, #d4af37 45%, #a8841a 100%);
+    --grad-card: linear-gradient(160deg, rgba(212, 175, 55, 0.10), rgba(139, 30, 46, 0.05) 55%, rgba(0, 0, 0, 0.02));
+    --grad-strip: linear-gradient(90deg, #a8841a 0%, #d4af37 50%, #a8841a 100%);
+    --grad-gold-text: linear-gradient(180deg, #f5d990 0%, #d4af37 35%, #a8841a 65%, #d4af37 85%, #f5d990 100%);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,7 +57,7 @@
     inset: 0;
     background:
       radial-gradient(420px 280px at 70% 50%, rgba(255,255,255,0.06), transparent 70%),
-      radial-gradient(700px 500px at 90% 90%, rgba(122,92,255,0.25), transparent 60%);
+      radial-gradient(700px 500px at 90% 90%, rgba(212, 175, 55, 0.18), transparent 60%);
     pointer-events: none;
   }
   .nav {
@@ -77,14 +80,17 @@
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
   }
   .brand {
-    font-family: 'Sora', sans-serif;
-    font-weight: 700;
-    font-size: 22px;
-    background: linear-gradient(90deg, #b6a4ff, #7a5cff 60%, #3a7bff);
+    font-family: 'Playfair Display', 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 28px;
+    background: var(--grad-gold-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.005em;
+    /* Subtle gold sheen */
+    filter: drop-shadow(0 1px 2px rgba(212, 175, 55, 0.15));
   }
   .nav-links { display: flex; gap: 36px; align-items: center; }
   .nav-links a {
@@ -129,9 +135,9 @@
     position: absolute;
     top: 6px; right: 7px;
     width: 8px; height: 8px;
-    background: linear-gradient(135deg, #ff5db1, #ff7a3d);
+    background: linear-gradient(135deg, #f5d990, #a8841a);
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(255,93,177,0.7);
+    box-shadow: 0 0 10px rgba(212,175,55,0.7);
   }
 
   .hero {
@@ -168,37 +174,39 @@
   .eyebrow::before {
     content: "";
     width: 6px; height: 6px; border-radius: 50%;
-    background: linear-gradient(135deg, #ff5db1, #ff7a3d);
-    box-shadow: 0 0 10px rgba(255,93,177,0.6);
+    background: linear-gradient(135deg, #f5d990, #a8841a);
+    box-shadow: 0 0 10px rgba(212,175,55,0.6);
   }
   h1.title {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: 800;
-    font-size: clamp(56px, 7.5vw, 116px);
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    font-size: clamp(60px, 8vw, 124px);
     line-height: 1.02;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.015em;
     margin: 0;
-    color: #ffffff;
+    color: var(--ink);
     text-align: center;
-    /* Deep multi-layer shadow so the title pops over the chef image */
     text-shadow:
-      0 4px 32px rgba(0, 0, 0, 0.8),
-      0 2px 12px rgba(0, 0, 0, 0.65),
-      0 0 80px rgba(7, 6, 15, 0.55);
+      0 4px 32px rgba(0, 0, 0, 0.85),
+      0 2px 12px rgba(0, 0, 0, 0.7),
+      0 0 80px rgba(0, 0, 0, 0.6);
   }
   h1.title .accent {
-    color: #ef3b3b;
-    font-family: inherit;
+    font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-weight: inherit;
-    /* Italic glyphs lean right; nudge the box so the curl of the "y" isn't cropped */
+    font-weight: 600;
+    /* Wine red with a hint of gold via gradient — feels like fire-lit Italian theatre */
+    background: linear-gradient(180deg, #f0c45a 0%, #d4af37 30%, #c9203a 70%, #8b1e2e 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
     display: inline-block;
-    padding-right: 0.06em;
-    /* Subtle red glow makes "Spicy" feel hot */
-    text-shadow:
-      0 4px 32px rgba(0, 0, 0, 0.8),
-      0 2px 12px rgba(0, 0, 0, 0.65),
-      0 0 28px rgba(239, 59, 59, 0.55);
+    padding: 0 0.08em 0.12em 0;
+    overflow: visible;
+    /* Glow layered behind the gradient text */
+    filter: drop-shadow(0 4px 32px rgba(0, 0, 0, 0.7))
+            drop-shadow(0 0 32px rgba(201, 32, 58, 0.3))
+            drop-shadow(0 0 18px rgba(212, 175, 55, 0.25));
   }
   .hero-meta {
     display: flex;
@@ -221,16 +229,16 @@
     margin-left: -10px;
   }
   .stack-faces div:first-child { margin-left: 0; }
-  .face-1 { background: linear-gradient(135deg, #ffb088, #ff5db1); }
-  .face-2 { background: linear-gradient(135deg, #88c5ff, #7a5cff); }
-  .face-3 { background: linear-gradient(135deg, #ffe0b3, #ff7a3d); }
-  .face-4 { background: linear-gradient(135deg, #c7b3ff, #5a3bff); }
+  .face-1 { background: linear-gradient(135deg, #f5d990, #a8841a); }
+  .face-2 { background: linear-gradient(135deg, #f0c45a, #8b1e2e); }
+  .face-3 { background: linear-gradient(135deg, #d4af37, #5a0a14); }
+  .face-4 { background: linear-gradient(135deg, #c9a55c, #d4af37); }
   .rating { display: flex; flex-direction: column; gap: 4px; }
   .rating-stars {
     display: flex; align-items: center; gap: 8px;
     font-weight: 600; font-size: 18px;
   }
-  .rating-stars .star { color: #ffd166; }
+  .rating-stars .star { color: var(--gold); filter: drop-shadow(0 0 8px rgba(212,175,55,0.5)); }
   .rating-sub { font-size: 12.5px; color: var(--ink-mute); letter-spacing: 0.04em; text-transform: uppercase; }
 
   .hero-right {
@@ -254,10 +262,10 @@
     font-weight: 600; font-size: 15px;
     border: none;
     cursor: pointer;
-    box-shadow: 0 12px 40px -10px rgba(255,93,177,0.5), 0 0 0 1px rgba(255,255,255,0.1) inset;
+    box-shadow: 0 12px 40px -10px rgba(212, 175, 55, 0.5), 0 0 0 1px rgba(255, 232, 180, 0.18) inset;
     transition: transform 0.25s, box-shadow 0.25s;
   }
-  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 18px 50px -10px rgba(255,93,177,0.65), 0 0 0 1px rgba(255,255,255,0.15) inset; }
+  .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 18px 50px -10px rgba(212, 175, 55, 0.65), 0 0 0 1px rgba(255, 232, 180, 0.22) inset; }
   .btn-cta .arrow {
     width: 32px; height: 32px;
     border-radius: 50%;
@@ -327,10 +335,10 @@
     border-radius: inherit;
     pointer-events: none;
     background: radial-gradient(120% 80% at 0% 0%,
-      rgba(255,93,177,0.18) 0%,
+      rgba(139, 30, 46, 0.20) 0%,
       transparent 45%),
       radial-gradient(120% 80% at 100% 100%,
-      rgba(122,92,255,0.18) 0%,
+      rgba(212, 175, 55, 0.22) 0%,
       transparent 45%);
     opacity: 0.9;
     z-index: -2;
@@ -346,7 +354,7 @@
       0 24px 60px -16px rgba(0,0,0,0.65),
       inset 0 1px 0 rgba(255,255,255,0.55),
       inset 0 -1px 0 rgba(255,255,255,0.10),
-      inset 0 0 40px rgba(122,92,255,0.10);
+      inset 0 0 40px rgba(212, 175, 55, 0.12);
   }
   .btn-glass:active {
     transform: translateY(0);
@@ -385,10 +393,10 @@
     width: 70%;
     height: 70%;
     background:
-      radial-gradient(closest-side, rgba(255,93,177,0.30), transparent 70%),
-      radial-gradient(closest-side at 50% 60%, rgba(122,92,255,0.40), transparent 75%);
-    filter: blur(40px);
-    opacity: 0.85;
+      radial-gradient(closest-side, rgba(212, 175, 55, 0.28), transparent 70%),
+      radial-gradient(closest-side at 50% 60%, rgba(139, 30, 46, 0.35), transparent 75%);
+    filter: blur(50px);
+    opacity: 0.9;
     z-index: 1;
   }
   .chef-img {
@@ -419,22 +427,24 @@
   }
   .marquee-track {
     display: flex;
-    gap: 48px;
+    gap: 56px;
     white-space: nowrap;
     animation: scroll-left 30s linear infinite;
-    font-family: 'Sora', sans-serif;
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: 0.04em;
-    color: #fff;
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: 0.02em;
+    color: #08070a; /* dark text against gold strip */
   }
   .marquee-track span { display: inline-flex; align-items: center; gap: 24px; }
   .marquee-track .dot {
-    width: 18px; height: 18px;
-    background: radial-gradient(circle at 30% 30%, #ffd166, #ff7a3d);
+    width: 8px; height: 8px;
+    background: radial-gradient(circle at 30% 30%, #c9203a, #5a0a14);
     border-radius: 50%;
     display: inline-block;
-    box-shadow: 0 0 12px rgba(255,209,102,0.7);
+    box-shadow: 0 0 10px rgba(139, 30, 46, 0.9);
+    transform: translateY(-3px);
   }
   @keyframes scroll-left {
     from { transform: translateX(0); }
@@ -445,7 +455,7 @@
   section { padding: 120px 0; position: relative; }
   .section-bg-text {
     position: absolute;
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
     font-weight: 800;
     font-size: clamp(140px, 16vw, 240px);
     color: rgba(255,255,255,0.025);
@@ -468,9 +478,9 @@
     border-radius: 18px;
     overflow: hidden;
     background:
-      linear-gradient(140deg, rgba(122,92,255,0.4), rgba(58,123,255,0.2) 50%, rgba(255,93,177,0.3)),
+      linear-gradient(140deg, rgba(212, 175, 55, 0.35), rgba(139, 30, 46, 0.25) 50%, rgba(0, 0, 0, 0.4)),
       radial-gradient(circle at 60% 35%, #ffd1a3 0%, #c98a5c 35%, #6a3a22 70%, #1a0a06 100%);
-    box-shadow: 0 30px 80px -20px rgba(122,92,255,0.4);
+    box-shadow: 0 30px 80px -20px rgba(212, 175, 55, 0.35);
   }
   .about-photo::before {
     content: "👩‍🍳";
@@ -515,14 +525,15 @@
     gap: 6px;
   }
   .stat-num {
-    font-family: 'Sora', sans-serif;
-    font-weight: 800;
+    font-family: 'Cinzel', 'Playfair Display', serif;
+    font-weight: 700;
     font-size: 56px;
     line-height: 1;
-    background: linear-gradient(180deg, #fff, #b9b3d6);
+    background: var(--grad-gold-text);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    letter-spacing: 0.02em;
   }
   .stat-label {
     color: var(--ink-mute);
@@ -555,7 +566,7 @@
     transition: background 0.25s;
     cursor: pointer;
   }
-  .socials .icon:hover { background: var(--purple); border-color: var(--purple); }
+  .socials .icon:hover { background: var(--gold); border-color: var(--gold); color: var(--bg-0); }
 
   /* ---------- RECIPES ---------- */
   .section-head {
@@ -568,7 +579,7 @@
     z-index: 2;
   }
   .section-head h2 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
     font-weight: 800;
     font-size: clamp(38px, 4.4vw, 60px);
     line-height: 1;
@@ -593,11 +604,11 @@
     cursor: pointer;
     transition: all 0.25s;
   }
-  .pager .pager-btn:hover { background: var(--purple); border-color: var(--purple); }
+  .pager .pager-btn:hover { background: var(--gold); border-color: var(--gold); color: var(--bg-0); }
   .pager .pager-btn.active {
     background: var(--grad-cta);
     border-color: transparent;
-    box-shadow: 0 8px 24px -8px rgba(255,93,177,0.5);
+    box-shadow: 0 8px 24px -8px rgba(212, 175, 55, 0.5);
   }
 
   .recipe-grid {
@@ -639,7 +650,7 @@
     background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.12), transparent 60%);
   }
   .recipe-card h4 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
     font-weight: 700;
     font-size: 16px;
     line-height: 1.25;
@@ -665,7 +676,7 @@
     z-index: 2;
   }
   .reviews-head h2 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
     font-weight: 800;
     font-size: clamp(38px, 4.4vw, 56px);
   }
@@ -704,7 +715,7 @@
     margin-bottom: 24px;
   }
   .reviewer-name {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
     font-weight: 700;
     font-size: 17px;
   }
@@ -740,7 +751,7 @@
     align-items: center;
   }
   .newsletter h3 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
     font-weight: 800;
     font-size: clamp(34px, 3.8vw, 50px);
     line-height: 1.1;
@@ -781,7 +792,7 @@
     border-radius: 999px;
     cursor: pointer;
     display: inline-flex; align-items: center; gap: 8px;
-    box-shadow: 0 8px 24px -8px rgba(255,93,177,0.5);
+    box-shadow: 0 8px 24px -8px rgba(212, 175, 55, 0.5);
   }
 
   /* ---------- FOOTER ---------- */
@@ -803,11 +814,11 @@
   .foot-row a:hover { color: #fff; }
   .foot-brand {
     text-align: center;
-    font-family: 'Sora', sans-serif;
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
     font-weight: 800;
     font-size: clamp(72px, 11vw, 160px);
     letter-spacing: -0.03em;
-    background: linear-gradient(180deg, rgba(122,92,255,0.6), rgba(122,92,255,0));
+    background: linear-gradient(180deg, rgba(212, 175, 55, 0.55), rgba(212, 175, 55, 0));
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -892,12 +903,12 @@
 <!-- ============= MARQUEE ============= -->
 <div class="marquee-strip">
   <div class="marquee-track">
+    <span><span class="dot"></span>La&nbsp;Cucina&nbsp;di&nbsp;Ashley</span>
+    <span><span class="dot"></span>Mangia·Bevi·Ama</span>
     <span><span class="dot"></span>The Best Cookbook In The World</span>
-    <span><span class="dot"></span>Get Spicy In The Kitchen</span>
+    <span><span class="dot"></span>La&nbsp;Cucina&nbsp;di&nbsp;Ashley</span>
+    <span><span class="dot"></span>Mangia·Bevi·Ama</span>
     <span><span class="dot"></span>The Best Cookbook In The World</span>
-    <span><span class="dot"></span>Get Spicy In The Kitchen</span>
-    <span><span class="dot"></span>The Best Cookbook In The World</span>
-    <span><span class="dot"></span>Get Spicy In The Kitchen</span>
   </div>
 </div>
 
