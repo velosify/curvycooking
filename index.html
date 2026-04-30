@@ -294,6 +294,14 @@
     background-size: cover;
     background-position: center;
     margin-left: -10px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
+    font-size: 22px;
+    line-height: 1;
+    /* Nudge the emoji slightly so the face is centered in the visible window */
+    text-indent: 0;
   }
   .stack-faces div:first-child { margin-left: 0; }
   .face-1 { background: linear-gradient(135deg, #ffb088, #ff5db1); }
@@ -1026,11 +1034,11 @@
     <div class="hero-text-bottom">
       <h1 class="title">Ready to<br>Get <span class="accent">Spicy</span>?</h1>
       <div class="hero-meta">
-        <div class="stack-faces">
-          <div class="face-1"></div>
-          <div class="face-2"></div>
-          <div class="face-3"></div>
-          <div class="face-4"></div>
+        <div class="stack-faces" aria-hidden="true">
+          <div class="face-1">👩🏽</div>
+          <div class="face-2">👨🏿</div>
+          <div class="face-3">👩🏻</div>
+          <div class="face-4">👨🏽</div>
         </div>
         <div class="rating">
           <div class="rating-stars"><span class="star">★</span> 4.9 Ratings</div>
