@@ -189,13 +189,16 @@
   h1.title .accent {
     color: #ef3b3b;
     font-family: inherit;
-    font-style: normal;
+    font-style: italic;
     font-weight: inherit;
+    /* Italic glyphs lean right; nudge the box so the curl of the "y" isn't cropped */
+    display: inline-block;
+    padding-right: 0.06em;
     /* Subtle red glow makes "Spicy" feel hot */
     text-shadow:
       0 4px 32px rgba(0, 0, 0, 0.8),
       0 2px 12px rgba(0, 0, 0, 0.65),
-      0 0 24px rgba(239, 59, 59, 0.5);
+      0 0 28px rgba(239, 59, 59, 0.55);
   }
   .hero-meta {
     display: flex;
@@ -864,7 +867,7 @@
     </div>
 
     <div class="hero-text-bottom">
-      <h1 class="title">Ready to Get <span class="accent">Spicy</span>&nbsp;🌶️</h1>
+      <h1 class="title">Ready to<br>Get <span class="accent">Spicy</span>?</h1>
       <div class="hero-meta">
         <div class="stack-faces">
           <div class="face-1"></div>
