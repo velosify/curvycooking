@@ -271,22 +271,32 @@
 </main>
 
 <script>
-  // Verify the payment really cleared by fetching the session details from
-  // our backend (which calls Stripe with the secret key). The browser-only
-  // ?session_id=... param can't be trusted on its own.
+  // Stripe redirects here with: ?payment_intent=pi_xxx&payment_intent_client_secret=...&redirect_status=succeeded
+  // Verify server-side via /api/payment-intent-status — don't trust URL params alone.
   (async () => {
-    const sessionId = new URLSearchParams(location.search).get('session_id');
-    if (!sessionId) return;
+    const params = new URLSearchParams(location.search);
+    const piId = params.get('payment_intent');
+    const redirectStatus = params.get('redirect_status');
+
+    if (!piId) return;
+
+    // If Stripe says the redirect failed (e.g. processing), reflect that
+    if (redirectStatus && redirectStatus !== 'succeeded') {
+      document.getElementById('lede').innerHTML =
+        'Your payment is <strong>' + redirectStatus.replace(/_/g, ' ') + '</strong>. ' +
+        'We\'ll email you the moment it clears. Hang tight.';
+      return;
+    }
 
     try {
-      const res = await fetch('/api/session-status?session_id=' + encodeURIComponent(sessionId));
+      const res = await fetch('/api/payment-intent-status?id=' + encodeURIComponent(piId));
       if (!res.ok) return;
       const data = await res.json();
-      if (data.payment_status !== 'paid') return;
+      if (data.status !== 'succeeded') return;
 
-      const email = data.customer_email || '';
-      const total = (data.amount_total != null)
-        ? new Intl.NumberFormat('en-US', { style: 'currency', currency: (data.currency || 'usd').toUpperCase() }).format(data.amount_total / 100)
+      const email = data.customer_email || data.receipt_email || '';
+      const total = (data.amount != null)
+        ? new Intl.NumberFormat('en-US', { style: 'currency', currency: (data.currency || 'usd').toUpperCase() }).format(data.amount / 100)
         : '';
 
       if (email) document.getElementById('customerEmail').textContent = email;
