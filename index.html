@@ -140,22 +140,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     text-align: center;
-    padding: 60px 48px 50px;
-    min-height: 960px;
+    padding: 40px 48px 50px;
+    min-height: 880px;
   }
-  .hero-text-top, .hero-text-bottom {
+  .hero-text-bottom {
     position: relative;
     z-index: 10;
     width: 100%;
     max-width: 1080px;
-  }
-  .hero-text-bottom {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 28px;
+    gap: 24px;
   }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
@@ -174,36 +172,30 @@
     box-shadow: 0 0 10px rgba(255,93,177,0.6);
   }
   h1.title {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: 800;
-    font-size: clamp(64px, 9vw, 144px);
-    line-height: 1.0;
-    letter-spacing: -0.03em;
-    margin-bottom: 0;
-    padding-bottom: 0.18em; /* Room for italic "y"/"?" descenders */
+    font-size: clamp(56px, 7.5vw, 116px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin: 0;
+    color: #ffffff;
     text-align: center;
     /* Deep multi-layer shadow so the title pops over the chef image */
     text-shadow:
-      0 4px 32px rgba(0, 0, 0, 0.75),
-      0 2px 12px rgba(0, 0, 0, 0.6),
-      0 0 80px rgba(7, 6, 15, 0.5);
+      0 4px 32px rgba(0, 0, 0, 0.8),
+      0 2px 12px rgba(0, 0, 0, 0.65),
+      0 0 80px rgba(7, 6, 15, 0.55);
   }
   h1.title .accent {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-    font-weight: 500;
-    background: linear-gradient(90deg, #ff5db1, #ff7a3d 60%, #ffd166);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    /* The italic glyph box needs vertical room for descenders AND
-       horizontal room for the right-leaning slant. Padding extends the
-       background paint area so background-clip:text doesn't crop the
-       gradient before the curl of the "y" or "?" finishes. */
-    display: inline-block;
-    padding: 0 0.08em 0.18em 0;
-    line-height: 1.05;
-    overflow: visible;
+    color: #ef3b3b;
+    font-family: inherit;
+    font-style: normal;
+    font-weight: inherit;
+    /* Subtle red glow makes "Spicy" feel hot */
+    text-shadow:
+      0 4px 32px rgba(0, 0, 0, 0.8),
+      0 2px 12px rgba(0, 0, 0, 0.65),
+      0 0 24px rgba(239, 59, 59, 0.5);
   }
   .hero-meta {
     display: flex;
@@ -866,16 +858,13 @@
 <!-- ============= HERO ============= -->
 <div class="hero-shell">
   <div class="hero">
-    <div class="hero-text-top">
-      <h1 class="title">Ready to <span class="accent">Get&nbsp;Spicy?</span></h1>
-    </div>
-
     <div class="chef-stage">
       <div class="chef-glow"></div>
       <img class="chef-img" src="chef-hero.jpg" alt="Curvy Cooking" />
     </div>
 
     <div class="hero-text-bottom">
+      <h1 class="title">Ready to Get <span class="accent">Spicy</span>&nbsp;🌶️</h1>
       <div class="hero-meta">
         <div class="stack-faces">
           <div class="face-1"></div>
