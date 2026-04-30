@@ -140,17 +140,22 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     text-align: center;
-    padding: 80px 48px 0;
-    min-height: 820px;
+    padding: 60px 48px 50px;
+    min-height: 960px;
   }
-  .hero-text {
+  .hero-text-top, .hero-text-bottom {
     position: relative;
     z-index: 10;
     width: 100%;
     max-width: 1080px;
-    pointer-events: auto;
+  }
+  .hero-text-bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
   }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
@@ -171,15 +176,15 @@
   h1.title {
     font-family: 'Sora', sans-serif;
     font-weight: 800;
-    font-size: clamp(72px, 10.5vw, 168px);
-    line-height: 1.05;
+    font-size: clamp(64px, 9vw, 144px);
+    line-height: 1.0;
     letter-spacing: -0.03em;
-    margin-bottom: 36px;
+    margin-bottom: 0;
     padding-bottom: 0.18em; /* Room for italic "y"/"?" descenders */
     text-align: center;
     /* Deep multi-layer shadow so the title pops over the chef image */
     text-shadow:
-      0 4px 32px rgba(0, 0, 0, 0.7),
+      0 4px 32px rgba(0, 0, 0, 0.75),
       0 2px 12px rgba(0, 0, 0, 0.6),
       0 0 80px rgba(7, 6, 15, 0.5);
   }
@@ -394,13 +399,13 @@
   .chef-img {
     position: relative;
     height: 100%;
-    max-height: 820px;
+    max-height: 920px;
     width: auto;
-    max-width: 90%;
+    max-width: 92%;
     object-fit: contain;
     object-position: bottom center;
     mix-blend-mode: screen;
-    filter: contrast(1.05) saturate(1.05) drop-shadow(0 30px 60px rgba(0,0,0,0.4));
+    filter: contrast(1.06) saturate(1.08) drop-shadow(0 40px 80px rgba(0,0,0,0.5));
     z-index: 2;
     transform: translateY(2px); /* tuck the bottom edge to the marquee */
   }
@@ -861,8 +866,16 @@
 <!-- ============= HERO ============= -->
 <div class="hero-shell">
   <div class="hero">
-    <div class="hero-text">
+    <div class="hero-text-top">
       <h1 class="title">Ready to <span class="accent">Get&nbsp;Spicy?</span></h1>
+    </div>
+
+    <div class="chef-stage">
+      <div class="chef-glow"></div>
+      <img class="chef-img" src="chef-hero.jpg" alt="Curvy Cooking" />
+    </div>
+
+    <div class="hero-text-bottom">
       <div class="hero-meta">
         <div class="stack-faces">
           <div class="face-1"></div>
@@ -880,11 +893,6 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
         </span>
       </a>
-    </div>
-
-    <div class="chef-stage">
-      <div class="chef-glow"></div>
-      <img class="chef-img" src="chef-hero.jpg" alt="Curvy Cooking" />
     </div>
   </div>
 </div>
