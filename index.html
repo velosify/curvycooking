@@ -664,7 +664,7 @@
      duplicate set lands precisely where the original started — seamless loop */
   @keyframes recipe-scroll {
     from { transform: translateX(0); }
-    to   { transform: translateX(calc((-320px - 24px) * 4)); }
+    to   { transform: translateX(calc((-320px - 24px) * 5)); }
   }
 
   .recipe-card {
@@ -715,6 +715,12 @@
       linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
       url("recipe-burger.jpg") center/cover no-repeat,
       #2a1410;
+  }
+  .recipe-thumb.five {
+    background:
+      linear-gradient(150deg, rgba(255,255,255,0.10), transparent 40%),
+      url("recipe-pastina.jpg") center/cover no-repeat,
+      #2a1f0a;
   }
   .recipe-card-meta {
     position: absolute;
@@ -940,7 +946,7 @@
     .recipe-track { animation-name: recipe-scroll-mobile; }
     @keyframes recipe-scroll-mobile {
       from { transform: translateX(0); }
-      to   { transform: translateX(calc((-260px - 24px) * 4)); }
+      to   { transform: translateX(calc((-260px - 24px) * 5)); }
     }
     .news-form { flex-direction: column; border-radius: 16px; padding: 12px; }
     .news-form input { padding: 10px 12px; }
@@ -1063,6 +1069,13 @@
             <div class="recipe-price">Carnivore · 25 min</div>
           </div>
         </div>
+        <div class="recipe-card">
+          <div class="recipe-thumb five"></div>
+          <div class="recipe-card-meta">
+            <h4>Pastina</h4>
+            <div class="recipe-price">Italian Comfort · 15 min</div>
+          </div>
+        </div>
         <!-- Duplicate set for seamless loop (a11y-hidden so screen readers
              don't read the same cards twice) -->
         <div class="recipe-card" aria-hidden="true">
@@ -1091,6 +1104,13 @@
           <div class="recipe-card-meta">
             <h4>Burger Bowls</h4>
             <div class="recipe-price">Carnivore · 25 min</div>
+          </div>
+        </div>
+        <div class="recipe-card" aria-hidden="true">
+          <div class="recipe-thumb five"></div>
+          <div class="recipe-card-meta">
+            <h4>Pastina</h4>
+            <div class="recipe-price">Italian Comfort · 15 min</div>
           </div>
         </div>
       </div>
