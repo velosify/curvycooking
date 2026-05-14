@@ -3,36 +3,46 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cooking Community — Members Area</title>
+<title>Members Area — Curvy Cooking</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%B6%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E" />
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%B6%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0e0904;
-    --bg-2: #1a1108;
-    --surface: rgba(28, 20, 14, 0.78);
-    --surface-solid: #1e1510;
-    --surface-strong: rgba(34, 25, 18, 0.92);
-    --text: #f5ecdf;
-    --muted: #a99c8a;
-    --border: rgba(255, 240, 210, 0.10);
-    --border-strong: rgba(255, 240, 210, 0.22);
-    --accent: #e8933a;
-    --accent-hover: #f4a84f;
-    --accent-text: #1a1108;
-    --danger-bg: rgba(153, 27, 27, 0.25);
-    --danger-border: rgba(239, 68, 68, 0.35);
-    --danger-text: #fca5a5;
-    --chip: rgba(255, 240, 210, 0.08);
-    --chip-hover: rgba(255, 240, 210, 0.14);
-    --chip-active: #e8933a;
-    --chip-active-text: #1a1108;
+    --bg: #07060f;
+    --bg-2: #0c0a1f;
+    --surface: rgba(20, 17, 46, 0.78);
+    --surface-solid: #14112e;
+    --surface-strong: rgba(20, 17, 46, 0.92);
+    --text: #ffffff;
+    --muted: #b9b3d6;
+    --ink-mute: #8a83ad;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --accent: #ff5db1;
+    --accent-hover: #ff7ec3;
+    --accent-text: #ffffff;
+    --purple: #7a5cff;
+    --pink: #ff5db1;
+    --orange: #ff7a3d;
+    --grad-cta: linear-gradient(90deg, #ff7a3d 0%, #ff5db1 50%, #7a5cff 100%);
+    --danger-bg: rgba(255, 93, 177, 0.12);
+    --danger-border: rgba(255, 93, 177, 0.35);
+    --danger-text: #ffb3d4;
+    --chip: rgba(255, 255, 255, 0.06);
+    --chip-hover: rgba(255, 255, 255, 0.12);
+    --chip-active: var(--purple);
+    --chip-active-text: #ffffff;
     --shadow: 0 1px 2px rgba(0,0,0,0.45), 0 6px 16px rgba(0,0,0,0.35);
-    --shadow-lg: 0 14px 48px rgba(0,0,0,0.55);
+    --shadow-lg: 0 30px 80px -20px rgba(0,0,0,0.6);
     --radius: 14px;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
@@ -40,56 +50,21 @@
     background-color: var(--bg);
   }
 
-  /* The user-supplied photo is the main backdrop. A vignette is layered ON
-     TOP to keep content readable. Mobile (default) uses the portrait photo;
-     desktop gets a 90°-rotated landscape version so the veg border frames
-     top & bottom instead of stretching awkwardly.
-     Fallback gradients only show if the images are missing. */
+  /* Same dark purple/pink/blue ambient gradient used on the landing page hero */
   body::before {
     content: '';
     position: fixed; inset: 0; z-index: -2;
-    background-image:
-      /* Top layer: center-clear vignette darkens edges slightly */
-      radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.55) 100%),
-      /* Subtle warm highlight, top-right */
-      radial-gradient(700px 500px at 92% 8%, rgba(232, 148, 58, 0.10), transparent 60%),
-      /* Portrait photo for mobile */
-      url("background.jpg"),
-      /* Fallback layers (only visible if the image fails to load) */
-      radial-gradient(900px 700px at 92% 8%, rgba(232, 148, 58, 0.30), transparent 55%),
-      radial-gradient(700px 700px at 8% 92%, rgba(120, 52, 22, 0.22), transparent 55%),
-      linear-gradient(160deg, #1c1208 0%, #0a0602 55%, #130c06 100%);
-    background-size: cover, cover, cover, cover, cover, cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background:
+      radial-gradient(1200px 700px at 78% 25%, rgba(122, 92, 255, 0.35), transparent 60%),
+      radial-gradient(900px 600px at 15% 85%, rgba(255, 93, 177, 0.22), transparent 65%),
+      radial-gradient(700px 500px at 50% 50%, rgba(58, 123, 255, 0.18), transparent 70%),
+      linear-gradient(180deg, #07060f 0%, #0a0820 60%, #07060f 100%);
     background-color: var(--bg);
-  }
-
-  /* Desktop: use the landscape (rotated) version of the photo */
-  @media (min-width: 768px) {
-    body::before {
-      background-image:
-        radial-gradient(ellipse at 50% 50%, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.35) 65%, rgba(0,0,0,0.55) 100%),
-        radial-gradient(700px 500px at 92% 8%, rgba(232, 148, 58, 0.10), transparent 60%),
-        url("background-wide.jpg"),
-        radial-gradient(900px 700px at 92% 8%, rgba(232, 148, 58, 0.30), transparent 55%),
-        radial-gradient(700px 700px at 8% 92%, rgba(120, 52, 22, 0.22), transparent 55%),
-        linear-gradient(160deg, #1c1208 0%, #0a0602 55%, #130c06 100%);
-    }
-  }
-
-  /* Film grain for texture */
-  body::after {
-    content: '';
-    position: fixed; inset: 0; z-index: -1; pointer-events: none;
-    opacity: 0.28;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
 
   [hidden] { display: none !important; }
   button { font-family: inherit; cursor: pointer; }
-  ::selection { background: rgba(232, 148, 58, 0.35); color: var(--text); }
+  ::selection { background: rgba(255, 93, 177, 0.35); color: var(--text); }
 
   /* ---------- Login ---------- */
   .login-wrap {
@@ -102,17 +77,17 @@
     position: relative;
     width: 100%;
     max-width: 420px;
-    background: rgba(20, 14, 10, 0.42);
-    border: 1px solid rgba(255, 245, 220, 0.20);
+    background:
+      linear-gradient(160deg, rgba(122,92,255,0.18), rgba(58,123,255,0.06) 60%, rgba(255,255,255,0.02));
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 22px;
     padding: 36px 32px;
     backdrop-filter: blur(32px) saturate(180%);
     -webkit-backdrop-filter: blur(32px) saturate(180%);
     box-shadow:
-      0 24px 70px rgba(0, 0, 0, 0.55),
-      0 4px 12px rgba(0, 0, 0, 0.25),
-      inset 0 1px 0 rgba(255, 255, 255, 0.22),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.30);
+      0 30px 80px -20px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(122, 92, 255, 0.10),
+      inset 0 1px 0 rgba(255, 255, 255, 0.10);
   }
   .login-card::before {
     content: '';
@@ -132,20 +107,23 @@
   }
   .brand-mark {
     width: 36px; height: 36px; border-radius: 10px;
-    background: linear-gradient(135deg, var(--accent), #c06a22);
-    color: var(--accent-text);
+    background: linear-gradient(135deg, rgba(122,92,255,0.35), rgba(255,93,177,0.25));
+    border: 1px solid rgba(255,255,255,0.18);
     display: grid; place-items: center;
-    font-weight: 800; font-size: 18px;
-    box-shadow: 0 4px 12px rgba(232, 148, 58, 0.35);
+    font-size: 22px;
+    line-height: 1;
+    box-shadow: 0 4px 12px rgba(122, 92, 255, 0.30);
   }
   .brand-name {
-    font-weight: 700; font-size: 18px; letter-spacing: 0.01em;
-    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700; font-size: 18px; letter-spacing: -0.01em;
+    background: linear-gradient(90deg, #b6a4ff, #7a5cff 60%, #3a7bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   .login-card h1 {
-    font-size: 30px; margin: 0 0 6px; letter-spacing: -0.01em;
-    font-family: Georgia, "Times New Roman", serif;
-    font-weight: 700;
+    font-size: 30px; margin: 0 0 6px; letter-spacing: -0.02em;
+    font-weight: 800;
   }
   .login-card p.sub { margin: 0 0 24px; color: var(--muted); font-size: 14px; }
   .field { margin-bottom: 14px; }
@@ -164,26 +142,26 @@
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   }
-  input::placeholder { color: rgba(255,240,210,0.35); }
+  input::placeholder { color: rgba(255,255,255,0.30); }
   input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(232, 148, 58, 0.18);
-    background: rgba(0,0,0,0.45);
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px rgba(122, 92, 255, 0.18);
+    background: rgba(122, 92, 255, 0.06);
   }
   .btn {
     width: 100%;
-    background: linear-gradient(180deg, var(--accent-hover), var(--accent));
-    color: var(--accent-text);
-    padding: 12px 16px;
+    background: var(--grad-cta);
+    color: #ffffff;
+    padding: 14px 16px;
     border: 0;
-    border-radius: 10px;
+    border-radius: 999px;
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.01em;
-    transition: transform 0.05s, box-shadow 0.15s, filter 0.15s;
-    box-shadow: 0 6px 18px rgba(232, 148, 58, 0.25);
+    transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 12px 30px -10px rgba(255, 93, 177, 0.5), inset 0 0 0 1px rgba(255,255,255,0.1);
   }
-  .btn:hover { filter: brightness(1.05); box-shadow: 0 8px 24px rgba(232, 148, 58, 0.35); }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 18px 40px -10px rgba(255, 93, 177, 0.65), inset 0 0 0 1px rgba(255,255,255,0.15); }
   .btn:active { transform: scale(0.99); }
   .hint {
     margin-top: 18px;
@@ -241,23 +219,23 @@
   }
   .avatar {
     width: 32px; height: 32px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), #8a4a1a);
-    color: var(--accent-text); font-weight: 700; font-size: 13px;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    color: #ffffff; font-weight: 700; font-size: 13px;
     display: grid; place-items: center;
     border: 1px solid var(--border-strong);
   }
   .logout {
     background: transparent; border: 1px solid var(--border-strong);
-    padding: 7px 12px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    padding: 7px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
     color: var(--text);
     transition: background 0.15s, border-color 0.15s;
   }
-  .logout:hover { background: var(--chip); border-color: var(--accent); }
+  .logout:hover { background: var(--chip); border-color: var(--purple); }
 
   .container { max-width: 1200px; margin: 0 auto; padding: 48px 24px 80px; }
   .hero h1 {
     font-size: 44px; margin: 0 0 8px; letter-spacing: -0.01em;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: 'Sora', 'Inter', system-ui, sans-serif;
     font-weight: 700;
   }
   .hero p { margin: 0 0 28px; color: var(--muted); font-size: 16px; }
@@ -277,13 +255,13 @@
   .chip.active {
     background: var(--chip-active); color: var(--chip-active-text);
     border-color: var(--chip-active);
-    box-shadow: 0 4px 14px rgba(232, 148, 58, 0.35);
+    box-shadow: 0 4px 14px rgba(122, 92, 255, 0.35);
   }
 
   .meals { display: grid; gap: 48px; }
   .meal-section h2 {
     font-size: 26px; margin: 0 0 4px; letter-spacing: -0.01em;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: 'Sora', 'Inter', system-ui, sans-serif;
     font-weight: 700;
     position: relative;
     display: inline-block;
@@ -408,11 +386,12 @@
     display: grid; place-items: center;
     font-size: 96px;
     background:
-      radial-gradient(circle at 30% 30%, rgba(232, 148, 58, 0.22), transparent 60%),
+      radial-gradient(circle at 30% 30%, rgba(255, 93, 177, 0.22), transparent 60%),
+      radial-gradient(circle at 70% 70%, rgba(122, 92, 255, 0.22), transparent 60%),
       linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.25));
     border-radius: 22px 22px 0 0;
     position: relative;
-    border-bottom: 1px solid rgba(255, 245, 220, 0.10);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
   .modal-close {
     position: absolute; top: 14px; right: 14px;
@@ -425,11 +404,11 @@
     box-shadow: var(--shadow);
     transition: background 0.15s, border-color 0.15s;
   }
-  .modal-close:hover { background: rgba(0,0,0,0.75); border-color: var(--accent); }
+  .modal-close:hover { background: rgba(0,0,0,0.75); border-color: var(--purple); }
   .modal-body { padding: 28px 32px 32px; }
   .modal-body h2 {
     font-size: 28px; margin: 0 0 8px; letter-spacing: -0.01em;
-    font-family: Georgia, "Times New Roman", serif;
+    font-family: 'Sora', 'Inter', system-ui, sans-serif;
   }
   .modal-body .meta { display: flex; gap: 18px; color: var(--muted); font-size: 14px; margin-bottom: 22px; }
   .modal-body h3 {
@@ -455,8 +434,8 @@
 <div id="login-view" class="login-wrap">
   <div class="login-card">
     <div class="brand">
-      <div class="brand-mark">C</div>
-      <div class="brand-name">Cooking Community</div>
+      <div class="brand-mark">🌶️</div>
+      <div class="brand-name">Curvy Cooking</div>
     </div>
 
     <div class="tab-toggle" role="tablist">
@@ -486,8 +465,7 @@
     </form>
 
     <p class="hint">
-      Try the demo account: <br />
-      <code>demo@cook.com</code> / <code>demo123</code>
+      Use the email from your <strong>Curvy Cooking</strong> purchase to sign in.
     </p>
   </div>
 </div>
@@ -1183,11 +1161,11 @@ function setSession(s) {
   else localStorage.removeItem(SESSION_KEY);
 }
 
-// Seed demo account once
-(function seedDemo() {
+// Clean up any legacy demo seed from previous versions
+(function clearDemo() {
   const users = loadUsers();
-  if (!users['demo@cook.com']) {
-    users['demo@cook.com'] = { name: 'Demo Chef', password: 'demo123' };
+  if (users['demo@cook.com']) {
+    delete users['demo@cook.com'];
     saveUsers(users);
   }
 })();
