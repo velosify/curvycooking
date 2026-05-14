@@ -1142,32 +1142,35 @@ const RECIPES = {
 };
 
 /* ----------------------------------------------------------
-   State + storage
+   API client — talks to the Railway backend.
+   Cookies are HttpOnly and Secure, set by the server on the API origin.
 ---------------------------------------------------------- */
-const USERS_KEY = 'cc_users_v1';
-const SESSION_KEY = 'cc_session_v1';
+const API_BASE = "https://curvycooking-production.up.railway.app";
 
-function loadUsers() {
-  try { return JSON.parse(localStorage.getItem(USERS_KEY)) || {}; }
-  catch { return {}; }
-}
-function saveUsers(u) { localStorage.setItem(USERS_KEY, JSON.stringify(u)); }
-function getSession() {
-  try { return JSON.parse(localStorage.getItem(SESSION_KEY)); }
-  catch { return null; }
-}
-function setSession(s) {
-  if (s) localStorage.setItem(SESSION_KEY, JSON.stringify(s));
-  else localStorage.removeItem(SESSION_KEY);
-}
-
-// Clean up any legacy demo seed from previous versions
-(function clearDemo() {
-  const users = loadUsers();
-  if (users['demo@cook.com']) {
-    delete users['demo@cook.com'];
-    saveUsers(users);
+async function api(path, opts = {}) {
+  const res = await fetch(API_BASE + path, {
+    method: opts.method || (opts.body ? "POST" : "GET"),
+    credentials: "include",                       // include session cookie cross-origin
+    headers: { "Content-Type": "application/json", ...(opts.headers || {}) },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  let data = null;
+  try { data = await res.json(); } catch {}
+  if (!res.ok) {
+    const err = new Error(data?.error || `Request failed (${res.status})`);
+    err.status = res.status;
+    err.data = data;
+    throw err;
   }
+  return data;
+}
+
+// One-time cleanup of legacy localStorage entries from the old mock auth.
+(function clearLegacyStorage() {
+  try {
+    localStorage.removeItem('cc_users_v1');
+    localStorage.removeItem('cc_session_v1');
+  } catch {}
 })();
 
 /* ----------------------------------------------------------
@@ -1206,28 +1209,39 @@ function showError(msg) {
   authError.hidden = false;
 }
 
-authForm.addEventListener('submit', (e) => {
+// Magic-link signup token: arrives in URL after Stripe payment email
+const urlParams = new URLSearchParams(location.search);
+const signupToken = urlParams.get('token');
+const prefilledEmail = (urlParams.get('email') || '').toLowerCase();
+
+authForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('email').value.trim().toLowerCase();
   const password = document.getElementById('password').value;
   const name = document.getElementById('name').value.trim();
-  const users = loadUsers();
 
-  if (mode === 'signup') {
-    if (!name) return showError('Please enter your name.');
-    if (users[email]) return showError('An account with that email already exists.');
-    users[email] = { name, password };
-    saveUsers(users);
-    setSession({ email, name });
-    enterApp({ email, name });
-    return;
+  submitBtn.disabled = true;
+  authError.hidden = true;
+
+  try {
+    let result;
+    if (mode === 'signup') {
+      if (!name) { submitBtn.disabled = false; return showError('Please enter your name.'); }
+      if (password.length < 8) { submitBtn.disabled = false; return showError('Password must be at least 8 characters.'); }
+      result = await api('/auth/signup', {
+        body: { email, password, name, signupToken: signupToken || undefined },
+      });
+    } else {
+      result = await api('/auth/login', { body: { email, password } });
+    }
+    // Strip token from URL so a refresh doesn't show the magic-link UI again
+    if (signupToken) history.replaceState({}, '', '/login');
+    enterApp(result.user);
+  } catch (err) {
+    showError(err.message);
+  } finally {
+    submitBtn.disabled = false;
   }
-  const u = users[email];
-  if (!u || u.password !== password) {
-    return showError('Email or password is incorrect.');
-  }
-  setSession({ email, name: u.name });
-  enterApp({ email, name: u.name });
 });
 
 /* ----------------------------------------------------------
@@ -1343,8 +1357,8 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !modal.h
 /* ----------------------------------------------------------
    Logout
 ---------------------------------------------------------- */
-document.getElementById('logout-btn').addEventListener('click', () => {
-  setSession(null);
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  try { await api('/auth/logout', { method: 'POST' }); } catch {}
   appView.hidden = true;
   loginView.hidden = false;
   authForm.reset();
@@ -1353,10 +1367,38 @@ document.getElementById('logout-btn').addEventListener('click', () => {
 });
 
 /* ----------------------------------------------------------
-   Boot
+   Boot — check existing session, or handle magic-link signup
 ---------------------------------------------------------- */
-const existing = getSession();
-if (existing) enterApp(existing);
+(async function boot() {
+  // 1) Magic-link signup flow (?token=...&email=... in URL)
+  if (signupToken && prefilledEmail) {
+    try {
+      const lookup = await api('/auth/lookup?token=' + encodeURIComponent(signupToken)
+                              + '&email=' + encodeURIComponent(prefilledEmail));
+      // Token is valid — switch to signup mode, prefill + lock email
+      setMode('signup');
+      const emailInput = document.getElementById('email');
+      emailInput.value = lookup.email;
+      emailInput.readOnly = true;
+      emailInput.style.opacity = '0.7';
+      if (lookup.name) document.getElementById('name').value = lookup.name;
+      authTitle.textContent = 'Finish setting up your account';
+      authSub.textContent = 'Pick a password — you\'re all set up after this.';
+      return;
+    } catch (err) {
+      // Token invalid/expired — show login as usual with a soft hint
+      showError(err.message + ' Try signing in if you already set up your account.');
+    }
+  }
+
+  // 2) Already signed in?
+  try {
+    const me = await api('/auth/me');
+    if (me?.user) enterApp(me.user);
+  } catch {
+    // Not signed in — show login form (already visible)
+  }
+})();
 </script>
 </body>
 </html>
