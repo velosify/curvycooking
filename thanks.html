@@ -298,10 +298,14 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     const piId = params.get('payment_intent');
     const redirectStatus = params.get('redirect_status');
 
-    if (!piId) return;
+    if (!piId) {
+      console.info('[thanks] No payment_intent in URL — skipping verification & Purchase pixel.');
+      return;
+    }
 
     // If Stripe says the redirect failed (e.g. processing), reflect that
     if (redirectStatus && redirectStatus !== 'succeeded') {
+      console.warn('[thanks] redirect_status is', redirectStatus, '— Purchase pixel will NOT fire.');
       document.getElementById('lede').innerHTML =
         'Your payment is <strong>' + redirectStatus.replace(/_/g, ' ') + '</strong>. ' +
         'We\'ll email you the moment it clears. Hang tight.';
@@ -310,20 +314,29 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
     try {
       const res = await fetch('/api/payment-intent-status?id=' + encodeURIComponent(piId));
-      if (!res.ok) return;
+      if (!res.ok) {
+        console.warn('[thanks] payment-intent-status returned', res.status, '— Purchase pixel will NOT fire.');
+        return;
+      }
       const data = await res.json();
+      console.info('[thanks] Stripe says payment status =', data.status);
       if (data.status !== 'succeeded') return;
 
       // Meta Pixel Purchase event — fires only after server confirms payment.
       // Use the payment intent ID as event_id for de-duplication if you later
       // mirror this via Conversions API.
       if (window.fbq && data.amount != null) {
+        const value = data.amount / 100;
+        const currency = (data.currency || 'usd').toUpperCase();
         fbq('track', 'Purchase', {
-          value: data.amount / 100,
-          currency: (data.currency || 'usd').toUpperCase(),
+          value: value,
+          currency: currency,
           content_ids: ['curvy-cookbook'],
           content_type: 'product',
         }, { eventID: piId });
+        console.info('[thanks] ✓ Meta Pixel Purchase fired:', { value, currency, eventID: piId });
+      } else {
+        console.warn('[thanks] Skipped Purchase pixel (fbq not loaded or amount missing).');
       }
 
       const email = data.customer_email || data.receipt_email || '';
