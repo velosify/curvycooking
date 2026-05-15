@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cookies Policy — Curvy Cooking</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%B6%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="legal.css">
+</head>
+<body>
+
+<nav class="legal-nav">
+  <a href="index.html" class="brand" aria-label="Curvy Cooking — home">
+    <span class="brand-icon" aria-hidden="true">🌶️</span>
+    <span class="brand-text">
+      <span class="brand-curvy">Curvy</span><span class="brand-cooking">Cooking</span>
+    </span>
+  </a>
+  <a href="index.html" class="back-link">← Back to home</a>
+</nav>
+
+<main class="legal-wrap">
+  <h1>Cookies Policy</h1>
+  <p class="updated">Last updated: <span id="legal-date"></span></p>
+
+  <p>This page explains the cookies and similar technologies we use on curvycooking.com. Not the bake-able kind — sorry.</p>
+
+  <h2>What's a cookie?</h2>
+  <p>A cookie is a small text file stored on your device by your browser. Sites use cookies to remember things like whether you're logged in, what's in your cart, or which articles you've already read.</p>
+
+  <h2>What we use</h2>
+
+  <h3>Strictly necessary</h3>
+  <p>These keep the site working. You can't opt out without breaking essential functionality.</p>
+  <ul>
+    <li><strong>cc_session</strong> — keeps you signed in to the members area. Set by our server (HttpOnly, Secure, SameSite=None). Expires after 30 days.</li>
+    <li><strong>Stripe cookies</strong> — used by Stripe to process your payment securely and detect fraud. Required to complete checkout.</li>
+  </ul>
+
+  <h3>Analytics &amp; advertising</h3>
+  <p>These help us understand how the site is used and measure ad performance. We use these unless you've opted out via your browser's "Do Not Track" or our cookie banner.</p>
+  <ul>
+    <li><strong>Meta Pixel (_fbp, _fbc)</strong> — measures ad performance and shows you Curvy Cooking ads on Facebook and Instagram when relevant. Set by Meta. Lifetime: up to 90 days.</li>
+    <li><strong>Cloudflare Analytics</strong> — privacy-friendly site analytics. No personally identifiable info collected.</li>
+  </ul>
+
+  <h2>How to control cookies</h2>
+  <p>You can clear cookies anytime through your browser settings:</p>
+  <ul>
+    <li><strong>Chrome</strong>: Settings → Privacy and Security → Cookies and other site data</li>
+    <li><strong>Safari</strong>: Settings → Privacy → Manage Website Data</li>
+    <li><strong>Firefox</strong>: Settings → Privacy &amp; Security → Cookies and Site Data</li>
+    <li><strong>Edge</strong>: Settings → Cookies and Site Permissions</li>
+  </ul>
+  <p>You can also block all third-party cookies in your browser settings. This will disable our Meta Pixel without affecting your ability to log in or complete a purchase.</p>
+
+  <h2>Do Not Track</h2>
+  <p>Our site respects the "Do Not Track" (DNT) browser signal. When DNT is enabled, we don't load the Meta Pixel.</p>
+
+  <h2>Changes</h2>
+  <p>We may update this policy occasionally. The "Last updated" date at the top reflects the most recent revision.</p>
+
+  <h2>Questions?</h2>
+  <p>Email <a href="mailto:hello@curvycooking.com">hello@curvycooking.com</a>.</p>
+</main>
+
+<footer class="legal-foot">
+  <div class="foot-wrap">
+    <p class="foot-copy">© <span id="foot-year"></span> Curvy Cooking. All rights reserved.</p>
+    <nav class="foot-links" aria-label="Legal">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="cookies.html">Cookies</a>
+    </nav>
+    <div class="foot-built">
+      Built by <a href="https://velosify.ai" target="_blank" rel="noopener noreferrer">Velosify</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('foot-year').textContent = new Date().getFullYear();
+  document.getElementById('legal-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+
+</body>
+</html>

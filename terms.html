@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Terms of Service — Curvy Cooking</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%B6%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="legal.css">
+</head>
+<body>
+
+<nav class="legal-nav">
+  <a href="index.html" class="brand" aria-label="Curvy Cooking — home">
+    <span class="brand-icon" aria-hidden="true">🌶️</span>
+    <span class="brand-text">
+      <span class="brand-curvy">Curvy</span><span class="brand-cooking">Cooking</span>
+    </span>
+  </a>
+  <a href="index.html" class="back-link">← Back to home</a>
+</nav>
+
+<main class="legal-wrap">
+  <h1>Terms of Service</h1>
+  <p class="updated">Last updated: <span id="legal-date"></span></p>
+
+  <p>By accessing curvycooking.com or purchasing the Curvy Cookbook, you agree to these terms. Please read them.</p>
+
+  <h2>The product</h2>
+  <p>Curvy Cookbook is a digital product — a collection of recipes accessible through our members area at curvycooking.com/login. It's a one-time purchase of $19 USD for lifetime access to the current cookbook and any future updates we publish.</p>
+
+  <h2>Your account</h2>
+  <p>You're responsible for keeping your password secure and for all activity on your account. Don't share your account credentials. If you suspect someone else has accessed your account, email us at <a href="mailto:hello@curvycooking.com">hello@curvycooking.com</a> and we'll lock it down.</p>
+
+  <h2>Payment and refunds</h2>
+  <p>Payments are processed by Stripe. We offer a <strong>30-day money-back guarantee</strong> — if the cookbook isn't for you, email <a href="mailto:hello@curvycooking.com">hello@curvycooking.com</a> within 30 days of purchase and we'll refund your $19, no questions asked.</p>
+
+  <h2>What you can and can't do</h2>
+  <p>You can:</p>
+  <ul>
+    <li>Cook every recipe in the cookbook for personal and household use.</li>
+    <li>Share the cookbook with family members in your household.</li>
+    <li>Reference recipes in your own social media posts, with credit.</li>
+  </ul>
+  <p>You can't:</p>
+  <ul>
+    <li>Resell, redistribute, or republish the cookbook or any of its recipes commercially.</li>
+    <li>Share your account credentials publicly or sell access to the members area.</li>
+    <li>Scrape or bulk-download the members area.</li>
+  </ul>
+
+  <h2>Disclaimers</h2>
+  <p>Recipes are provided as-is for personal cooking. Curvy Cooking is not responsible for kitchen mishaps, allergic reactions, or any disagreements over how much garlic is too much. Check ingredients for any allergies you have before cooking.</p>
+
+  <h2>Changes to the service</h2>
+  <p>We may update recipes, add new ones, or modify the members area at any time. We won't remove recipes you've already purchased access to.</p>
+
+  <h2>Termination</h2>
+  <p>You can close your account at any time by emailing us. We may suspend or terminate accounts that violate these terms (scraping, abuse, fraud, chargebacks). If we terminate your account for cause, no refund is due.</p>
+
+  <h2>Governing law</h2>
+  <p>These terms are governed by the laws of the State of New York, USA. Any disputes will be resolved in courts located in New York County, NY.</p>
+
+  <h2>Contact</h2>
+  <p>Questions? <a href="mailto:hello@curvycooking.com">hello@curvycooking.com</a></p>
+</main>
+
+<footer class="legal-foot">
+  <div class="foot-wrap">
+    <p class="foot-copy">© <span id="foot-year"></span> Curvy Cooking. All rights reserved.</p>
+    <nav class="foot-links" aria-label="Legal">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="cookies.html">Cookies</a>
+    </nav>
+    <div class="foot-built">
+      Built by <a href="https://velosify.ai" target="_blank" rel="noopener noreferrer">Velosify</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('foot-year').textContent = new Date().getFullYear();
+  document.getElementById('legal-date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+
+</body>
+</html>

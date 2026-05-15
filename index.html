@@ -1075,6 +1075,55 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   }
 
   /* ---------- FOOTER ---------- */
+  .foot-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    padding: 36px 32px;
+    flex-wrap: wrap;
+  }
+  .foot-left {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .foot-copy {
+    color: var(--ink-mute);
+    font-size: 13px;
+    margin: 0;
+  }
+  .foot-links {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+  .foot-links a {
+    color: var(--ink-dim);
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+  .foot-links a:hover { color: var(--ink); }
+  .foot-built {
+    color: var(--ink-mute);
+    font-size: 13px;
+  }
+  .foot-built a {
+    color: var(--ink-dim);
+    font-weight: 600;
+    transition: color 0.2s;
+    background: linear-gradient(90deg, #b6a4ff, #7a5cff 60%, #3a7bff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .foot-built a:hover { filter: brightness(1.2); }
+  @media (max-width: 720px) {
+    .foot-wrap { justify-content: center; text-align: center; }
+    .foot-left { align-items: center; }
+  }
+
+  /* ---------- LEGACY FOOTER (unused after refactor) ---------- */
   footer {
     border-top: 1px solid var(--line);
     padding: 32px 0 24px;
@@ -1167,7 +1216,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     <a href="#about">About</a>
     <a href="#recipes">Recipes</a>
     <a href="#reviews">Reviews</a>
-    <a href="order.html">Get Spicy</a>
+    <a href="order.html">Get The Cookbook</a>
   </div>
   <div class="nav-actions">
     <a href="order.html" class="btn-pill">Order Now</a>
@@ -1592,52 +1641,29 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   </div>
 </section>
 
-<!-- ============= NEWSLETTER MARQUEE ============= -->
-<div class="news-strip">
-  <div class="marquee-track">
-    <span><span class="dot"></span>Subscribe To Newsletter</span>
-    <span><span class="dot"></span>Get Spicy Discounts</span>
-    <span><span class="dot"></span>Subscribe To Newsletter</span>
-    <span><span class="dot"></span>Get Spicy Discounts</span>
-    <span><span class="dot"></span>Subscribe To Newsletter</span>
-    <span><span class="dot"></span>Get Spicy Discounts</span>
-  </div>
-</div>
-
-<!-- ============= NEWSLETTER ============= -->
-<section id="newsletter" class="newsletter">
-  <div class="wrap">
-    <div class="newsletter-inner">
-      <div class="scroll-fade" data-fade-delay="0">
-        <h3>Exclusive Discounts &amp; Recipes Into Your Inbox</h3>
-      </div>
-      <div class="newsletter-right scroll-fade" data-fade-delay="150">
-        <p>One email. Spicy recipes, behind-the-scenes kitchen chaos, and first-look discounts on The Cookbook. No spam, ever.</p>
-        <form class="news-form" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Subscribed ✓';">
-          <input type="email" placeholder="Email Address" required>
-          <button type="submit">
-            Subscribe
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ============= FOOTER ============= -->
 <footer>
-  <div class="wrap">
-    <div class="foot-row">
-      <a href="#">Home</a>
-      <a href="#about">About</a>
-      <a href="#recipes">Recipes</a>
-      <a href="#reviews">Reviews</a>
-      <a href="order.html">Get The Cookbook · $19</a>
+  <div class="wrap foot-wrap">
+    <div class="foot-left">
+      <a href="#" class="brand" aria-label="Curvy Cooking — home">
+        <span class="brand-icon" aria-hidden="true">🌶️</span>
+        <span class="brand-text">
+          <span class="brand-curvy">Curvy</span><span class="brand-cooking">Cooking</span>
+        </span>
+      </a>
+      <p class="foot-copy">© <span id="foot-year"></span> Curvy Cooking. All rights reserved.</p>
     </div>
-    <div class="foot-brand">Ashbovaxo</div>
+    <nav class="foot-links" aria-label="Legal">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="cookies.html">Cookies</a>
+    </nav>
+    <div class="foot-built">
+      Built by <a href="https://velosify.ai" target="_blank" rel="noopener noreferrer">Velosify</a>
+    </div>
   </div>
 </footer>
+<script>document.getElementById('foot-year').textContent = new Date().getFullYear();</script>
 
 <script>
   // Scroll-triggered reveals + stat number count-up.
