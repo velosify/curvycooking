@@ -374,6 +374,16 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     height: 100%;
     object-fit: cover;
     display: block;
+    filter: saturate(0.92) contrast(1.04);
+  }
+  /* Subtle dark gradient on top of recipe photos — knocks the "too-clean"
+     edge off and helps them sit in the dark UI without screaming. */
+  .card-img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.32) 100%);
+    pointer-events: none;
   }
   .card-body { padding: 14px 16px 16px; }
   .card-tag {
@@ -442,6 +452,14 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     height: 100%;
     object-fit: cover;
     display: block;
+    filter: saturate(0.92) contrast(1.04);
+  }
+  .modal-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.28) 100%);
+    pointer-events: none;
   }
   .modal-close {
     position: absolute; top: 14px; right: 14px;
