@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Checkout — Curvy Cooking</title>
+<title>Checkout · Curvy Cooking</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%B6%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E" />
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%B6%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E" />
 
@@ -721,7 +721,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
 <!-- ============= NAV ============= -->
 <nav class="top">
-  <a href="index.html" class="brand" aria-label="Curvy Cooking — home">
+  <a href="index.html" class="brand" aria-label="Curvy Cooking home">
     <span class="brand-icon" aria-hidden="true">🌶️</span>
     <span class="brand-text">
       <span class="brand-curvy">Curvy</span><span class="brand-cooking">Cooking</span>
@@ -846,8 +846,8 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 <script src="https://js.stripe.com/v3/"></script>
 <script>
   // ============================================================
-  // STRIPE PUBLISHABLE KEY — safe to ship in browser.
-  // NEVER use a secret key (sk_…) here — those go in Cloudflare env vars.
+  // STRIPE PUBLISHABLE KEY. Safe to ship in browser.
+  // NEVER use a secret key (sk_…) here; those go in Cloudflare env vars.
   // ============================================================
   const STRIPE_PUBLISHABLE_KEY = "pk_live_51TRgYjPcIdhItMees3skqXDcNc2y4m3Gg8Vxs5vd5rWyytqAB5RMmC7yuAFQMro5wVGkQR3kMqqyp9uFyPwQSpKm00SeNOsJxZ";
 
@@ -1038,7 +1038,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
     setLoading(true);
 
-    // Meta Pixel: customer is committing to pay — fire AddPaymentInfo
+    // Meta Pixel: customer is committing to pay. Fire AddPaymentInfo.
     if (window.fbq) {
       fbq('track', 'AddPaymentInfo', { value: 19.00, currency: 'USD' });
     }
@@ -1067,7 +1067,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
       showMessage(msg);
       setLoading(false);
     }
-    // On success, Stripe redirects to return_url — nothing to do here.
+    // On success, Stripe redirects to return_url. Nothing to do here.
   });
 </script>
 

@@ -4,7 +4,7 @@
 // the client_secret so the browser can mount Stripe Elements and collect
 // payment details directly. We use a hard-coded amount/currency rather than
 // looking up STRIPE_PRICE_ID because Payment Intents take amount in cents
-// directly — Prices belong to the Checkout Session API.
+// directly. Prices belong to the Checkout Session API.
 //
 // Required env vars:
 //   STRIPE_SECRET_KEY  e.g. sk_live_xxx
@@ -30,7 +30,7 @@ export async function onRequestPost(context) {
   params.set("description", DESCRIPTION);
   // Explicit payment methods: Card (which includes Apple Pay + Google Pay
   // wallets when the device supports them) and Cash App Pay. No Link,
-  // no Klarna, no Affirm — keeps the form clean.
+  // no Klarna, no Affirm. Keeps the form clean.
   params.set("payment_method_types[0]", "card");
   params.set("payment_method_types[1]", "cashapp");
   params.set("metadata[product]", "curvy-cookbook");

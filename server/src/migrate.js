@@ -1,4 +1,4 @@
-// One-shot schema setup. Idempotent — safe to run on every deploy via the
+// One-shot schema setup. Idempotent. Safe to run on every deploy via the
 // `migrate` script or on first boot below.
 import { query } from "./db.js";
 
@@ -24,7 +24,7 @@ CREATE INDEX IF NOT EXISTS idx_users_reset_token ON users (reset_token);
 `;
 
 export async function runMigrations() {
-  // Postgres ships CITEXT in an extension — enable it first.
+  // Postgres ships CITEXT in an extension; enable it first.
   await query(`CREATE EXTENSION IF NOT EXISTS citext;`);
   await query(SCHEMA);
   console.log("[migrate] schema ready");

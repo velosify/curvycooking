@@ -1,13 +1,13 @@
 // Transactional email via Resend.
 //
 // Env vars (set in Railway):
-//   RESEND_API_KEY        re_xxx — required to actually send
+//   RESEND_API_KEY        re_xxx (required to actually send)
 //   EMAIL_FROM            verified sending address, e.g. "hello@curvycooking.com"
 //   EMAIL_FROM_NAME       optional display name, e.g. "Ashley at Curvy Cooking"
 //   EMAIL_REPLY_TO        optional reply-to (defaults to EMAIL_FROM)
 //
 // If RESEND_API_KEY isn't set, sendEmail() logs the would-be email instead
-// of failing — useful for local dev and as a safety net.
+// of failing. Useful for local dev and as a safety net.
 
 import { Resend } from "resend";
 
@@ -36,7 +36,7 @@ function fromHeader() {
  */
 export async function sendEmail({ to, subject, html, text }, logger = console) {
   if (!resend) {
-    logger.warn(`[email] RESEND_API_KEY not set — would have sent: ${subject} → ${to}\n${text}`);
+    logger.warn(`[email] RESEND_API_KEY not set. Would have sent: ${subject} → ${to}\n${text}`);
     return { ok: false, error: "RESEND_API_KEY not configured" };
   }
 
@@ -70,7 +70,7 @@ const SURFACE = "#14112e";
 const INK = "#ffffff";
 const INK_DIM = "#b9b3d6";
 
-// Minimal HTML email shell — works in Gmail, Apple Mail, Outlook
+// Minimal HTML email shell. Works in Gmail, Apple Mail, Outlook.
 function shell(innerHtml) {
   return `<!doctype html>
 <html><body style="margin:0;padding:0;background:${BG};font-family:-apple-system,'Inter',Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:${INK};">
@@ -82,7 +82,7 @@ function shell(innerHtml) {
         </td></tr>
         ${innerHtml}
         <tr><td style="padding:24px 32px 32px;border-top:1px solid rgba(255,255,255,0.06);color:${INK_DIM};font-size:13px;line-height:1.6;">
-          Reply to this email if anything's off — we read every message.<br>
+          Reply to this email if anything's off. We read every message.<br>
           <span style="color:#6e6982;">curvycooking.com · made with love and red sauce</span>
         </td></tr>
       </table>
@@ -97,10 +97,10 @@ function btn(href, label) {
 
 export async function sendSignupEmail({ to, name, signupUrl }, logger) {
   const first = (name || "").split(/\s+/)[0] || "there";
-  const subject = "Welcome to Curvy Cooking — set up your account 🌶️";
+  const subject = "Welcome to Curvy Cooking · set up your account 🌶️";
   const html = shell(`
     <tr><td style="padding:0 32px 8px;">
-      <h1 style="margin:8px 0 16px;font-size:28px;line-height:1.2;letter-spacing:-0.02em;color:${INK};">Hey ${first} —</h1>
+      <h1 style="margin:8px 0 16px;font-size:28px;line-height:1.2;letter-spacing:-0.02em;color:${INK};">Hey ${first},</h1>
       <p style="margin:0 0 16px;color:${INK_DIM};font-size:16px;line-height:1.6;">
         Thanks for grabbing the cookbook! Click below to set up your account and start cooking.
       </p>
@@ -111,7 +111,7 @@ export async function sendSignupEmail({ to, name, signupUrl }, logger) {
       <span style="color:${INK};word-break:break-all;">${signupUrl}</span>
     </td></tr>
   `);
-  const text = `Hey ${first} —
+  const text = `Hey ${first},
 
 Thanks for grabbing Curvy Cookbook! Click the link below to set up your account and start cooking:
 
@@ -119,7 +119,7 @@ ${signupUrl}
 
 This link expires in 14 days. Reply to this email if anything's off.
 
-— Ashley`;
+Ashley`;
   return sendEmail({ to, subject, html, text }, logger);
 }
 
@@ -134,7 +134,7 @@ export async function sendResetEmail({ to, resetUrl }, logger) {
     </td></tr>
     <tr><td style="padding:16px 32px 24px;" align="center">${btn(resetUrl, "Choose a new password")}</td></tr>
     <tr><td style="padding:0 32px 24px;color:${INK_DIM};font-size:13px;line-height:1.6;">
-      Didn't request this? You can ignore this email — your password won't change.<br><br>
+      Didn't request this? You can ignore this email. Your password won't change.<br><br>
       If the button doesn't work, copy and paste:<br>
       <span style="color:${INK};word-break:break-all;">${resetUrl}</span>
     </td></tr>
@@ -145,8 +145,8 @@ Someone (hopefully you) asked to reset your password. Click below within the nex
 
 ${resetUrl}
 
-If you didn't request this, ignore this email — your password won't change.
+If you didn't request this, ignore this email. Your password won't change.
 
-— Curvy Cooking`;
+Curvy Cooking`;
   return sendEmail({ to, subject, html, text }, logger);
 }

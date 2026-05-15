@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Thank You — Curvy Cooking</title>
+<title>Thank You · Curvy Cooking</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%B6%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E" />
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%B6%EF%B8%8F%3C%2Ftext%3E%3C%2Fsvg%3E" />
 
@@ -248,8 +248,8 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     <h1>You're in the <span class="accent">kitchen</span>.</h1>
     <p class="lede" id="lede">Payment received. We just sent an email with a link to create your <strong>Curvy Cookbook</strong> members account.</p>
     <div class="receipt" id="receipt" style="display:none;">
-      <div><span>Sent to</span><strong id="customerEmail">—</strong></div>
-      <div><span>Total</span><strong id="customerTotal">—</strong></div>
+      <div><span>Sent to</span><strong id="customerEmail">…</strong></div>
+      <div><span>Total</span><strong id="customerTotal">…</strong></div>
     </div>
 
     <ul class="next-steps">
@@ -264,14 +264,14 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
         <span class="step-dot">2</span>
         <div>
           <strong>Click the link &amp; pick a password.</strong>
-          <span>Takes 20 seconds. Once you're in, every recipe, every cuisine, every update is yours — sign in from any device, anytime.</span>
+          <span>Takes 20 seconds. Once you're in, every recipe, every cuisine, every update is yours. Sign in from any device, anytime.</span>
         </div>
       </li>
       <li>
         <span class="step-dot">3</span>
         <div>
           <strong>Tag me when you cook.</strong>
-          <span>Hit me on Instagram <a href="#" style="color:#fff;">@ashbovaxo</a> with what you're making — I love seeing your plates.</span>
+          <span>Hit me on Instagram <a href="#" style="color:#fff;">@ashbovaxo</a> with what you're making. I love seeing your plates.</span>
         </div>
       </li>
     </ul>
@@ -292,20 +292,20 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
 <script>
   // Stripe redirects here with: ?payment_intent=pi_xxx&payment_intent_client_secret=...&redirect_status=succeeded
-  // Verify server-side via /api/payment-intent-status — don't trust URL params alone.
+  // Verify server-side via /api/payment-intent-status. Don't trust URL params alone.
   (async () => {
     const params = new URLSearchParams(location.search);
     const piId = params.get('payment_intent');
     const redirectStatus = params.get('redirect_status');
 
     if (!piId) {
-      console.info('[thanks] No payment_intent in URL — skipping verification & Purchase pixel.');
+      console.info('[thanks] No payment_intent in URL. Skipping verification & Purchase pixel.');
       return;
     }
 
     // If Stripe says the redirect failed (e.g. processing), reflect that
     if (redirectStatus && redirectStatus !== 'succeeded') {
-      console.warn('[thanks] redirect_status is', redirectStatus, '— Purchase pixel will NOT fire.');
+      console.warn('[thanks] redirect_status is', redirectStatus, '. Purchase pixel will NOT fire.');
       document.getElementById('lede').innerHTML =
         'Your payment is <strong>' + redirectStatus.replace(/_/g, ' ') + '</strong>. ' +
         'We\'ll email you the moment it clears. Hang tight.';
@@ -315,14 +315,14 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     try {
       const res = await fetch('/api/payment-intent-status?id=' + encodeURIComponent(piId));
       if (!res.ok) {
-        console.warn('[thanks] payment-intent-status returned', res.status, '— Purchase pixel will NOT fire.');
+        console.warn('[thanks] payment-intent-status returned', res.status, '. Purchase pixel will NOT fire.');
         return;
       }
       const data = await res.json();
       console.info('[thanks] Stripe says payment status =', data.status);
       if (data.status !== 'succeeded') return;
 
-      // Meta Pixel Purchase event — fires only after server confirms payment.
+      // Meta Pixel Purchase event. Fires only after server confirms payment.
       // Use the payment intent ID as event_id for de-duplication if you later
       // mirror this via Conversions API.
       if (window.fbq && data.amount != null) {

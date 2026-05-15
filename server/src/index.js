@@ -1,4 +1,4 @@
-// Curvy Cooking API — Fastify on Railway.
+// Curvy Cooking API. Fastify on Railway.
 //
 // Env vars required:
 //   DATABASE_URL                  Auto-injected by Railway Postgres
@@ -51,7 +51,7 @@ await app.register(cors, {
 });
 await app.register(cookie);
 
-// Capture raw body on the Stripe webhook route only — Stripe signs the raw bytes.
+// Capture raw body on the Stripe webhook route only. Stripe signs the raw bytes.
 app.addContentTypeParser("application/json", { parseAs: "buffer" }, (req, body, done) => {
   try {
     req.rawBody = body;
@@ -126,13 +126,13 @@ app.post("/auth/signup", async (req, reply) => {
 
   if (existing.password_hash) {
     return reply.code(409).send({
-      error: "That account already has a password. Try signing in instead — or use 'Forgot password'.",
+      error: "That account already has a password. Try signing in instead, or use 'Forgot password'.",
     });
   }
 
   if (!existing.paid_at) {
     return reply.code(403).send({
-      error: "We can't find a paid order for that email yet. Hang tight — it can take ~30 seconds after payment.",
+      error: "We can't find a paid order for that email yet. Hang tight, it can take ~30 seconds after payment.",
     });
   }
 
@@ -182,7 +182,7 @@ app.post("/auth/login", async (req, reply) => {
   return { user: { id: u.id, email: u.email, name: u.name } };
 });
 
-// GET /auth/me — used by login.html to check existing session
+// GET /auth/me. Used by login.html to check existing session.
 app.get("/auth/me", async (req, reply) => {
   const session = readSession(req);
   if (!session) return reply.code(401).send({ error: "Not signed in" });
@@ -201,7 +201,7 @@ app.post("/auth/logout", async (req, reply) => {
   return { ok: true };
 });
 
-// POST /webhooks/stripe — Stripe signs every event. Verify, then insert/upgrade
+// POST /webhooks/stripe. Stripe signs every event. Verify, then insert/upgrade.
 // the user row to "paid" and generate a one-time signup token.
 app.post("/webhooks/stripe", async (req, reply) => {
   if (!stripe || !STRIPE_WEBHOOK_SECRET) return reply.code(503).send({ error: "Stripe not configured" });
@@ -222,7 +222,7 @@ app.post("/webhooks/stripe", async (req, reply) => {
     const name = pi.charges?.data?.[0]?.billing_details?.name || null;
 
     if (!email) {
-      app.log.warn({ pi: pi.id }, "no email on succeeded PI — skipping insert");
+      app.log.warn({ pi: pi.id }, "no email on succeeded PI; skipping insert");
       return { received: true };
     }
 
@@ -250,7 +250,7 @@ app.post("/webhooks/stripe", async (req, reply) => {
     // Fire the welcome / signup email
     const sent = await sendSignupEmail({ to: email, name, signupUrl }, app.log);
     if (!sent.ok) {
-      app.log.warn({ err: sent.error, signupUrl }, "signup email failed — link logged above for manual delivery");
+      app.log.warn({ err: sent.error, signupUrl }, "signup email failed; link logged above for manual delivery");
     }
   }
 
@@ -258,7 +258,7 @@ app.post("/webhooks/stripe", async (req, reply) => {
 });
 
 // POST /auth/forgot-password { email }
-// Always returns 200 OK regardless of whether the email exists — don't leak
+// Always returns 200 OK regardless of whether the email exists; don't leak
 // account-existence info. If the email IS registered (and has a password set),
 // we generate a 1-hour reset token and log the link.
 app.post("/auth/forgot-password", async (req, reply) => {
@@ -290,7 +290,7 @@ app.post("/auth/forgot-password", async (req, reply) => {
 
     const sent = await sendResetEmail({ to: u.email, resetUrl }, app.log);
     if (!sent.ok) {
-      app.log.warn({ err: sent.error, resetUrl }, "reset email failed — link logged above for manual delivery");
+      app.log.warn({ err: sent.error, resetUrl }, "reset email failed; link logged above for manual delivery");
     }
   } else {
     app.log.info({ email }, "forgot-password: no matching account (silent success)");
@@ -299,7 +299,7 @@ app.post("/auth/forgot-password", async (req, reply) => {
   return { ok: true };
 });
 
-// GET /auth/lookup-reset?reset_token=...&email=... — validates that the link
+// GET /auth/lookup-reset?reset_token=...&email=... validates that the link
 // in a reset email is still good before showing the new-password form.
 app.get("/auth/lookup-reset", async (req, reply) => {
   const email = clean(req.query?.email);
@@ -358,7 +358,7 @@ app.post("/auth/reset-password", async (req, reply) => {
   return { user: { id: u.id, email: u.email, name: u.name } };
 });
 
-// GET /auth/lookup?token=...&email=... — used by /login page to validate the
+// GET /auth/lookup?token=...&email=... used by /login page to validate the
 // magic link from the Stripe email before the user types a password.
 app.get("/auth/lookup", async (req, reply) => {
   const email = clean(req.query?.email);
@@ -372,7 +372,7 @@ app.get("/auth/lookup", async (req, reply) => {
   );
   const u = rows[0];
   if (!u) return reply.code(404).send({ error: "No order matches that email" });
-  if (u.password_hash) return reply.code(409).send({ error: "Account already set up — please sign in instead." });
+  if (u.password_hash) return reply.code(409).send({ error: "Account already set up. Please sign in instead." });
   if (u.signup_token !== token) return reply.code(403).send({ error: "Invalid signup link" });
   if (u.signup_token_expires_at && new Date(u.signup_token_expires_at) < new Date())
     return reply.code(403).send({ error: "Signup link expired" });

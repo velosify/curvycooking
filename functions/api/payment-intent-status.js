@@ -2,7 +2,7 @@
 //
 // After Stripe redirects the customer to /thanks?payment_intent=pi_xxx&...
 // the thanks page calls this endpoint to verify the payment really cleared.
-// Don't trust browser URL params alone — anyone could craft a fake redirect.
+// Don't trust browser URL params alone. Anyone could craft a fake redirect.
 
 export async function onRequestGet(context) {
   const { request, env } = context;
