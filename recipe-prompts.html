@@ -1,0 +1,1400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Curvy Cooking - Recipe Image Prompts</title>
+<style>
+  :root {
+    --bg-0: #07060f;
+    --bg-1: #14112e;
+    --ink: #ffffff;
+    --ink-dim: #b9b3d6;
+    --ink-mute: #8a83ad;
+    --line: rgba(255,255,255,0.10);
+    --accent: #7a5cff;
+    --pink: #ff5db1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg-0);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  body {
+    background:
+      radial-gradient(900px 600px at 78% 0%, rgba(122, 92, 255, 0.18), transparent 60%),
+      radial-gradient(700px 500px at 15% 100%, rgba(255, 93, 177, 0.10), transparent 65%),
+      linear-gradient(180deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-0) 100%);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 48px 28px 96px; }
+  h1 {
+    font-size: clamp(36px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .lede {
+    color: var(--ink-dim);
+    font-size: 16px;
+    margin-bottom: 36px;
+    max-width: 640px;
+  }
+  .intro-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 44px;
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    line-height: 1.65;
+  }
+  .intro-card strong { color: var(--ink); font-weight: 700; }
+  .intro-card em { color: #c7b3ff; font-style: normal; }
+  h2.diet {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    margin: 56px 0 4px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+  h3.meal {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--pink);
+    margin: 20px 0 14px;
+  }
+  .recipe {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+  }
+  .recipe-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+  .recipe-title {
+    font-size: 15.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .recipe-num {
+    color: var(--ink-mute);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .filename {
+    font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 13px;
+    color: #c7b3ff;
+    margin-bottom: 12px;
+    user-select: all;
+    cursor: text;
+  }
+  .prompt-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .prompt {
+    flex: 1;
+    background: rgba(0,0,0,0.30);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    /* Allow normal text wrapping; copy will produce a single line. */
+    white-space: normal;
+  }
+  .copy-btn {
+    flex-shrink: 0;
+    background: linear-gradient(90deg, #ff7a3d 0%, #ff5db1 50%, #7a5cff 100%);
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 8px 24px -10px rgba(255,93,177,0.5);
+    transition: transform 0.15s, box-shadow 0.15s;
+    min-width: 96px;
+    text-align: center;
+  }
+  .copy-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 30px -10px rgba(255,93,177,0.65); }
+  .copy-btn:active { transform: translateY(0); }
+  .copy-btn.copied {
+    background: linear-gradient(90deg, #4ade80, #10b981);
+    box-shadow: 0 8px 24px -10px rgba(16,185,129,0.6);
+  }
+  @media (max-width: 640px) {
+    .prompt-row { flex-direction: column; }
+    .copy-btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Curvy Cooking</h1>
+  <p class="lede">Recipe image prompts &middot; 100 Midjourney prompts in one consistent house style.</p>
+
+  <div class="intro-card">
+    Click <strong>Copy</strong> next to a prompt, then paste into Midjourney (web app or Discord <em>/imagine</em>). When the 2&times;2 grid comes back, upscale your favorite, save the PNG to the project's <em>recipes/</em> folder using the filename shown above each prompt.
+  </div>
+<h2 class="diet">No Restrictions</h2>
+<h3 class="meal">Breakfast</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Classic Buttermilk Pancakes</span>
+    <span class="recipe-num">#001</span>
+  </div>
+  <div class="filename">buttermilk-pancakes.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a stack of four fluffy classic buttermilk pancakes, golden brown with crisp edges, a pat of butter melting on top with maple syrup cascading down the sides, served on a simple white ceramic plate on a rustic light-wood table, a few fresh blueberries scattered alongside, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Eggs Benedict</span>
+    <span class="recipe-num">#002</span>
+  </div>
+  <div class="filename">eggs-benedict.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of two perfect eggs Benedict, toasted English muffin halves topped with Canadian bacon and poached eggs, glossy yellow hollandaise sauce cascading down, fresh chives sprinkled on top, served on a white ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Blueberry French Toast</span>
+    <span class="recipe-num">#003</span>
+  </div>
+  <div class="filename">blueberry-french-toast.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of golden brioche French toast slices stacked on a white ceramic plate, fresh blueberries piled on top, a generous drizzle of maple syrup running down the sides, a dusting of powdered sugar, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Bacon Breakfast Burrito</span>
+    <span class="recipe-num">#004</span>
+  </div>
+  <div class="filename">bacon-breakfast-burrito.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bacon breakfast burrito sliced in half to reveal scrambled eggs, crispy bacon, melted cheddar and salsa wrapped in a warm flour tortilla, served on a cream ceramic plate with a side of fresh salsa, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Steel-Cut Oats with Brown Sugar</span>
+    <span class="recipe-num">#005</span>
+  </div>
+  <div class="filename">steel-cut-oats.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of creamy steel-cut oatmeal with a glossy melted pat of butter on top, brown sugar dissolving in the center, cinnamon dusting and a small pitcher of milk to the side, served in a cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Pannukakku (Finnish Pancake)</span>
+    <span class="recipe-num">#006</span>
+  </div>
+  <div class="filename">pannukakku.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a Finnish pannukakku just out of the oven, golden brown with puffed edges and a slightly custardy center, served in a black cast-iron skillet on a rustic light-wood table, lightly dusted with powdered sugar, a small bowl of fresh blueberries and a ramekin of maple syrup on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Lunch</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Grilled Chicken Caesar Wrap</span>
+    <span class="recipe-num">#007</span>
+  </div>
+  <div class="filename">caesar-wrap.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a grilled chicken Caesar wrap sliced on the diagonal, romaine, shaved Parmesan and croutons visible inside, served on a white plate on a rustic light-wood table, a small bowl of Caesar dressing on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">BLT with Avocado</span>
+    <span class="recipe-num">#008</span>
+  </div>
+  <div class="filename">blt-avocado.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a BLT with avocado on toasted sourdough, crispy bacon, ripe tomato, lettuce and sliced avocado layered between two halves of golden bread, sliced in half to show the layers, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Beef &amp; Cheddar Sliders</span>
+    <span class="recipe-num">#009</span>
+  </div>
+  <div class="filename">beef-cheddar-sliders.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of three small beef sliders with melted cheddar and caramelized onions on toasted brioche buns, arranged on a slate board on a rustic light-wood table, a small bowl of ketchup on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Tomato Basil Soup &amp; Grilled Cheese</span>
+    <span class="recipe-num">#010</span>
+  </div>
+  <div class="filename">tomato-soup-grilled-cheese.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a creamy tomato basil soup in a cream ceramic bowl swirled with a drizzle of cream, fresh basil leaves on top, a golden grilled cheese sandwich sliced in half on a small plate next to it, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Turkey Club Sandwich</span>
+    <span class="recipe-num">#011</span>
+  </div>
+  <div class="filename">turkey-club.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a triple-decker turkey club sandwich on toasted bread, layers of roast turkey, bacon, lettuce, tomato and mayo, cut into quarters and held together with toothpicks, served on a white ceramic plate on a rustic light-wood table, a few potato chips on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Dinner</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Herb-Crusted Salmon &amp; Vegetables</span>
+    <span class="recipe-num">#012</span>
+  </div>
+  <div class="filename">herb-crusted-salmon.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of an herb-crusted salmon fillet with a golden parsley and panko crust, served alongside roasted carrots, asparagus and lemon wedges on a cream ceramic plate, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Spaghetti Bolognese</span>
+    <span class="recipe-num">#013</span>
+  </div>
+  <div class="filename">spaghetti-bolognese.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a deep bowl of spaghetti bolognese, rich meaty tomato sauce coating the pasta, freshly grated Parmesan and torn basil on top, a fork twirled into the pasta, served in a white ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Butter Chicken with Naan</span>
+    <span class="recipe-num">#014</span>
+  </div>
+  <div class="filename">butter-chicken.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of butter chicken in a copper bowl, creamy orange tomato sauce with chunks of tender chicken, garnished with fresh cilantro and a swirl of cream, two pieces of warm naan bread on the side, basmati rice in a small bowl, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Beef Stir-Fry with Broccoli</span>
+    <span class="recipe-num">#015</span>
+  </div>
+  <div class="filename">beef-stir-fry.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of beef and broccoli stir-fry over jasmine rice, glossy savory sauce, sesame seeds and sliced scallions on top, served in a black bowl with chopsticks resting on the rim, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Margherita Pizza</span>
+    <span class="recipe-num">#016</span>
+  </div>
+  <div class="filename">margherita-pizza.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a Neapolitan-style Margherita pizza fresh from the oven, bubbly leopard-spotted crust, melted fresh mozzarella, vibrant red tomato sauce and fresh basil leaves, served on a wooden pizza board on a rustic light-wood table, a small bowl of red pepper flakes on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h2 class="diet">Vegan</h2>
+<h3 class="meal">Breakfast</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Chia Seed Pudding with Berries</span>
+    <span class="recipe-num">#017</span>
+  </div>
+  <div class="filename">chia-pudding.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a glass jar of chia seed pudding layered with fresh blueberries, strawberries and raspberries, a sprig of mint on top, served on a small white saucer on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Tofu Scramble with Veggies</span>
+    <span class="recipe-num">#018</span>
+  </div>
+  <div class="filename">tofu-scramble.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a tofu scramble in a cast-iron skillet, golden turmeric-yellow tofu crumbles with diced red bell pepper, spinach and scallions, on a rustic light-wood table, sliced avocado and a piece of toast on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Banana Oat Pancakes</span>
+    <span class="recipe-num">#019</span>
+  </div>
+  <div class="filename">banana-oat-pancakes.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a short stack of three banana oat pancakes on a cream ceramic plate, fresh banana slices and a drizzle of maple syrup on top, a sprinkle of chopped walnuts, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Avocado Toast with Tomato</span>
+    <span class="recipe-num">#020</span>
+  </div>
+  <div class="filename">avocado-toast.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of avocado toast on rustic sourdough, smashed avocado topped with cherry tomato halves, chili flakes, flaky salt and a squeeze of lemon, served on a wooden board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Acai Smoothie Bowl</span>
+    <span class="recipe-num">#021</span>
+  </div>
+  <div class="filename">acai-bowl.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a thick purple acai smoothie bowl topped with sliced banana, fresh strawberries, blueberries, granola and shredded coconut arranged in neat rows, served in a coconut shell bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Tofu Scramble Burrito</span>
+    <span class="recipe-num">#022</span>
+  </div>
+  <div class="filename">tofu-burrito.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a tofu scramble burrito sliced diagonally to show the golden turmeric tofu, black beans, salsa and scallions wrapped in a warm flour tortilla, served on a wooden board on a rustic light-wood table, a small bowl of salsa on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Lunch</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Chickpea Tuna Sandwich</span>
+    <span class="recipe-num">#023</span>
+  </div>
+  <div class="filename">chickpea-tuna.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a chickpea tuna salad sandwich on whole-grain bread, mashed chickpea filling visible with bits of celery and red onion, lettuce and tomato peeking out, sliced in half on a wooden board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Buddha Bowl with Tahini</span>
+    <span class="recipe-num">#024</span>
+  </div>
+  <div class="filename">buddha-bowl.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a colorful Buddha bowl with sections of quinoa, roasted sweet potato cubes, chickpeas, massaged kale and a drizzle of creamy tahini sauce, served in a wide ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Lentil Soup</span>
+    <span class="recipe-num">#025</span>
+  </div>
+  <div class="filename">lentil-soup.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a deep bowl of red lentil soup, glossy orange broth with bits of carrot and tomato, garnished with fresh parsley and a lemon wedge on the side, served in a cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Black Bean Burger</span>
+    <span class="recipe-num">#026</span>
+  </div>
+  <div class="filename">black-bean-burger.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a vegan black bean burger on a toasted bun, sliced avocado, lettuce and salsa stacked on top, served on a wooden board on a rustic light-wood table, sweet potato fries in a small basket on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Vegan Pad Thai</span>
+    <span class="recipe-num">#027</span>
+  </div>
+  <div class="filename">vegan-pad-thai.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of vegan pad thai, rice noodles tossed with cubed tofu in a glossy tamarind sauce, topped with bean sprouts, crushed peanuts, chopped scallions and lime wedges, served in a black bowl with chopsticks on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Dinner</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Thai Coconut Curry with Tofu</span>
+    <span class="recipe-num">#028</span>
+  </div>
+  <div class="filename">thai-coconut-curry.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a Thai red coconut curry with golden pan-fried tofu, red bell peppers and snap peas in a creamy orange-red sauce, served over jasmine rice in a white ceramic bowl, fresh basil and a lime wedge on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Mushroom Risotto</span>
+    <span class="recipe-num">#029</span>
+  </div>
+  <div class="filename">mushroom-risotto.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a wide bowl of creamy mushroom risotto, golden-brown sauteed mushrooms scattered on top, a sprinkle of fresh parsley and nutritional yeast, served in a cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Spaghetti Marinara</span>
+    <span class="recipe-num">#030</span>
+  </div>
+  <div class="filename">spaghetti-marinara.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a deep bowl of spaghetti marinara, garlicky tomato sauce coating glossy noodles, topped with torn fresh basil and chili flakes, served in a white ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Stuffed Portobello Mushrooms</span>
+    <span class="recipe-num">#031</span>
+  </div>
+  <div class="filename">stuffed-portobellos.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of two roasted portobello mushrooms stuffed with herbed quinoa, wilted spinach and sun-dried tomatoes, fresh thyme sprinkled on top, served on a wooden board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Cauliflower Tacos</span>
+    <span class="recipe-num">#032</span>
+  </div>
+  <div class="filename">cauliflower-tacos.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of three corn tortilla tacos filled with crispy roasted cauliflower, shredded purple cabbage slaw and a drizzle of chipotle crema, fresh cilantro and lime wedges, arranged on a wooden board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Eggplant Walnut Bolognese</span>
+    <span class="recipe-num">#033</span>
+  </div>
+  <div class="filename">eggplant-bolognese.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of pappardelle pasta tossed with a meaty eggplant and walnut bolognese sauce, fresh basil torn on top, served in a wide white ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h2 class="diet">Sugar Free</h2>
+<h3 class="meal">Breakfast</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Veggie-Loaded Spinach Omelet</span>
+    <span class="recipe-num">#034</span>
+  </div>
+  <div class="filename">spinach-omelet.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a folded spinach omelet with peppers and onions visible inside, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Avocado &amp; Smoked Salmon Plate</span>
+    <span class="recipe-num">#035</span>
+  </div>
+  <div class="filename">avocado-salmon.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of sliced avocado and smoked salmon arranged on a cream ceramic plate, capers, thin red onion slices and a lemon wedge, drizzled with olive oil and cracked black pepper, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Greek Yogurt, Walnuts &amp; Cinnamon</span>
+    <span class="recipe-num">#036</span>
+  </div>
+  <div class="filename">greek-yogurt-walnuts.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of thick plain Greek yogurt topped with chopped walnuts, a dusting of cinnamon, chia seeds and a curl of lemon zest, served in a small ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Scrambled Eggs with Avocado</span>
+    <span class="recipe-num">#037</span>
+  </div>
+  <div class="filename">scrambled-eggs-avocado.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of soft-scrambled eggs with sliced avocado on the side, fresh chives sprinkled on top, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Cottage Cheese &amp; Cucumber Bowl</span>
+    <span class="recipe-num">#038</span>
+  </div>
+  <div class="filename">cottage-cheese-cucumber.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of cottage cheese topped with diced cucumber, fresh dill and a drizzle of olive oil, cracked black pepper on top, served in a small ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Bacon Egg Bites</span>
+    <span class="recipe-num">#039</span>
+  </div>
+  <div class="filename">bacon-egg-bites.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of six golden egg muffin bites studded with crispy bacon, melted cheddar and chives, arranged on a slate board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Lunch</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Zucchini Noodle Pesto Bowl</span>
+    <span class="recipe-num">#040</span>
+  </div>
+  <div class="filename">zucchini-pesto.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of zucchini noodles tossed with bright green basil pesto, topped with sliced grilled chicken, cherry tomato halves and pine nuts, served in a cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Chicken Cobb Salad</span>
+    <span class="recipe-num">#041</span>
+  </div>
+  <div class="filename">cobb-salad.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a Cobb salad with neat rows of grilled chicken, crumbled bacon, hard-boiled egg, sliced avocado, cherry tomatoes and blue cheese on a bed of romaine, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Beef Lettuce Wraps</span>
+    <span class="recipe-num">#042</span>
+  </div>
+  <div class="filename">beef-lettuce-wraps.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of butter lettuce cups filled with savory ground beef, topped with sliced scallions and sesame seeds, arranged on a wooden board on a rustic light-wood table, a small bowl of sauce on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Tuna Salad Stuffed Avocado</span>
+    <span class="recipe-num">#043</span>
+  </div>
+  <div class="filename">tuna-stuffed-avocado.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of two avocado halves filled with creamy tuna salad with bits of celery and red onion, garnished with fresh parsley and cracked black pepper, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Turkey &amp; Cheese Roll-Ups</span>
+    <span class="recipe-num">#044</span>
+  </div>
+  <div class="filename">turkey-rollups.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of turkey and cheese roll-ups sliced in half to reveal the spiral of turkey, cheddar, avocado and spinach, arranged on a slate board on a rustic light-wood table, a small ramekin of mustard on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Salmon Nicoise Salad</span>
+    <span class="recipe-num">#045</span>
+  </div>
+  <div class="filename">salmon-nicoise.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a salmon Nicoise salad, seared salmon fillet on a bed of mixed greens with green beans, halved hard-boiled eggs, Nicoise olives and a lemon wedge, served on a wide white ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Dinner</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Lemon-Garlic Roast Chicken &amp; Asparagus</span>
+    <span class="recipe-num">#046</span>
+  </div>
+  <div class="filename">lemon-garlic-chicken.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of roasted lemon-garlic chicken thighs in a cast-iron pan with asparagus spears, lemon slices and roasted garlic cloves, herbs scattered on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Baked Cod with Broccoli</span>
+    <span class="recipe-num">#047</span>
+  </div>
+  <div class="filename">baked-cod.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of baked cod fillets topped with herb butter and parsley, alongside roasted broccoli florets and a lemon wedge, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Pork Chops with Sauteed Spinach</span>
+    <span class="recipe-num">#048</span>
+  </div>
+  <div class="filename">pork-chops-spinach.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of two bone-in pork chops with golden seared crust, served over a bed of garlicky sauteed spinach with a pat of melting butter and fresh thyme, on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Cauliflower Fried Rice</span>
+    <span class="recipe-num">#049</span>
+  </div>
+  <div class="filename">cauliflower-fried-rice.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of cauliflower fried rice with shrimp, scrambled egg, peas and scallions, glossy from sesame oil, served in a black bowl with chopsticks on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Zucchini Lasagna</span>
+    <span class="recipe-num">#050</span>
+  </div>
+  <div class="filename">zucchini-lasagna.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a slice of zucchini lasagna lifted from a baking dish, visible layers of zucchini, meat sauce, ricotta and bubbling melted mozzarella, fresh basil on top, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h2 class="diet">Gluten Free</h2>
+<h3 class="meal">Breakfast</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Quinoa Breakfast Bowl</span>
+    <span class="recipe-num">#051</span>
+  </div>
+  <div class="filename">quinoa-breakfast-bowl.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a warm quinoa breakfast bowl with sliced banana, almonds and chia seeds, a drizzle of honey and a dusting of cinnamon, served in a cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Greek Yogurt Parfait with GF Granola</span>
+    <span class="recipe-num">#052</span>
+  </div>
+  <div class="filename">yogurt-parfait.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a tall glass parfait of layered Greek yogurt, gluten-free granola and fresh strawberries, drizzled with honey and topped with slivered almonds, served on a small saucer on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Veggie Frittata</span>
+    <span class="recipe-num">#053</span>
+  </div>
+  <div class="filename">veggie-frittata.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a baked veggie frittata fresh from the oven in a cast-iron skillet, golden top with bell peppers, spinach and crumbled feta, slices already cut, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Corn Tortilla Breakfast Tacos</span>
+    <span class="recipe-num">#054</span>
+  </div>
+  <div class="filename">breakfast-tacos.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of three corn tortilla breakfast tacos filled with scrambled eggs and crumbled chorizo, topped with shredded cheese, fresh salsa and cilantro, arranged on a wooden board on a rustic light-wood table, lime wedges on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Chia Banana Smoothie</span>
+    <span class="recipe-num">#055</span>
+  </div>
+  <div class="filename">chia-banana-smoothie.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a creamy banana almond smoothie in a tall glass topped with chia seeds and a sprinkle of cinnamon, a paper straw, on a rustic light-wood table, a banana and a few almonds on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Shakshuka</span>
+    <span class="recipe-num">#056</span>
+  </div>
+  <div class="filename">shakshuka.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a shakshuka in a cast-iron skillet, four eggs poached in a bubbling spiced tomato and red pepper sauce, crumbled feta and fresh parsley scattered on top, with a piece of bread on the side, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Lunch</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Stuffed Bell Peppers with Rice</span>
+    <span class="recipe-num">#057</span>
+  </div>
+  <div class="filename">stuffed-peppers.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of four red and yellow bell peppers stuffed with seasoned ground beef and rice, topped with melted cheese, in a ceramic baking dish on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Rice Paper Summer Rolls</span>
+    <span class="recipe-num">#058</span>
+  </div>
+  <div class="filename">summer-rolls.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of fresh Vietnamese rice paper summer rolls sliced in half to reveal shrimp, vermicelli, lettuce, mint and shredded carrot, arranged on a wooden board on a rustic light-wood table, a small bowl of peanut dipping sauce on the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Quinoa Tabbouleh</span>
+    <span class="recipe-num">#059</span>
+  </div>
+  <div class="filename">quinoa-tabbouleh.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of quinoa tabbouleh, bright green with chopped parsley and mint, diced tomato and cucumber, glossy with lemon and olive oil, served in a cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Shrimp Poke Bowl</span>
+    <span class="recipe-num">#060</span>
+  </div>
+  <div class="filename">shrimp-poke.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a shrimp poke bowl with sushi rice, cooked shrimp, sliced avocado, edamame, scallions and sesame seeds, nori strips on top, served in a wide black bowl with chopsticks on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">GF Pasta Primavera</span>
+    <span class="recipe-num">#061</span>
+  </div>
+  <div class="filename">gf-pasta-primavera.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of gluten-free pasta primavera, glossy pasta tossed with asparagus, zucchini and peas in a lemon-butter sauce, topped with shaved Parmesan, served in a cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Dinner</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Grilled Steak with Sweet Potato Mash</span>
+    <span class="recipe-num">#062</span>
+  </div>
+  <div class="filename">steak-sweet-potato.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a grilled ribeye steak sliced and resting over a bed of creamy mashed sweet potato, a sprig of rosemary on top, on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Coconut Shrimp Curry</span>
+    <span class="recipe-num">#063</span>
+  </div>
+  <div class="filename">coconut-shrimp-curry.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a coconut shrimp curry, plump shrimp in a creamy coconut sauce with red pepper, served over jasmine rice in a white bowl, fresh cilantro and a lime wedge on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Stuffed Spaghetti Squash</span>
+    <span class="recipe-num">#064</span>
+  </div>
+  <div class="filename">spaghetti-squash.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of two halves of roasted spaghetti squash filled with Italian sausage marinara and melted mozzarella, fresh basil on top, in a sheet pan on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Chicken Piccata (GF)</span>
+    <span class="recipe-num">#065</span>
+  </div>
+  <div class="filename">chicken-piccata.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of gluten-free chicken piccata, golden pan-seared chicken cutlets in a lemon-caper butter sauce with capers, fresh parsley on top, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Pan-Seared Scallops with Risotto</span>
+    <span class="recipe-num">#066</span>
+  </div>
+  <div class="filename">scallops-risotto.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of four pan-seared scallops with golden crust atop a creamy Parmesan risotto, chives sprinkled on top, served on a wide cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Carne Asada Tacos</span>
+    <span class="recipe-num">#067</span>
+  </div>
+  <div class="filename">carne-asada-tacos.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of three corn tortilla tacos filled with marinated grilled skirt steak, diced white onion and fresh cilantro, lime wedges and salsa on the side, arranged on a wooden board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h2 class="diet">Dairy Free</h2>
+<h3 class="meal">Breakfast</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Coconut Yogurt Parfait with Granola</span>
+    <span class="recipe-num">#068</span>
+  </div>
+  <div class="filename">coconut-yogurt-parfait.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a tall glass of coconut yogurt parfait layered with mixed berries and dairy-free granola, drizzled with maple syrup and topped with hemp hearts, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Avocado Toast with Egg</span>
+    <span class="recipe-num">#069</span>
+  </div>
+  <div class="filename">avocado-toast-egg.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of avocado toast topped with a sunny-side-up egg, red pepper flakes and flaky salt, served on a wooden board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Banana Almond Smoothie</span>
+    <span class="recipe-num">#070</span>
+  </div>
+  <div class="filename">banana-almond-smoothie.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a thick banana almond smoothie in a tall glass, dusted with cinnamon and topped with chia seeds, a paper straw, on a rustic light-wood table, fresh almonds scattered to the side, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Oatmeal with Almond Milk &amp; Berries</span>
+    <span class="recipe-num">#071</span>
+  </div>
+  <div class="filename">oatmeal-berries.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a bowl of creamy oatmeal in almond milk, topped with fresh blueberries, sliced almonds and a drizzle of maple syrup, served in a cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Veggie Breakfast Hash</span>
+    <span class="recipe-num">#072</span>
+  </div>
+  <div class="filename">veggie-hash.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a veggie breakfast hash with crispy diced potatoes, bell peppers, onions and two sunny-side-up eggs on top, dusted with smoked paprika, served in a cast-iron skillet on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Sweet Potato &amp; Sausage Hash</span>
+    <span class="recipe-num">#073</span>
+  </div>
+  <div class="filename">sweet-potato-hash.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a sweet potato and sausage hash in a cast-iron skillet, crispy orange sweet potato cubes with crumbled sausage, bell peppers and onions, two sunny-side-up eggs on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Lunch</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Asian Rice Noodle Salad</span>
+    <span class="recipe-num">#074</span>
+  </div>
+  <div class="filename">rice-noodle-salad.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a cold rice noodle salad with shredded carrot, cucumber, mint and cilantro, drizzled with a lime-tamari dressing and topped with crushed peanuts, served in a wide white ceramic bowl with chopsticks on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Mediterranean Grain Bowl</span>
+    <span class="recipe-num">#075</span>
+  </div>
+  <div class="filename">mediterranean-bowl.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a Mediterranean grain bowl with farro, chickpeas, Kalamata olives, arugula, cucumber and a drizzle of tahini-lemon sauce, served in a wide ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Turkey Avocado Wrap</span>
+    <span class="recipe-num">#076</span>
+  </div>
+  <div class="filename">turkey-avocado-wrap.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a turkey avocado wrap sliced diagonally to show layers of turkey, avocado, lettuce, tomato and a smear of hummus inside a flour tortilla, served on a wooden board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Vietnamese Chicken Pho</span>
+    <span class="recipe-num">#077</span>
+  </div>
+  <div class="filename">chicken-pho.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a deep bowl of Vietnamese chicken pho, aromatic clear broth with rice noodles, sliced poached chicken, fresh basil, bean sprouts and lime, served in a wide black bowl with chopsticks on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Roasted Veggie Couscous Salad</span>
+    <span class="recipe-num">#078</span>
+  </div>
+  <div class="filename">couscous-salad.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a roasted vegetable couscous salad, fluffy couscous topped with roasted zucchini, red pepper and red onion, fresh parsley and lemon wedges, served in a wide cream ceramic bowl on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Dinner</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Moroccan Chicken Tagine</span>
+    <span class="recipe-num">#079</span>
+  </div>
+  <div class="filename">chicken-tagine.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a Moroccan chicken tagine in a traditional ceramic tagine vessel, golden chicken thighs in a warmly spiced sauce with preserved lemon and green olives, fresh cilantro on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Cajun Shrimp &amp; Rice</span>
+    <span class="recipe-num">#080</span>
+  </div>
+  <div class="filename">cajun-shrimp.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of Cajun shrimp with red bell peppers and onion over white rice, glistening from spice oil, garnished with a lemon wedge and parsley, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Grilled Pork Tenderloin with Apples</span>
+    <span class="recipe-num">#081</span>
+  </div>
+  <div class="filename">pork-tenderloin-apples.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of sliced grilled pork tenderloin medallions with golden caramelized apples and onions in a glossy maple-cider glaze, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Coconut Chicken Curry</span>
+    <span class="recipe-num">#082</span>
+  </div>
+  <div class="filename">coconut-chicken-curry.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a coconut chicken curry in a wide bowl, tender chicken in a creamy yellow coconut sauce over jasmine rice, fresh cilantro on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Sheet-Pan Fajitas</span>
+    <span class="recipe-num">#083</span>
+  </div>
+  <div class="filename">sheet-pan-fajitas.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a sheet pan of beef fajitas, sliced flank steak with charred red, yellow and green bell peppers and onions, lime wedges, a stack of warm corn tortillas and a small bowl of guacamole on the side, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Lemon Herb Roasted Chicken</span>
+    <span class="recipe-num">#084</span>
+  </div>
+  <div class="filename">lemon-herb-chicken.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a whole roasted chicken with golden herb-crusted skin on a sheet pan, surrounded by roasted baby potatoes, carrots and lemon halves, fresh thyme and rosemary sprigs, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h2 class="diet">Carnivore</h2>
+<h3 class="meal">Breakfast</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Bacon &amp; Eggs Skillet</span>
+    <span class="recipe-num">#085</span>
+  </div>
+  <div class="filename">bacon-eggs-skillet.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of crispy bacon strips and two sunny-side-up eggs in a black cast-iron skillet, glossy yolks, cracked black pepper, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Steak &amp; Eggs</span>
+    <span class="recipe-num">#086</span>
+  </div>
+  <div class="filename">steak-eggs.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a sliced sirloin steak with golden crust next to two sunny-side-up eggs on a cream ceramic plate, a pat of melting butter on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Ham &amp; Cheese Omelet</span>
+    <span class="recipe-num">#087</span>
+  </div>
+  <div class="filename">ham-cheese-omelet.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a fluffy folded omelet with melted cheddar and diced ham visible at the seam, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Ground Beef Breakfast Patties</span>
+    <span class="recipe-num">#088</span>
+  </div>
+  <div class="filename">beef-patties.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of four golden-seared ground beef breakfast patties on a cream ceramic plate, glistening with butter, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Sausage &amp; Egg Cups</span>
+    <span class="recipe-num">#089</span>
+  </div>
+  <div class="filename">sausage-egg-cups.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of six sausage-wrapped egg cups in a muffin tin, golden sausage walls with baked egg centers, fresh chives sprinkled on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Lunch</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Grilled Ribeye with Bone Marrow</span>
+    <span class="recipe-num">#090</span>
+  </div>
+  <div class="filename">ribeye-marrow.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of two grilled ribeye steaks with golden sear marks topped with a pat of butter, two roasted halved bone marrow bones alongside, flaky salt scattered, on a wooden board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Burger Patties with Cheese</span>
+    <span class="recipe-num">#091</span>
+  </div>
+  <div class="filename">burger-patties.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of four bunless beef burger patties stacked with melted cheddar slices on a cream ceramic plate, pats of butter melting on top, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Pork Belly Bites</span>
+    <span class="recipe-num">#092</span>
+  </div>
+  <div class="filename">pork-belly-bites.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of crispy roasted pork belly cubes, deeply golden and lacquered, arranged on a slate board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Lamb Chops</span>
+    <span class="recipe-num">#093</span>
+  </div>
+  <div class="filename">lamb-chops.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of six golden seared lamb chops with rosemary sprigs and garlic cloves, glistening with butter, on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Grilled Salmon Fillet</span>
+    <span class="recipe-num">#094</span>
+  </div>
+  <div class="filename">grilled-salmon.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a pan-seared salmon fillet with crispy skin and a pat of butter melting on top, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+<h3 class="meal">Dinner</h3>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Slow-Cooked Beef Short Ribs</span>
+    <span class="recipe-num">#095</span>
+  </div>
+  <div class="filename">short-ribs.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of fall-apart braised beef short ribs in a Dutch oven, glossy from rich braising liquid, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Prime Rib Roast</span>
+    <span class="recipe-num">#096</span>
+  </div>
+  <div class="filename">prime-rib.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a sliced prime rib roast showing perfect medium-rare pink centers and a salt-crusted exterior, arranged on a wooden carving board on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Chicken Thighs in Butter</span>
+    <span class="recipe-num">#097</span>
+  </div>
+  <div class="filename">chicken-thighs-butter.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of six crispy-skin chicken thighs in a cast-iron skillet, pooled with golden butter and pan juices, on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Surf &amp; Turf (Filet + Shrimp)</span>
+    <span class="recipe-num">#098</span>
+  </div>
+  <div class="filename">surf-turf.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of two seared filet mignon steaks topped with garlic butter shrimp, glistening from butter, served on a cream ceramic plate on a rustic light-wood table, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Roast Turkey Breast</span>
+    <span class="recipe-num">#099</span>
+  </div>
+  <div class="filename">roast-turkey.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a sliced bone-in roast turkey breast with crispy golden buttered skin, arranged on a wooden carving board on a rustic light-wood table, fresh thyme sprigs alongside, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+<div class="recipe">
+  <div class="recipe-head">
+    <span class="recipe-title">Slow-Roasted Pork Shoulder</span>
+    <span class="recipe-num">#100</span>
+  </div>
+  <div class="filename">pork-shoulder.png</div>
+  <div class="prompt-row">
+    <div class="prompt">Overhead photograph of a slow-roasted pork shoulder with crackling crispy skin, partially pulled apart to reveal juicy interior, on a wooden carving board on a rustic light-wood table, flaky salt scattered, soft natural daylight from upper left, gentle shadows, editorial food photography, warm and inviting --ar 1:1 --style raw --v 6.1</div>
+    <button class="copy-btn" type="button">Copy</button>
+  </div>
+</div>
+
+</div>
+<script>
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    const prompt = btn.previousElementSibling.textContent.trim();
+    try {
+      await navigator.clipboard.writeText(prompt);
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+    } catch (err) {
+      btn.textContent = 'Failed';
+      setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+    }
+  });
+</script>
+</body>
+</html>
