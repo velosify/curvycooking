@@ -374,15 +374,17 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: saturate(0.92) contrast(1.04);
+    filter: saturate(0.82) contrast(1.08) brightness(0.93);
   }
-  /* Subtle dark gradient on top of recipe photos — knocks the "too-clean"
-     edge off and helps them sit in the dark UI without screaming. */
+  /* Recipe photo overlay: vertical darken + vignette in the corners.
+     Vignette especially helps AI images read as real photos. */
   .card-img::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.08) 0%, rgba(0,0,0,0.32) 100%);
+    background:
+      radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,0.50) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.45) 100%);
     pointer-events: none;
   }
   .card-body { padding: 14px 16px 16px; }
@@ -452,13 +454,15 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     height: 100%;
     object-fit: cover;
     display: block;
-    filter: saturate(0.92) contrast(1.04);
+    filter: saturate(0.82) contrast(1.08) brightness(0.93);
   }
   .modal-hero::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.28) 100%);
+    background:
+      radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.42) 100%),
+      linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.35) 100%);
     pointer-events: none;
   }
   .modal-close {
