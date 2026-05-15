@@ -59,7 +59,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     --radius: 14px;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--text);
@@ -497,6 +497,9 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     /* Reserve enough vertical room so Ashley is consistently big across
        short and long recipes. */
     min-height: 62vh;
+    /* Clip Ashley to the modal-body bounds so her negative `right` offset
+       never triggers horizontal scrolling. */
+    overflow: hidden;
   }
   .modal-body > * { position: relative; z-index: 1; }
   .modal-body h2,
@@ -567,6 +570,18 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     .modal-body { padding: 22px 20px 26px; min-height: 55vh; }
     .cards { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
     .modal-ashley { height: 50vh; opacity: 0.72; right: -30px; }
+    /* Trim the top bar on small screens: ditch the name, keep avatar + logout. */
+    #user-name { display: none; }
+    /* Mobile card tightening: drop the inset white highlight that reads as a
+       1px gap above the image, and use a simpler shadow so the image sits
+       flush with the top edge of the card. */
+    .card {
+      box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.45),
+        0 2px 6px rgba(0, 0, 0, 0.2);
+      border-radius: 14px;
+    }
+    .card::before { display: none; }
   }
 </style>
 </head>
@@ -631,7 +646,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
       <div class="user">
         <div class="avatar" id="user-avatar">?</div>
         <span id="user-name">Guest</span>
-        <button class="logout" id="logout-btn" type="button">Log out</button>
+        <button class="logout" id="logout-btn" type="button">logout</button>
       </div>
     </div>
   </div>
