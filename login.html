@@ -453,19 +453,23 @@
         <label for="name">Name</label>
         <input id="name" type="text" placeholder="Jane Cook" />
       </div>
-      <div class="field">
+      <div class="field" id="email-field">
         <label for="email">Email</label>
         <input id="email" type="email" required placeholder="you@example.com" />
       </div>
-      <div class="field">
+      <div class="field" id="password-field">
         <label for="password">Password</label>
         <input id="password" type="password" required minlength="4" placeholder="••••••••" />
       </div>
       <button class="btn" type="submit" id="submit-btn">Sign in</button>
     </form>
 
-    <p class="hint">
-      Use the email from your <strong>Curvy Cooking</strong> purchase to sign in.
+    <p class="hint" id="auth-hint">
+      <a href="#" id="forgot-link" style="color: var(--accent); text-decoration: none;">Forgot your password?</a>
+    </p>
+
+    <p class="hint" id="success-msg" hidden style="color: var(--text);">
+      ✓ If an account exists for that email, we sent a reset link. Check your inbox (and spam folder).
     </p>
   </div>
 </div>
@@ -1187,31 +1191,86 @@ const submitBtn = document.getElementById('submit-btn');
 const authForm = document.getElementById('auth-form');
 const authError = document.getElementById('auth-error');
 
+const emailField = document.getElementById('email-field');
+const passwordField = document.getElementById('password-field');
+const forgotLink = document.getElementById('forgot-link');
+const authHint = document.getElementById('auth-hint');
+const successMsg = document.getElementById('success-msg');
+const tabToggle = document.querySelector('.tab-toggle');
+
 let mode = 'login';
 function setMode(m) {
   mode = m;
-  const isLogin = m === 'login';
-  tabLogin.classList.toggle('active', isLogin);
-  tabSignup.classList.toggle('active', !isLogin);
-  authTitle.textContent = isLogin ? 'Welcome back' : 'Create your account';
-  authSub.textContent = isLogin
-    ? 'Sign in to explore recipes tailored to your diet.'
-    : 'Sign up to start cooking with the community.';
-  nameField.hidden = isLogin;
-  submitBtn.textContent = isLogin ? 'Sign in' : 'Create account';
   authError.hidden = true;
+  successMsg.hidden = true;
+
+  // Reset readonly state on email
+  const emailInput = document.getElementById('email');
+  emailInput.readOnly = false;
+  emailInput.style.opacity = '';
+
+  switch (m) {
+    case 'login':
+      tabToggle.style.display = '';
+      tabLogin.classList.add('active');
+      tabSignup.classList.remove('active');
+      authTitle.textContent = 'Welcome back';
+      authSub.textContent = 'Sign in to explore recipes tailored to your diet.';
+      nameField.hidden = true;
+      passwordField.hidden = false;
+      submitBtn.textContent = 'Sign in';
+      authHint.hidden = false;
+      forgotLink.textContent = 'Forgot your password?';
+      break;
+    case 'signup':
+      tabToggle.style.display = '';
+      tabLogin.classList.remove('active');
+      tabSignup.classList.add('active');
+      authTitle.textContent = 'Create your account';
+      authSub.textContent = 'Sign up to start cooking with the community.';
+      nameField.hidden = false;
+      passwordField.hidden = false;
+      submitBtn.textContent = 'Create account';
+      authHint.hidden = true;
+      break;
+    case 'forgot':
+      tabToggle.style.display = 'none';
+      authTitle.textContent = 'Reset your password';
+      authSub.textContent = 'Enter your email — we\'ll send you a reset link.';
+      nameField.hidden = true;
+      passwordField.hidden = true;
+      submitBtn.textContent = 'Send reset link';
+      authHint.hidden = false;
+      forgotLink.textContent = '← Back to sign in';
+      break;
+    case 'reset':
+      tabToggle.style.display = 'none';
+      authTitle.textContent = 'Choose a new password';
+      authSub.textContent = 'Pick a new password to finish resetting your account.';
+      nameField.hidden = true;
+      passwordField.hidden = false;
+      submitBtn.textContent = 'Save new password';
+      authHint.hidden = true;
+      break;
+  }
 }
 tabLogin.addEventListener('click', () => setMode('login'));
 tabSignup.addEventListener('click', () => setMode('signup'));
+forgotLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  setMode(mode === 'forgot' ? 'login' : 'forgot');
+});
 
 function showError(msg) {
   authError.textContent = msg;
   authError.hidden = false;
 }
 
-// Magic-link signup token: arrives in URL after Stripe payment email
+// URL params: ?token=...&email=...     → magic signup link (after Stripe)
+//             ?reset_token=...&email=... → password reset link
 const urlParams = new URLSearchParams(location.search);
 const signupToken = urlParams.get('token');
+const resetToken = urlParams.get('reset_token');
 const prefilledEmail = (urlParams.get('email') || '').toLowerCase();
 
 authForm.addEventListener('submit', async (e) => {
@@ -1222,6 +1281,7 @@ authForm.addEventListener('submit', async (e) => {
 
   submitBtn.disabled = true;
   authError.hidden = true;
+  successMsg.hidden = true;
 
   try {
     let result;
@@ -1231,11 +1291,22 @@ authForm.addEventListener('submit', async (e) => {
       result = await api('/auth/signup', {
         body: { email, password, name, signupToken: signupToken || undefined },
       });
+    } else if (mode === 'forgot') {
+      await api('/auth/forgot-password', { body: { email } });
+      submitBtn.disabled = false;
+      successMsg.hidden = false;
+      authHint.hidden = true;
+      return;
+    } else if (mode === 'reset') {
+      if (password.length < 8) { submitBtn.disabled = false; return showError('Password must be at least 8 characters.'); }
+      result = await api('/auth/reset-password', {
+        body: { email, reset_token: resetToken, password },
+      });
     } else {
       result = await api('/auth/login', { body: { email, password } });
     }
-    // Strip token from URL so a refresh doesn't show the magic-link UI again
-    if (signupToken) history.replaceState({}, '', '/login');
+    // Strip auth tokens from URL after success
+    if (signupToken || resetToken) history.replaceState({}, '', '/login');
     enterApp(result.user);
   } catch (err) {
     showError(err.message);
@@ -1375,7 +1446,6 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
     try {
       const lookup = await api('/auth/lookup?token=' + encodeURIComponent(signupToken)
                               + '&email=' + encodeURIComponent(prefilledEmail));
-      // Token is valid — switch to signup mode, prefill + lock email
       setMode('signup');
       const emailInput = document.getElementById('email');
       emailInput.value = lookup.email;
@@ -1386,12 +1456,27 @@ document.getElementById('logout-btn').addEventListener('click', async () => {
       authSub.textContent = 'Pick a password — you\'re all set up after this.';
       return;
     } catch (err) {
-      // Token invalid/expired — show login as usual with a soft hint
       showError(err.message + ' Try signing in if you already set up your account.');
     }
   }
 
-  // 2) Already signed in?
+  // 2) Password reset flow (?reset_token=...&email=... in URL)
+  if (resetToken && prefilledEmail) {
+    try {
+      const lookup = await api('/auth/lookup-reset?reset_token=' + encodeURIComponent(resetToken)
+                              + '&email=' + encodeURIComponent(prefilledEmail));
+      setMode('reset');
+      const emailInput = document.getElementById('email');
+      emailInput.value = lookup.email;
+      emailInput.readOnly = true;
+      emailInput.style.opacity = '0.7';
+      return;
+    } catch (err) {
+      showError(err.message);
+    }
+  }
+
+  // 3) Already signed in?
   try {
     const me = await api('/auth/me');
     if (me?.user) enterApp(me.user);

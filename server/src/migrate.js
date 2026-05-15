@@ -16,6 +16,11 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE INDEX IF NOT EXISTS idx_users_signup_token ON users (signup_token);
+
+-- Added 2026-05-14: password reset support
+ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_token TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_token_expires_at TIMESTAMPTZ;
+CREATE INDEX IF NOT EXISTS idx_users_reset_token ON users (reset_token);
 `;
 
 export async function runMigrations() {

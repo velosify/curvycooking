@@ -252,6 +252,105 @@ app.post("/webhooks/stripe", async (req, reply) => {
   return { received: true };
 });
 
+// POST /auth/forgot-password { email }
+// Always returns 200 OK regardless of whether the email exists — don't leak
+// account-existence info. If the email IS registered (and has a password set),
+// we generate a 1-hour reset token and log the link.
+app.post("/auth/forgot-password", async (req, reply) => {
+  const email = clean(req.body?.email);
+  if (!email) return reply.code(400).send({ error: "Email is required." });
+
+  const { rows } = await query(
+    `SELECT id, email, password_hash FROM users WHERE email = $1 LIMIT 1`,
+    [email]
+  );
+  const u = rows[0];
+
+  // Only issue a reset token to fully-set-up accounts.
+  if (u && u.password_hash) {
+    const token = newToken();
+    const expires = new Date(Date.now() + 1000 * 60 * 60); // 1 hour
+
+    await query(
+      `UPDATE users
+         SET reset_token = $1,
+             reset_token_expires_at = $2,
+             updated_at = NOW()
+       WHERE id = $3`,
+      [token, expires, u.id]
+    );
+
+    // TODO: Send email via Resend / Postmark. For now, log the URL — copy
+    // it manually from Railway logs and send to the customer until email
+    // is wired up.
+    const resetUrl = `${FRONTEND_ORIGIN}/login?reset_token=${token}&email=${encodeURIComponent(u.email)}`;
+    app.log.info({ resetUrl, email: u.email }, "→ send this password reset link to the customer");
+  } else {
+    app.log.info({ email }, "forgot-password: no matching account (silent success)");
+  }
+
+  return { ok: true };
+});
+
+// GET /auth/lookup-reset?reset_token=...&email=... — validates that the link
+// in a reset email is still good before showing the new-password form.
+app.get("/auth/lookup-reset", async (req, reply) => {
+  const email = clean(req.query?.email);
+  const token = req.query?.reset_token;
+  if (!email || !token) return reply.code(400).send({ error: "Missing token or email" });
+
+  const { rows } = await query(
+    `SELECT email, name, reset_token, reset_token_expires_at, password_hash
+       FROM users WHERE email = $1 LIMIT 1`,
+    [email]
+  );
+  const u = rows[0];
+  if (!u || !u.reset_token) return reply.code(404).send({ error: "Reset link not valid" });
+  if (u.reset_token !== token) return reply.code(403).send({ error: "Reset link not valid" });
+  if (u.reset_token_expires_at && new Date(u.reset_token_expires_at) < new Date())
+    return reply.code(403).send({ error: "Reset link expired. Request a new one." });
+
+  return { email: u.email, name: u.name };
+});
+
+// POST /auth/reset-password { email, reset_token, password }
+// Validates the token, writes the new password hash, clears the token,
+// signs the user in.
+app.post("/auth/reset-password", async (req, reply) => {
+  const { email: rawEmail, reset_token, password } = req.body || {};
+  const email = clean(rawEmail);
+
+  if (!email || !reset_token)
+    return reply.code(400).send({ error: "Missing token or email." });
+  if (!password || password.length < 8)
+    return reply.code(400).send({ error: "Password must be at least 8 characters." });
+
+  const { rows } = await query(
+    `SELECT id, email, name, reset_token, reset_token_expires_at
+       FROM users WHERE email = $1 LIMIT 1`,
+    [email]
+  );
+  const u = rows[0];
+  if (!u || !u.reset_token || u.reset_token !== reset_token)
+    return reply.code(403).send({ error: "Reset link not valid" });
+  if (u.reset_token_expires_at && new Date(u.reset_token_expires_at) < new Date())
+    return reply.code(403).send({ error: "Reset link expired. Request a new one." });
+
+  const password_hash = await bcrypt.hash(password, 12);
+  await query(
+    `UPDATE users
+       SET password_hash = $1,
+           reset_token = NULL,
+           reset_token_expires_at = NULL,
+           updated_at = NOW()
+     WHERE id = $2`,
+    [password_hash, u.id]
+  );
+
+  reply.setCookie(COOKIE_NAME, signSession(u), COOKIE_OPTS);
+  return { user: { id: u.id, email: u.email, name: u.name } };
+});
+
 // GET /auth/lookup?token=...&email=... — used by /login page to validate the
 // magic link from the Stripe email before the user types a password.
 app.get("/auth/lookup", async (req, reply) => {
