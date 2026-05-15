@@ -19,6 +19,7 @@ import Stripe from "stripe";
 import crypto from "node:crypto";
 import { query, pool } from "./db.js";
 import { runMigrations } from "./migrate.js";
+import { sendSignupEmail, sendResetEmail } from "./email.js";
 
 const {
   JWT_SECRET,
@@ -243,10 +244,14 @@ app.post("/webhooks/stripe", async (req, reply) => {
 
     app.log.info({ email, pi: pi.id }, "paid user upserted");
 
-    // TODO: send email with the signup link (Resend / Postmark). For now we
-    // just log the URL — copy it manually until email is wired.
     const signupUrl = `${FRONTEND_ORIGIN}/login?token=${token}&email=${encodeURIComponent(email)}`;
-    app.log.info({ signupUrl }, "→ send this signup link to the customer");
+    app.log.info({ signupUrl }, "→ signup link generated");
+
+    // Fire the welcome / signup email
+    const sent = await sendSignupEmail({ to: email, name, signupUrl }, app.log);
+    if (!sent.ok) {
+      app.log.warn({ err: sent.error, signupUrl }, "signup email failed — link logged above for manual delivery");
+    }
   }
 
   return { received: true };
@@ -280,11 +285,13 @@ app.post("/auth/forgot-password", async (req, reply) => {
       [token, expires, u.id]
     );
 
-    // TODO: Send email via Resend / Postmark. For now, log the URL — copy
-    // it manually from Railway logs and send to the customer until email
-    // is wired up.
     const resetUrl = `${FRONTEND_ORIGIN}/login?reset_token=${token}&email=${encodeURIComponent(u.email)}`;
-    app.log.info({ resetUrl, email: u.email }, "→ send this password reset link to the customer");
+    app.log.info({ resetUrl, email: u.email }, "→ reset link generated");
+
+    const sent = await sendResetEmail({ to: u.email, resetUrl }, app.log);
+    if (!sent.ok) {
+      app.log.warn({ err: sent.error, resetUrl }, "reset email failed — link logged above for manual delivery");
+    }
   } else {
     app.log.info({ email }, "forgot-password: no matching account (silent success)");
   }

@@ -16,6 +16,10 @@ issues one-time signup tokens.
    - `FRONTEND_ORIGIN` — `https://curvycooking.com`
    - `COOKIE_DOMAIN` — `.curvycooking.com` (note leading dot — cross-subdomain)
    - `NODE_ENV` — `production`
+   - `RESEND_API_KEY` — `re_…` from Resend Dashboard → API Keys (optional; emails are logged if missing)
+   - `EMAIL_FROM` — verified sending address, e.g. `hello@curvycooking.com`
+   - `EMAIL_FROM_NAME` — optional display name, e.g. `Ashley at Curvy Cooking`
+   - `EMAIL_REPLY_TO` — optional reply-to address (defaults to EMAIL_FROM)
 4. Generate a public domain: Settings → Networking → Generate Domain.
 5. In Stripe Dashboard → Developers → Webhooks → **Add endpoint**:
    - URL: `https://your-railway-domain.up.railway.app/webhooks/stripe`
