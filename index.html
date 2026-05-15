@@ -914,6 +914,95 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     font-size: 13px;
     margin-top: 4px;
   }
+  /* ---------- REVIEW MARQUEE ---------- */
+  .review-marquee {
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+            mask-image: linear-gradient(90deg, transparent 0%, #000 5%, #000 95%, transparent 100%);
+    z-index: 2;
+  }
+  .review-track {
+    display: flex;
+    gap: 20px;
+    width: max-content;
+    animation: review-scroll 36s linear infinite;
+  }
+  .review-marquee:hover .review-track { animation-play-state: paused; }
+  @keyframes review-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc((-360px - 20px) * 5)); }
+  }
+  .review-track--reverse {
+    animation-direction: reverse;
+    animation-duration: 44s;
+  }
+  .review-marquee + .review-marquee { margin-top: 20px; }
+
+  .review-card-sm {
+    flex-shrink: 0;
+    width: 360px;
+    padding: 28px 26px;
+    background: var(--grad-card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-height: 220px;
+  }
+  .review-card-sm .quote {
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+    flex-grow: 1;
+  }
+  .review-card-sm .reviewer-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .review-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: #fff;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.06);
+  }
+  .av-1  { background: linear-gradient(135deg, #ffb088, #ff5db1); }
+  .av-2  { background: linear-gradient(135deg, #88c5ff, #7a5cff); }
+  .av-3  { background: linear-gradient(135deg, #ffe0b3, #ff7a3d); }
+  .av-4  { background: linear-gradient(135deg, #c7b3ff, #5a3bff); }
+  .av-5  { background: linear-gradient(135deg, #ff7a8a, #d63b6b); }
+  .av-6  { background: linear-gradient(135deg, #ffd166, #ff7a3d); }
+  .av-7  { background: linear-gradient(135deg, #6ed79b, #2e8c5e); }
+  .av-8  { background: linear-gradient(135deg, #ffaab5, #b91c4e); }
+  .av-9  { background: linear-gradient(135deg, #aab6ff, #4a5fff); }
+  .av-10 { background: linear-gradient(135deg, #ffcc99, #c97c00); }
+  .review-card-sm .name {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 2px;
+  }
+  .review-card-sm .role {
+    color: var(--ink-mute);
+    font-size: 13px;
+    line-height: 1.3;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .review-track { animation: none; }
+  }
+
   .review-pager {
     position: absolute;
     right: 28px; bottom: 28px;
@@ -1043,6 +1132,13 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     .section-head h2 { font-size: clamp(30px, 8vw, 40px); }
     .section-bg-text { font-size: clamp(80px, 24vw, 120px); }
     .review-card { padding: 26px 24px; }
+    .review-card-sm { width: 280px; padding: 22px 20px; min-height: 200px; }
+    .review-card-sm .quote { font-size: 14px; }
+    .review-track { animation-name: review-scroll-mobile; }
+    @keyframes review-scroll-mobile {
+      from { transform: translateX(0); }
+      to   { transform: translateX(calc((-280px - 20px) * 5)); }
+    }
     .recipe-card { width: 260px; }
     .recipe-thumb { font-size: 100px; }
     .recipe-track { animation-name: recipe-scroll-mobile; }
@@ -1280,18 +1376,215 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     <div class="reviews-head scroll-fade">
       <h2>Reviews From My Readers</h2>
     </div>
-    <div class="review-row">
-      <div class="reviewer scroll-fade" data-fade-delay="0">👩</div>
-      <div class="review-card scroll-fade" data-fade-delay="150">
-        <p class="quote">"I bought this on a whim and now my husband thinks I went to culinary school. The pastina alone paid for the cookbook three times over. Ashley writes the way your funniest friend texts — except every recipe actually works."</p>
-        <div class="reviewer-name">Adelia Z.</div>
-        <div class="reviewer-role">Home Cook · NY</div>
-        <div class="review-pager">
-          <div class="pager-btn">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    <!-- ROW 1: scrolls right → left -->
+    <div class="review-marquee scroll-fade">
+      <div class="review-track">
+        <div class="review-card-sm">
+          <p class="quote">"I bought this on a whim and now my husband thinks I went to culinary school. The pastina alone paid for the cookbook three times over."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-1">AZ</div>
+            <div>
+              <div class="name">Adelia Z.</div>
+              <div class="role">Home Cook · NY</div>
+            </div>
           </div>
-          <div class="pager-btn active">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </div>
+        <div class="review-card-sm">
+          <p class="quote">"Made the Pasta and Meatballs for my Italian mother-in-law. She asked me for the recipe. I cried."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-2">MR</div>
+            <div>
+              <div class="name">Maya R.</div>
+              <div class="role">Software Engineer · Austin</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm">
+          <p class="quote">"I'm the world's worst cook. Even I couldn't mess up the Mac &amp; Cheese. Genuinely life-changing $19."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-3">DK</div>
+            <div>
+              <div class="name">Devon K.</div>
+              <div class="role">Student · Boston</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm">
+          <p class="quote">"Carnivore + Burger Bowls = my new meal-prep religion. Down 12 lbs and dinner tastes like a restaurant."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-4">MT</div>
+            <div>
+              <div class="name">Marcus T.</div>
+              <div class="role">Personal Trainer · Miami</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm">
+          <p class="quote">"Clever recipes that don't require running to four grocery stores. As a working mom, this is the dream."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-5">PS</div>
+            <div>
+              <div class="name">Priya S.</div>
+              <div class="role">Mom of 3 · Seattle</div>
+            </div>
+          </div>
+        </div>
+        <!-- Duplicates for seamless loop -->
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"I bought this on a whim and now my husband thinks I went to culinary school. The pastina alone paid for the cookbook three times over."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-1">AZ</div>
+            <div>
+              <div class="name">Adelia Z.</div>
+              <div class="role">Home Cook · NY</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"Made the Pasta and Meatballs for my Italian mother-in-law. She asked me for the recipe. I cried."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-2">MR</div>
+            <div>
+              <div class="name">Maya R.</div>
+              <div class="role">Software Engineer · Austin</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"I'm the world's worst cook. Even I couldn't mess up the Mac &amp; Cheese. Genuinely life-changing $19."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-3">DK</div>
+            <div>
+              <div class="name">Devon K.</div>
+              <div class="role">Student · Boston</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"Carnivore + Burger Bowls = my new meal-prep religion. Down 12 lbs and dinner tastes like a restaurant."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-4">MT</div>
+            <div>
+              <div class="name">Marcus T.</div>
+              <div class="role">Personal Trainer · Miami</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"Clever recipes that don't require running to four grocery stores. As a working mom, this is the dream."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-5">PS</div>
+            <div>
+              <div class="name">Priya S.</div>
+              <div class="role">Mom of 3 · Seattle</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: scrolls left → right (reverse direction) -->
+    <div class="review-marquee scroll-fade">
+      <div class="review-track review-track--reverse">
+        <div class="review-card-sm">
+          <p class="quote">"Eggplant Parmesan made my Sicilian grandfather speechless. He just nodded once. From him, that's a standing ovation."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-6">GV</div>
+            <div>
+              <div class="name">Gianna V.</div>
+              <div class="role">Marketing Director · Brooklyn</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm">
+          <p class="quote">"Bought it for myself. Used it last week to impress a date. Now I cook for him every Sunday. Worth every penny."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-7">JL</div>
+            <div>
+              <div class="name">James L.</div>
+              <div class="role">Engineer · San Francisco</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm">
+          <p class="quote">"Best $19 I've ever spent on a digital anything. The Cinnamon Rolls alone. Just trust me on the cinnamon rolls."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-8">SO</div>
+            <div>
+              <div class="name">Sarah O.</div>
+              <div class="role">Nurse · Chicago</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm">
+          <p class="quote">"Finally a cookbook that respects my time AND my freezer. Make-ahead friendly. 12-hour shifts approve."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-9">JA</div>
+            <div>
+              <div class="name">Jordan A.</div>
+              <div class="role">Pediatrician · Denver</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm">
+          <p class="quote">"I tag Ashley in every plate. She hasn't responded yet but I'm not giving up. Steak &amp; Eggs is unreal."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-10">TG</div>
+            <div>
+              <div class="name">Tomás G.</div>
+              <div class="role">Designer · LA</div>
+            </div>
+          </div>
+        </div>
+        <!-- Duplicates -->
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"Eggplant Parmesan made my Sicilian grandfather speechless. He just nodded once. From him, that's a standing ovation."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-6">GV</div>
+            <div>
+              <div class="name">Gianna V.</div>
+              <div class="role">Marketing Director · Brooklyn</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"Bought it for myself. Used it last week to impress a date. Now I cook for him every Sunday. Worth every penny."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-7">JL</div>
+            <div>
+              <div class="name">James L.</div>
+              <div class="role">Engineer · San Francisco</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"Best $19 I've ever spent on a digital anything. The Cinnamon Rolls alone. Just trust me on the cinnamon rolls."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-8">SO</div>
+            <div>
+              <div class="name">Sarah O.</div>
+              <div class="role">Nurse · Chicago</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"Finally a cookbook that respects my time AND my freezer. Make-ahead friendly. 12-hour shifts approve."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-9">JA</div>
+            <div>
+              <div class="name">Jordan A.</div>
+              <div class="role">Pediatrician · Denver</div>
+            </div>
+          </div>
+        </div>
+        <div class="review-card-sm" aria-hidden="true">
+          <p class="quote">"I tag Ashley in every plate. She hasn't responded yet but I'm not giving up. Steak &amp; Eggs is unreal."</p>
+          <div class="reviewer-row">
+            <div class="review-avatar av-10">TG</div>
+            <div>
+              <div class="name">Tomás G.</div>
+              <div class="role">Designer · LA</div>
+            </div>
           </div>
         </div>
       </div>
