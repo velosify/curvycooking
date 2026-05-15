@@ -1209,6 +1209,12 @@ function setMode(m) {
   emailInput.readOnly = false;
   emailInput.style.opacity = '';
 
+  // Get refs to required-controlled inputs — toggling `required` per mode
+  // is essential, otherwise HTML5 validation blocks submit on hidden fields
+  // ("An invalid form control with name='' is not focusable" error).
+  const nameInput = document.getElementById('name');
+  const passwordInput = document.getElementById('password');
+
   switch (m) {
     case 'login':
       tabToggle.style.display = '';
@@ -1221,6 +1227,8 @@ function setMode(m) {
       submitBtn.textContent = 'Sign in';
       authHint.hidden = false;
       forgotLink.textContent = 'Forgot your password?';
+      nameInput.required = false;
+      passwordInput.required = true;
       break;
     case 'signup':
       tabToggle.style.display = '';
@@ -1232,6 +1240,8 @@ function setMode(m) {
       passwordField.hidden = false;
       submitBtn.textContent = 'Create account';
       authHint.hidden = true;
+      nameInput.required = true;
+      passwordInput.required = true;
       break;
     case 'forgot':
       tabToggle.style.display = 'none';
@@ -1242,6 +1252,8 @@ function setMode(m) {
       submitBtn.textContent = 'Send reset link';
       authHint.hidden = false;
       forgotLink.textContent = '← Back to sign in';
+      nameInput.required = false;
+      passwordInput.required = false;
       break;
     case 'reset':
       tabToggle.style.display = 'none';
@@ -1251,6 +1263,8 @@ function setMode(m) {
       passwordField.hidden = false;
       submitBtn.textContent = 'Save new password';
       authHint.hidden = true;
+      nameInput.required = false;
+      passwordInput.required = true;
       break;
   }
 }
