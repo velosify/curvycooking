@@ -1010,6 +1010,135 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   }
   .review-pager .pager-btn { width: 36px; height: 36px; }
 
+  /* ---------- FINAL CTA ---------- */
+  .final-cta {
+    padding: 100px 0 120px;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta-inner {
+    position: relative;
+    padding: 80px 60px;
+    border-radius: 28px;
+    border: 1px solid var(--line-strong);
+    background:
+      radial-gradient(800px 400px at 50% 0%, rgba(255, 93, 177, 0.16), transparent 60%),
+      radial-gradient(700px 500px at 100% 100%, rgba(122, 92, 255, 0.20), transparent 65%),
+      linear-gradient(160deg, rgba(122, 92, 255, 0.10) 0%, rgba(58, 123, 255, 0.04) 60%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(14px);
+    text-align: center;
+    overflow: hidden;
+    box-shadow: 0 40px 100px -30px rgba(122, 92, 255, 0.45);
+  }
+  .final-cta-inner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 120%, rgba(255, 122, 61, 0.18), transparent 50%);
+    pointer-events: none;
+  }
+  .final-cta-inner > * { position: relative; z-index: 1; }
+
+  .final-cta-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-dim);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-bottom: 28px;
+  }
+  .final-cta-eyebrow .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #ff5db1;
+    box-shadow: 0 0 10px rgba(255, 93, 177, 0.9);
+  }
+  .final-cta h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 800;
+    font-size: clamp(44px, 6vw, 80px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 22px;
+    color: #fff;
+  }
+  .final-cta h2 .accent {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    background: linear-gradient(90deg, #ff7a3d 0%, #ff5db1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .final-cta-sub {
+    color: var(--ink-dim);
+    font-size: 18px;
+    line-height: 1.6;
+    max-width: 560px;
+    margin: 0 auto 36px;
+  }
+  .final-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 32px 20px 36px;
+    border-radius: 999px;
+    background: var(--grad-cta);
+    color: #fff;
+    font-weight: 700;
+    font-size: 16px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 20px 50px -15px rgba(255, 93, 177, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.12) inset;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .final-cta-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 28px 60px -15px rgba(255, 93, 177, 0.85), 0 0 0 1px rgba(255, 255, 255, 0.18) inset;
+  }
+  .final-cta-btn .arrow {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: grid; place-items: center;
+    transition: transform 0.25s;
+  }
+  .final-cta-btn:hover .arrow { transform: translateX(3px); }
+  .final-cta-features {
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+  .final-cta-feature {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-mute);
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .final-cta-feature svg {
+    width: 18px; height: 18px;
+    stroke: #6ed79b;
+    flex-shrink: 0;
+  }
+  @media (max-width: 768px) {
+    .final-cta { padding: 60px 0 80px; }
+    .final-cta-inner { padding: 56px 24px; border-radius: 22px; }
+    .final-cta-features { gap: 18px; }
+    .final-cta-sub { font-size: 16px; }
+  }
+
   /* ---------- NEWSLETTER MARQUEE ---------- */
   .news-strip {
     background: var(--grad-strip);
@@ -1636,6 +1765,37 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= FINAL CTA ============= -->
+<section class="final-cta">
+  <div class="wrap">
+    <div class="final-cta-inner scroll-fade">
+      <div class="final-cta-eyebrow"><span class="dot"></span>One payment · Lifetime access</div>
+      <h2>Your kitchen is <span class="accent">waiting</span>.</h2>
+      <p class="final-cta-sub">150+ recipes across 10+ cuisines. One $19 payment. Yours forever — including every new recipe I publish.</p>
+      <a href="order.html" class="final-cta-btn">
+        Get The Cookbook — $19
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <div class="final-cta-features">
+        <span class="final-cta-feature">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          30-day money-back guarantee
+        </span>
+        <span class="final-cta-feature">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Instant access
+        </span>
+        <span class="final-cta-feature">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          Lifetime updates
+        </span>
       </div>
     </div>
   </div>
