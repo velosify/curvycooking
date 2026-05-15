@@ -1662,11 +1662,10 @@ function openModal(dietId, mealId, idx) {
     li.textContent = s;
     ol.appendChild(li);
   });
-  // Alternate Ashley's image per recipe: simple title-length parity, so the
-  // same recipe always shows the same photo.
+  // Alternate Ashley's image: whisk, bowl, whisk, bowl... using card idx parity.
   const ashleyEl = document.getElementById('modal-ashley');
-  const useBowl = (r.title.length % 2) === 0;
-  ashleyEl.src = useBowl ? 'creator/ashley-bowl-cutout.png' : 'creator/ashley-whisk-cutout.png';
+  const useWhisk = (idx % 2) === 0;
+  ashleyEl.src = useWhisk ? 'creator/ashley-whisk-cutout.png' : 'creator/ashley-bowl-cutout.png';
   ashleyEl.alt = '';
 
   modal.hidden = false;
