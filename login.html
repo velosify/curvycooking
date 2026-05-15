@@ -357,24 +357,38 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
       inset 0 1px 0 rgba(255, 255, 255, 0.26),
       inset 0 -1px 0 rgba(0, 0, 0, 0.30);
   }
+  /* Padding-bottom trick locks 16:10 ratio bulletproof across iOS Safari */
   .card-img {
-    aspect-ratio: 16/10;
-    display: grid; place-items: center;
-    font-size: 56px;
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 62.5%;          /* 10 / 16 */
     background:
       linear-gradient(180deg,
         rgba(255, 255, 255, 0.04) 0%,
         rgba(0, 0, 0, 0.18) 100%);
     border-bottom: 1px solid rgba(255, 245, 220, 0.08);
     overflow: hidden;
-    position: relative;
+    font-size: 56px;
+    line-height: 0;                 /* prevent emoji fallback from creating intrinsic height */
   }
   .card-img img {
+    position: absolute;
+    top: 0; left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
     filter: saturate(0.82) contrast(1.08) brightness(0.93);
+  }
+  /* Emoji fallback (used only if a recipe has no img field): center it inside the padded box. */
+  .card-img > .card-emoji {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
   }
   /* Recipe photo overlay: vertical darken + vignette in the corners.
      Vignette especially helps AI images read as real photos. */
@@ -1621,7 +1635,7 @@ function renderMeals() {
     const list = recipes[m.id] || [];
     const cards = list.map((r, idx) => `
       <article class="card" data-diet="${activeDiet}" data-meal="${m.id}" data-idx="${idx}">
-        <div class="card-img">${r.img ? `<img src="recipes/${r.img}" alt="${r.title}" loading="lazy">` : r.emoji}</div>
+        <div class="card-img">${r.img ? `<img src="recipes/${r.img}" alt="${r.title}" loading="lazy">` : `<span class="card-emoji">${r.emoji}</span>`}</div>
         <div class="card-body">
           <div class="card-tag">${m.label}</div>
           <h3 class="card-title">${r.title}</h3>
