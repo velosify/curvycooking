@@ -347,6 +347,14 @@
         rgba(255, 255, 255, 0.04) 0%,
         rgba(0, 0, 0, 0.18) 100%);
     border-bottom: 1px solid rgba(255, 245, 220, 0.08);
+    overflow: hidden;
+    position: relative;
+  }
+  .card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .card-body { padding: 14px 16px 16px; }
   .card-tag {
@@ -408,6 +416,13 @@
     border-radius: 22px 22px 0 0;
     position: relative;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+  .modal-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .modal-close {
     position: absolute; top: 14px; right: 14px;
@@ -568,7 +583,7 @@ const RECIPES = {
   none: {
     breakfast: [
       {
-        title: 'Classic Buttermilk Pancakes', emoji: '🥞', time: '20 min', serves: '2',
+        title: 'Classic Buttermilk Pancakes', emoji: '🥞', img: 'buttermilk-pancakes.png', time: '20 min', serves: '2',
         desc: 'Fluffy, golden pancakes the whole table will fight over.',
         ingredients: ['1½ cups flour','2 tbsp sugar','1 tsp baking powder','½ tsp baking soda','½ tsp salt','1¼ cups buttermilk','1 large egg','3 tbsp melted butter'],
         steps: ['Whisk dry ingredients.','Whisk buttermilk, egg, and butter separately.','Combine wet and dry; leave lumps.','Cook ¼-cup portions on a buttered skillet, 2 min per side.','Serve with maple syrup and butter.']
@@ -1457,7 +1472,7 @@ function renderMeals() {
     const list = recipes[m.id] || [];
     const cards = list.map((r, idx) => `
       <article class="card" data-diet="${activeDiet}" data-meal="${m.id}" data-idx="${idx}">
-        <div class="card-img">${r.emoji}</div>
+        <div class="card-img">${r.img ? `<img src="recipes/${r.img}" alt="${r.title}" loading="lazy">` : r.emoji}</div>
         <div class="card-body">
           <div class="card-tag">${m.label}</div>
           <h3 class="card-title">${r.title}</h3>
@@ -1489,7 +1504,20 @@ const modalClose = document.getElementById('modal-close');
 
 function openModal(dietId, mealId, idx) {
   const r = RECIPES[dietId][mealId][idx];
-  document.getElementById('modal-emoji').textContent = r.emoji;
+  const heroEl = document.getElementById('modal-emoji').parentElement;
+  // Wipe any previous image, restore the emoji span, then choose what to show.
+  heroEl.querySelectorAll('img').forEach(img => img.remove());
+  const emojiSpan = document.getElementById('modal-emoji');
+  if (r.img) {
+    emojiSpan.style.display = 'none';
+    const img = document.createElement('img');
+    img.src = `recipes/${r.img}`;
+    img.alt = r.title;
+    heroEl.insertBefore(img, heroEl.firstChild);
+  } else {
+    emojiSpan.style.display = '';
+    emojiSpan.textContent = r.emoji;
+  }
   document.getElementById('modal-title').textContent = r.title;
   document.getElementById('modal-time').textContent = '⏱ ' + r.time;
   document.getElementById('modal-serves').textContent = '🍽 Serves ' + r.serves;
