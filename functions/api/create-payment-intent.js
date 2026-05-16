@@ -1,6 +1,6 @@
 // Cloudflare Pages Function: POST /api/create-payment-intent
 //
-// Creates a Stripe Payment Intent for the Curvy Cookbook ($19) and returns
+// Creates a Stripe Payment Intent for the Curvy Cookbook ($9) and returns
 // the client_secret so the browser can mount Stripe Elements and collect
 // payment details directly. We use a hard-coded amount/currency rather than
 // looking up STRIPE_PRICE_ID because Payment Intents take amount in cents
@@ -9,7 +9,7 @@
 // Required env vars:
 //   STRIPE_SECRET_KEY  e.g. sk_live_xxx
 
-const AMOUNT_CENTS = 1900;   // $19.00
+const AMOUNT_CENTS = 900;    // $9.00
 const CURRENCY     = "usd";
 const DESCRIPTION  = "Curvy Cookbook";
 

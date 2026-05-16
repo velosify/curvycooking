@@ -19,7 +19,7 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '1653416992647228');
 fbq('track', 'PageView');
-fbq('track', 'InitiateCheckout', { value: 19.00, currency: 'USD', num_items: 1, content_ids: ['curvy-cookbook'], content_type: 'product' });
+fbq('track', 'InitiateCheckout', { value: 9.00, currency: 'USD', num_items: 1, content_ids: ['curvy-cookbook'], content_type: 'product' });
 </script>
 <noscript><img height="1" width="1" style="display:none"
 src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
@@ -740,7 +740,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 <div class="wrap">
   <div class="page-head">
     <h1 class="page-title">Almost in the <span class="accent">kitchen</span>.</h1>
-    <p class="page-sub">Pay $19 once. Lifetime access to the members area.</p>
+    <p class="page-sub">Pay $9 once. Lifetime access to the members area.</p>
   </div>
 </div>
 
@@ -778,7 +778,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
       <div id="payment-message" class="checkout-error"></div>
 
       <button id="submit-btn" type="submit" class="btn-place" disabled>
-        <span class="btn-text">Pay $19 · Get The Cookbook</span>
+        <span class="btn-text">Pay $9 · Get The Cookbook</span>
         <span class="btn-loader" style="display:none;">
           <span class="spinner spinner-sm"></span>
           <span>Processing…</span>
@@ -806,7 +806,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
         <div class="totals-row">
           <span>Subtotal</span>
-          <span>$19.00</span>
+          <span>$9.00</span>
         </div>
         <div class="totals-row">
           <span>Delivery</span>
@@ -815,7 +815,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
         <div class="totals-row grand">
           <span>Total</span>
-          <span class="num">$19.00</span>
+          <span class="num">$9.00</span>
         </div>
 
         <div class="trust-row" style="margin-top: 24px;">
@@ -1040,7 +1040,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
     // Meta Pixel: customer is committing to pay. Fire AddPaymentInfo.
     if (window.fbq) {
-      fbq('track', 'AddPaymentInfo', { value: 19.00, currency: 'USD' });
+      fbq('track', 'AddPaymentInfo', { value: 9.00, currency: 'USD' });
     }
 
     const { error } = await stripe.confirmPayment({
