@@ -763,21 +763,16 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   <div class="checkout-grid">
     <!-- LEFT: CUSTOM CHECKOUT (Stripe Elements) -->
     <form class="card stripe-card scroll-fade" id="payment-form" novalidate>
-      <h2 style="font-size: 18px; margin-bottom: 22px;">Secure checkout</h2>
-
       <div class="field-grid">
         <div class="field full">
-          <label for="cardName">Full name</label>
-          <input class="input" type="text" id="cardName" placeholder="Ashley Bova" required autocomplete="name">
+          <input class="input" type="text" id="cardName" placeholder="Full Name" required autocomplete="name" aria-label="Full name">
         </div>
         <div class="field full">
-          <label for="email">Email</label>
-          <input class="input" type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+          <input class="input" type="email" id="email" placeholder="you@example.com" required autocomplete="email" aria-label="Email">
         </div>
       </div>
 
       <div class="field full" style="margin-top: 8px;">
-        <label>Payment method</label>
         <div id="payment-loading" class="payment-loading">
           <div class="spinner"></div>
           <span>Loading payment options…</span>
