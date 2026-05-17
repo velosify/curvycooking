@@ -56,16 +56,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    /* Kitchen scene lives on html itself — iOS Safari paints html background
-       behind the address bar / home indicator areas, unlike a fixed child div. */
     background-color: var(--bg-0);
-    background-image:
-      linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
-      url("creator/ashley-kitchen.jpg");
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
   }
   body {
     background: transparent;
@@ -73,13 +64,22 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     padding: env(safe-area-inset-top) env(safe-area-inset-right)
              env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
+
+  /* Fixed kitchen scene behind everything */
+  .bg-fixed {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
+      url("creator/ashley-kitchen.jpg") center center / cover no-repeat;
+    pointer-events: none;
+  }
   @media (max-width: 700px) {
-    html {
-      background-image:
+    .bg-fixed {
+      background:
         linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 50%, rgba(7,6,15,0.78) 100%),
-        url("creator/ashley-kitchen-mobile.jpg");
-      /* attachment: fixed misbehaves on iOS Safari for non-html elements but
-         html itself handles it cleanly. */
+        url("creator/ashley-kitchen-mobile.jpg") center center / cover no-repeat;
     }
   }
   a { color: inherit; text-decoration: none; }
@@ -752,6 +752,9 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 <body>
 
 <!-- ============= NAV ============= -->
+<!-- Fixed kitchen scene anchored behind everything -->
+<div class="bg-fixed" aria-hidden="true"></div>
+
 <nav class="top">
   <div class="nav-headline">
     Get into Ashley's <span class="accent">kitchen</span>.
