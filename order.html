@@ -56,14 +56,31 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    background-color: var(--bg-0); /* failsafe behind .bg-fixed */
+    /* Kitchen scene lives on html itself — iOS Safari paints html background
+       behind the address bar / home indicator areas, unlike a fixed child div. */
+    background-color: var(--bg-0);
+    background-image:
+      linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
+      url("creator/ashley-kitchen.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
   body {
     background: transparent;
     min-height: 100vh;
-    /* iOS safe-area padding so content doesn't sit under notch / home bar. */
     padding: env(safe-area-inset-top) env(safe-area-inset-right)
              env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+  @media (max-width: 700px) {
+    html {
+      background-image:
+        linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 50%, rgba(7,6,15,0.78) 100%),
+        url("creator/ashley-kitchen-mobile.jpg");
+      /* attachment: fixed misbehaves on iOS Safari for non-html elements but
+         html itself handles it cleanly. */
+    }
   }
   a { color: inherit; text-decoration: none; }
   img { display: block; max-width: 100%; }
@@ -100,28 +117,6 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     color: transparent;
   }
 
-  /* Fixed kitchen scene behind everything. Over-extend on every side so iOS
-     Safari's address bar area is always covered no matter how the visual
-     viewport shrinks/grows as the bar collapses or expands. */
-  .bg-fixed {
-    position: fixed;
-    top: -120px;
-    left: -60px;
-    right: -60px;
-    bottom: -120px;
-    z-index: -1;
-    background:
-      linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
-      url("creator/ashley-kitchen.jpg") center center / cover no-repeat;
-    pointer-events: none;
-  }
-  @media (max-width: 700px) {
-    .bg-fixed {
-      background:
-        linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 50%, rgba(7,6,15,0.78) 100%),
-        url("creator/ashley-kitchen-mobile.jpg") center center / cover no-repeat;
-    }
-  }
   .secure-pill {
     display: inline-flex;
     align-items: center;
@@ -757,9 +752,6 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 <body>
 
 <!-- ============= NAV ============= -->
-<!-- Fixed kitchen scene anchored behind everything -->
-<div class="bg-fixed" aria-hidden="true"></div>
-
 <nav class="top">
   <div class="nav-headline">
     Get into Ashley's <span class="accent">kitchen</span>.
