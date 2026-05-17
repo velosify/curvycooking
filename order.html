@@ -58,29 +58,30 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     min-height: 100vh;
     background-color: var(--bg-0);
   }
+  /* Kitchen scene on body — iOS Safari extends body bg through the address
+     bar / home indicator areas. */
   body {
-    background: transparent;
     min-height: 100vh;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right)
-             env(safe-area-inset-bottom) env(safe-area-inset-left);
-  }
-
-  /* Fixed kitchen scene behind everything */
-  .bg-fixed {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
     background:
       linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
-      url("creator/ashley-kitchen.jpg") center center / cover no-repeat;
-    pointer-events: none;
+      url("creator/ashley-kitchen.jpg") no-repeat center center fixed;
+    background-size: cover;
   }
   @media (max-width: 700px) {
-    .bg-fixed {
+    body {
       background:
         linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 50%, rgba(7,6,15,0.78) 100%),
-        url("creator/ashley-kitchen-mobile.jpg") center center / cover no-repeat;
+        url("creator/ashley-kitchen-mobile.jpg") no-repeat center center fixed;
+      background-size: cover;
     }
+  }
+  /* Safe-area padding lives on a wrapper around content so the body background
+     stays edge-to-edge. */
+  .safe {
+    padding-top: env(safe-area-inset-top);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
   }
   a { color: inherit; text-decoration: none; }
   img { display: block; max-width: 100%; }
@@ -752,17 +753,14 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 <body>
 
 <!-- ============= NAV ============= -->
-<!-- Fixed kitchen scene anchored behind everything -->
-<div class="bg-fixed" aria-hidden="true"></div>
-
-<nav class="top">
+<nav class="top safe">
   <div class="nav-headline">
     Get into Ashley's <span class="accent">kitchen</span>.
   </div>
 </nav>
 
 <!-- ============= CHECKOUT ============= -->
-<div class="wrap">
+<div class="wrap safe">
   <div class="checkout-grid">
     <!-- LEFT: CUSTOM CHECKOUT (Stripe Elements) -->
     <form class="card stripe-card scroll-fade" id="payment-form" novalidate>
