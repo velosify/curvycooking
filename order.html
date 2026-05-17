@@ -100,16 +100,15 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     color: transparent;
   }
 
-  /* Fixed kitchen scene behind everything. Use 100lvh (large viewport height)
-     so the bg covers the area behind iOS Safari's address bar — not just the
-     small visible viewport. */
+  /* Fixed kitchen scene behind everything. Over-extend on every side so iOS
+     Safari's address bar area is always covered no matter how the visual
+     viewport shrinks/grows as the bar collapses or expands. */
   .bg-fixed {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 100vh;            /* fallback for browsers without lvh */
-    height: 100lvh;           /* iOS Safari: covers behind address bar */
+    top: -120px;
+    left: -60px;
+    right: -60px;
+    bottom: -120px;
     z-index: -1;
     background:
       linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
