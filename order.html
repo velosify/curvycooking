@@ -81,12 +81,12 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   .nav-headline {
     font-family: 'Sora', sans-serif;
     font-weight: 800;
-    font-size: 22px;
+    font-size: 30px;
     letter-spacing: -0.02em;
     text-decoration: none;
     color: #f5ecdb;
     line-height: 1.1;
-    text-shadow: 0 1px 8px rgba(7, 6, 15, 0.6);
+    text-shadow: 0 2px 12px rgba(7, 6, 15, 0.75), 0 0 4px rgba(7, 6, 15, 0.55);
   }
   .nav-headline .accent {
     font-family: 'Playfair Display', serif;
@@ -153,7 +153,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   }
 
   @media (max-width: 700px) {
-    .nav-headline { font-size: 18px; }
+    .nav-headline { font-size: 22px; }
   }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
@@ -260,21 +260,22 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     font-weight: 600;
   }
   .input {
-    background: rgba(255,255,255,0.04);
+    background: rgba(7, 6, 15, 0.55);
     border: 1px solid var(--line-strong);
     border-radius: 12px;
     padding: 14px 16px;
-    color: #fff;
-    font-size: 15px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
     outline: none;
     transition: border-color 0.2s, background 0.2s;
     width: 100%;
   }
-  .input::placeholder { color: var(--ink-mute); }
+  .input::placeholder { color: rgba(255, 255, 255, 0.45); }
   .input:focus {
     border-color: var(--purple);
-    background: rgba(122,92,255,0.06);
-    box-shadow: 0 0 0 4px rgba(122,92,255,0.12);
+    background: rgba(7, 6, 15, 0.70);
+    box-shadow: 0 0 0 4px rgba(122,92,255,0.18);
   }
   select.input {
     appearance: none;
@@ -874,19 +875,19 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     labels: 'above',
     variables: {
       fontFamily: '"Inter", system-ui, -apple-system, sans-serif',
-      fontSizeBase: '15px',
+      fontSizeBase: '16px',
       fontWeightNormal: '500',
       fontWeightMedium: '600',
       spacingUnit: '4px',
       borderRadius: '12px',
       colorPrimary: '#7a5cff',
-      colorBackground: 'rgba(255,255,255,0.04)',
+      colorBackground: 'rgba(7, 6, 15, 0.55)',
       colorText: '#ffffff',
-      colorTextSecondary: '#b9b3d6',
-      colorTextPlaceholder: '#8a83ad',
+      colorTextSecondary: '#e3deef',
+      colorTextPlaceholder: 'rgba(255, 255, 255, 0.50)',
       colorDanger: '#ff5db1',
       colorSuccess: '#6ed79b',
-      colorIconTab: '#b9b3d6',
+      colorIconTab: '#e3deef',
       colorIconTabHover: '#ffffff',
       colorIconTabSelected: '#ffffff',
       colorLogo: 'dark',
