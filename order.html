@@ -51,16 +51,17 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
+  html {
     color: var(--ink);
     font-family: 'Inter', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     min-height: 100vh;
-    background: transparent;
+    background-color: var(--bg-0); /* failsafe behind .bg-fixed */
   }
-  /* iOS safe-area: let the page (and the fixed bg behind it) extend behind
-     the notch + home indicator so there are no black bands at top/bottom. */
   body {
+    background: transparent;
+    min-height: 100vh;
+    /* iOS safe-area padding so content doesn't sit under notch / home bar. */
     padding: env(safe-area-inset-top) env(safe-area-inset-right)
              env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
@@ -99,10 +100,16 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     color: transparent;
   }
 
-  /* Fixed kitchen scene behind everything */
+  /* Fixed kitchen scene behind everything. Use 100lvh (large viewport height)
+     so the bg covers the area behind iOS Safari's address bar — not just the
+     small visible viewport. */
   .bg-fixed {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;            /* fallback for browsers without lvh */
+    height: 100lvh;           /* iOS Safari: covers behind address bar */
     z-index: -1;
     background:
       linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
