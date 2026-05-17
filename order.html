@@ -197,10 +197,10 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     padding: 22px 24px;
   }
   .ashley-greeting-photo {
-    width: 110px;
-    height: 140px;
+    width: 120px;
+    height: 150px;
     object-fit: cover;
-    object-position: center top;
+    object-position: center 18%;   /* bias toward her face/apron, not the floor */
     border-radius: 14px;
     flex-shrink: 0;
     background: rgba(255, 255, 255, 0.04);
@@ -227,7 +227,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   }
   @media (max-width: 600px) {
     .ashley-greeting { flex-direction: column; align-items: stretch; gap: 14px; padding: 20px; }
-    .ashley-greeting-photo { width: 100%; max-width: 180px; height: 180px; align-self: center; }
+    .ashley-greeting-photo { width: 100%; max-width: 220px; height: 240px; align-self: center; object-position: center 20%; }
     .ashley-greeting-text { text-align: center; }
   }
 
@@ -794,7 +794,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
       <!-- Ashley greeting card -->
       <div class="card ashley-greeting">
-        <img src="creator/ashley-whisk-cutout.png" alt="Ashley" class="ashley-greeting-photo">
+        <img src="creator/ashley-apron.png" alt="Ashley in her kitchen" class="ashley-greeting-photo">
         <div class="ashley-greeting-text">
           <h3>Hey, I'm Ashley.</h3>
           <p>
