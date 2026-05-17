@@ -59,8 +59,8 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     min-height: 100vh;
   }
   body {
-    background: var(--grad-bg);
-    background-attachment: fixed;
+    /* Transparent so .bg-fixed shows through behind everything */
+    background: transparent;
   }
   a { color: inherit; text-decoration: none; }
   img { display: block; max-width: 100%; }
@@ -77,36 +77,42 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     padding: 28px 48px;
     border-bottom: 1px solid var(--line);
   }
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-    line-height: 1;
-    color: #f5ecdb;
-  }
-  .brand-icon {
-    font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif;
-    font-size: 26px;
-    line-height: 1;
-    transform: translateY(1px);
-  }
-  .brand-text {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 6px;
-    font-size: 22px;
-    line-height: 1;
-  }
-  .brand-curvy {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic;
-    font-weight: 600;
-  }
-  .brand-cooking {
-    font-family: 'Helvetica Neue', 'Inter', Helvetica, Arial, sans-serif;
+  .nav-headline {
+    font-family: 'Sora', sans-serif;
     font-weight: 800;
+    font-size: 22px;
     letter-spacing: -0.02em;
+    text-decoration: none;
+    color: #f5ecdb;
+    line-height: 1.1;
+    text-shadow: 0 1px 8px rgba(7, 6, 15, 0.6);
+  }
+  .nav-headline .accent {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 500;
+    background: linear-gradient(90deg, #ff5db1, #ff7a3d 60%, #ffd166);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Fixed kitchen scene behind everything */
+  .bg-fixed {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
+      url("creator/ashley-kitchen.jpg") center center / cover no-repeat;
+    pointer-events: none;
+  }
+  @media (max-width: 700px) {
+    .bg-fixed {
+      background:
+        linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 50%, rgba(7,6,15,0.78) 100%),
+        url("creator/ashley-kitchen-mobile.jpg") center center / cover no-repeat;
+    }
   }
   .secure-pill {
     display: inline-flex;
@@ -129,9 +135,24 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   .back-link:hover { color: #fff; }
 
   /* ---------- PAGE HEADER ---------- */
-  .page-head {
-    padding: 56px 0 32px;
-    text-align: center;
+  /* Scroll-reveal: form sections float up when scrolled into view */
+  .scroll-fade {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.2, 0.8, 0.2, 1),
+                transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    will-change: opacity, transform;
+  }
+  .scroll-fade.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-fade { opacity: 1; transform: none; transition: none; }
+  }
+
+  @media (max-width: 700px) {
+    .nav-headline { font-size: 18px; }
   }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 10px;
@@ -188,48 +209,6 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     backdrop-filter: blur(10px);
   }
   .card + .card { margin-top: 24px; }
-
-  /* Ashley greeting card above the form */
-  .ashley-greeting {
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    padding: 22px 24px;
-  }
-  .ashley-greeting-photo {
-    width: 120px;
-    height: 150px;
-    object-fit: cover;
-    object-position: center 18%;   /* bias toward her face/apron, not the floor */
-    border-radius: 14px;
-    flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--line);
-  }
-  .ashley-greeting-text h3 {
-    font-size: 17px;
-    font-weight: 700;
-    margin: 0 0 6px;
-    color: var(--ink);
-    letter-spacing: -0.01em;
-  }
-  .ashley-greeting-text p {
-    font-size: 14px;
-    line-height: 1.55;
-    color: var(--ink-dim);
-    margin: 0 0 8px;
-  }
-  .ashley-sign {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-style: italic;
-    font-size: 14px;
-    color: #c7b3ff;
-  }
-  @media (max-width: 600px) {
-    .ashley-greeting { flex-direction: column; align-items: stretch; gap: 14px; padding: 20px; }
-    .ashley-greeting-photo { width: 100%; max-width: 220px; height: 240px; align-self: center; object-position: center 20%; }
-    .ashley-greeting-text { text-align: center; }
-  }
 
   .step-num {
     display: inline-flex; align-items: center; justify-content: center;
@@ -762,49 +741,27 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 <body>
 
 <!-- ============= NAV ============= -->
+<!-- Fixed kitchen scene anchored behind everything -->
+<div class="bg-fixed" aria-hidden="true"></div>
+
 <nav class="top">
-  <a href="index.html" class="brand" aria-label="Curvy Cooking home">
-    <span class="brand-icon" aria-hidden="true">🌶️</span>
-    <span class="brand-text">
-      <span class="brand-curvy">Curvy</span><span class="brand-cooking">Cooking</span>
-    </span>
+  <a href="index.html" class="nav-headline" aria-label="Curvy Cooking home">
+    Get into Ashley's <span class="accent">kitchen</span>.
   </a>
   <div class="secure-pill">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
       <rect x="4" y="11" width="16" height="10" rx="2"/>
       <path d="M8 11V7a4 4 0 018 0v4"/>
     </svg>
-    Secure checkout · 256-bit SSL
+    Secure checkout
   </div>
 </nav>
-
-<!-- ============= PAGE HEAD ============= -->
-<div class="wrap">
-  <div class="page-head">
-    <h1 class="page-title">Get into Ashley's <span class="accent">kitchen</span>.</h1>
-    <p class="page-sub">$9 once. Cook with me forever.</p>
-  </div>
-</div>
 
 <!-- ============= CHECKOUT ============= -->
 <div class="wrap">
   <div class="checkout-grid">
     <!-- LEFT: CUSTOM CHECKOUT (Stripe Elements) -->
-    <div class="left-col">
-
-      <!-- Ashley greeting card -->
-      <div class="card ashley-greeting">
-        <img src="creator/ashley-apron.png" alt="Ashley in her kitchen" class="ashley-greeting-photo">
-        <div class="ashley-greeting-text">
-          <h3>Hey, I'm Ashley.</h3>
-          <p>
-            Thanks for grabbing my cookbook. Once you're in, reply to your welcome email anytime &mdash; I read every one. I made this for you. Let's cook.
-          </p>
-          <div class="ashley-sign">&mdash; Ashley</div>
-        </div>
-      </div>
-
-    <form class="card stripe-card" id="payment-form" novalidate>
+    <form class="card stripe-card scroll-fade" id="payment-form" novalidate>
       <h2 style="font-size: 18px; margin-bottom: 22px;">Secure checkout</h2>
 
       <div class="field-grid">
@@ -842,11 +799,10 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
         Powered by <strong>Stripe</strong> · 256-bit SSL · PCI-DSS Level 1
       </div>
     </form>
-    </div>
 
     <!-- RIGHT: ORDER SUMMARY -->
     <aside class="summary">
-      <div class="card">
+      <div class="card scroll-fade">
         <h2 style="font-size: 18px; margin-bottom: 22px;">Order summary</h2>
 
         <div class="product-row">
@@ -883,7 +839,7 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
         </div>
       </div>
 
-      <div class="card">
+      <div class="card scroll-fade" data-fade-delay="120">
         <h2 style="font-size: 17px; margin-bottom: 12px;">What you get</h2>
         <ul class="perks">
           <li>My personal recipe collection &mdash; 100+ recipes I actually cook</li>
@@ -1118,6 +1074,28 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     }
     // On success, Stripe redirects to return_url. Nothing to do here.
   });
+
+  /* ----------------------------------------------------------
+     Scroll-reveal: float .scroll-fade elements up as they enter
+     the viewport. Respects prefers-reduced-motion automatically
+     via CSS.
+  ---------------------------------------------------------- */
+  (function () {
+    if (!('IntersectionObserver' in window)) return;
+    // Per-element delay via data-fade-delay attribute
+    document.querySelectorAll('[data-fade-delay]').forEach(el => {
+      el.style.transitionDelay = el.dataset.fadeDelay + 'ms';
+    });
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+    document.querySelectorAll('.scroll-fade').forEach(el => io.observe(el));
+  })();
 </script>
 
 </body>
