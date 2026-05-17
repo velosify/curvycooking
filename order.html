@@ -71,12 +71,13 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
   /* ---------- NAV ---------- */
   nav.top {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
     padding: 28px 48px;
-    border-bottom: 1px solid var(--line);
   }
+  nav.top .nav-headline { grid-column: 2; text-align: center; }
+  nav.top .secure-pill  { grid-column: 3; justify-self: end; }
   .nav-headline {
     font-family: 'Sora', sans-serif;
     font-weight: 800;
@@ -197,8 +198,14 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     display: grid;
     grid-template-columns: 1.25fr 1fr;
     gap: 32px;
-    padding: 32px 0 96px;
+    /* Push the form down so Ashley's face shows above-the-fold on first load.
+       User has to scroll to bring the form into the viewport, which triggers
+       the scroll-fade reveal. */
+    padding: 60vh 0 96px;
     align-items: start;
+  }
+  @media (max-width: 700px) {
+    .checkout-grid { padding-top: 55vh; }
   }
 
   .card {
