@@ -59,19 +59,41 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     background-color: var(--bg-0);
   }
   /* Kitchen scene on body — iOS Safari extends body bg through the address
-     bar / home indicator areas. */
+     bar / home indicator areas. attachment:fixed is broken on iOS so we use
+     a fixed ::before below to actually keep the bg sticky during scroll. */
   body {
     min-height: 100vh;
     background:
       linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
-      url("creator/ashley-kitchen.jpg") no-repeat center center fixed;
+      url("creator/ashley-kitchen.jpg") no-repeat center center;
     background-size: cover;
+    background-attachment: scroll;
+    position: relative;
+  }
+  /* Sticky overlay that stays fixed in the viewport while content scrolls.
+     Same image as body bg so the chrome-area + viewport read as one scene. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background:
+      linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 60%, rgba(7,6,15,0.78) 100%),
+      url("creator/ashley-kitchen.jpg") no-repeat center center;
+    background-size: cover;
+    pointer-events: none;
   }
   @media (max-width: 700px) {
     body {
       background:
         linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 50%, rgba(7,6,15,0.78) 100%),
-        url("creator/ashley-kitchen-mobile.jpg") no-repeat center center fixed;
+        url("creator/ashley-kitchen-mobile.jpg") no-repeat center center;
+      background-size: cover;
+    }
+    body::before {
+      background:
+        linear-gradient(180deg, rgba(7,6,15,0.30) 0%, rgba(7,6,15,0.55) 50%, rgba(7,6,15,0.78) 100%),
+        url("creator/ashley-kitchen-mobile.jpg") no-repeat center center;
       background-size: cover;
     }
   }
