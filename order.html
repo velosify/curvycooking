@@ -107,11 +107,14 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   .nav-headline .accent {
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    font-weight: 500;
-    background: linear-gradient(90deg, #ff5db1, #ff7a3d 60%, #ffd166);
+    font-weight: 600;
+    background: linear-gradient(90deg, #ff3d8e, #ff5d2a 60%, #ff9a1a);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    /* drop-shadow works on gradient-clipped text where text-shadow doesn't */
+    filter: drop-shadow(0 2px 6px rgba(7, 6, 15, 0.9))
+            drop-shadow(0 0 2px rgba(7, 6, 15, 0.7));
   }
 
   .secure-pill {
