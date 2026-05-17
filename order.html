@@ -757,12 +757,8 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
           <input class="input" type="text" id="cardName" placeholder="Ashley Bova" required autocomplete="name">
         </div>
         <div class="field full">
-          <label for="email">Email · receipt &amp; account link</label>
+          <label for="email">Email</label>
           <input class="input" type="email" id="email" placeholder="you@example.com" required autocomplete="email">
-        </div>
-        <div class="field full">
-          <label for="phone">Phone</label>
-          <input class="input" type="tel" id="phone" placeholder="(555) 555-5555" required autocomplete="tel">
         </div>
       </div>
 
@@ -962,7 +958,6 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   const loadingEl = document.getElementById('payment-loading');
   const emailEl = document.getElementById('email');
   const nameEl = document.getElementById('cardName');
-  const phoneEl = document.getElementById('phone');
 
   let stripe, elements;
 
@@ -1029,10 +1024,8 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
     const name  = nameEl.value.trim();
     const email = emailEl.value.trim();
-    const phone = phoneEl.value.trim();
     if (!name)  { showMessage('Please enter your full name.'); nameEl.focus(); return; }
     if (!email) { showMessage('Please enter your email.'); emailEl.focus(); return; }
-    if (!phone) { showMessage('Please enter your phone number.'); phoneEl.focus(); return; }
     if (!stripe || !elements) { showMessage('Payment form is still loading.'); return; }
 
     setLoading(true);
@@ -1051,7 +1044,6 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
           billing_details: {
             name,
             email,
-            phone,
           },
         },
       },
