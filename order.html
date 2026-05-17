@@ -71,22 +71,22 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
 
   /* ---------- NAV ---------- */
   nav.top {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    justify-content: center;
     align-items: center;
     padding: 28px 48px;
   }
-  nav.top .nav-headline { grid-column: 2; text-align: center; }
-  nav.top .secure-pill  { grid-column: 3; justify-self: end; }
   .nav-headline {
     font-family: 'Sora', sans-serif;
     font-weight: 800;
-    font-size: 30px;
-    letter-spacing: -0.02em;
+    font-size: clamp(34px, 5vw, 48px);
+    letter-spacing: -0.025em;
     text-decoration: none;
     color: #f5ecdb;
     line-height: 1.1;
-    text-shadow: 0 2px 12px rgba(7, 6, 15, 0.75), 0 0 4px rgba(7, 6, 15, 0.55);
+    text-shadow: 0 2px 14px rgba(7, 6, 15, 0.8), 0 0 4px rgba(7, 6, 15, 0.55);
+    width: 100%;
+    text-align: center;
   }
   .nav-headline .accent {
     font-family: 'Playfair Display', serif;
@@ -201,11 +201,11 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
     /* Push the form down so Ashley's face shows above-the-fold on first load.
        User has to scroll to bring the form into the viewport, which triggers
        the scroll-fade reveal. */
-    padding: 60vh 0 96px;
+    padding: 32vh 0 96px;
     align-items: start;
   }
   @media (max-width: 700px) {
-    .checkout-grid { padding-top: 55vh; }
+    .checkout-grid { padding-top: 28vh; }
   }
 
   .card {
@@ -757,13 +757,6 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
   <a href="index.html" class="nav-headline" aria-label="Curvy Cooking home">
     Get into Ashley's <span class="accent">kitchen</span>.
   </a>
-  <div class="secure-pill">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-      <rect x="4" y="11" width="16" height="10" rx="2"/>
-      <path d="M8 11V7a4 4 0 018 0v4"/>
-    </svg>
-    Secure checkout
-  </div>
 </nav>
 
 <!-- ============= CHECKOUT ============= -->
@@ -840,10 +833,6 @@ src="https://www.facebook.com/tr?id=1653416992647228&ev=PageView&noscript=1"
           <span>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
             Encrypted by Stripe
-          </span>
-          <span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            30-day refund
           </span>
         </div>
       </div>
